@@ -11,6 +11,11 @@
     <!-- FontAwesome para Ícones adicionais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- KaTeX para Renderização Impecável de LaTeX de forma Síncrona -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
@@ -45,7 +50,7 @@
                 </div>
                 <div>
                     <h1 class="font-fun text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">Cubos do Amanhã</h1>
-                    <p class="text-xs text-indigo-300">Dominando a Geometria Espacial (8º Ano)</p>
+                    <p class="text-xs text-indigo-300 font-bold">Dominando a Geometria Espacial (8º Ano)</p>
                 </div>
             </div>
             <!-- Painel de Progresso Global -->
@@ -79,7 +84,7 @@
             <div class="max-w-2xl mx-auto">
                 <span class="bg-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-indigo-500/30">Missão Espacial Geometria</span>
                 <h2 class="font-fun text-4xl sm:text-5xl text-white mt-4 mb-6 leading-tight">Pronto para Conquistar a Terceira Dimensão?</h2>
-                <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed">
+                <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed font-semibold">
                     Bem-vindo, Cadete! A bordo da nave espacial <span class="text-indigo-400 font-bold">Cubo-1</span>, você aprenderá como as arestas formam estruturas e como calculamos o espaço que elas ocupam no universo – o nosso famoso <span class="text-pink-400 font-bold">Volume</span>!
                 </p>
 
@@ -98,7 +103,7 @@
                     <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
                         <div class="text-2xl mb-1">📦</div>
                         <h4 class="font-bold text-slate-200 text-sm">Fase 2: Blocos</h4>
-                        <p class="text-[11px] text-slate-400">Empilhe pequenos cubos de 1cm³ e veja o volume surgir.</p>
+                        <p class="text-[11px] text-slate-400">Empilhe pequenos cubos de $1\text{ cm}^3$ e veja o volume surgir.</p>
                     </div>
                     <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
                         <div class="text-2xl mb-1">⚡</div>
@@ -108,7 +113,7 @@
                     <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
                         <div class="text-2xl mb-1">🧪</div>
                         <h4 class="font-bold text-slate-200 text-sm">Fase 4: Líquidos</h4>
-                        <p class="text-[11px] text-slate-400">Converta volumes em L e mL com precisão decimal avançada.</p>
+                        <p class="text-[11px] text-slate-400">Converta volumes em $L$ e $mL$ com precisão decimal avançada.</p>
                     </div>
                     <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
                         <div class="text-2xl mb-1">🔮</div>
@@ -123,7 +128,7 @@
             </div>
         </section>
 
-        <!-- INTRODUÇÃO TEÓRICA FASE 0 (NOVA) -->
+        <!-- INTRODUÇÃO TEÓRICA FASE 0 -->
         <section id="screen-intro-0" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
             <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
                 <div class="md:w-1/2">
@@ -149,7 +154,6 @@
                 </div>
                 <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800">
                     <div class="w-full flex items-center justify-center relative h-48">
-                        <!-- Holograma visual moderno -->
                         <div class="absolute inset-0 bg-indigo-500/10 rounded-full filter blur-xl animate-pulse"></div>
                         <i class="fa-solid fa-cube text-7xl text-indigo-400 animate-bounce"></i>
                     </div>
@@ -163,7 +167,7 @@
             </div>
         </section>
 
-        <!-- JOGO - FASE 0 (NOVO) -->
+        <!-- JOGO - FASE 0 -->
         <section id="game-phase-0" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
                 <div>
@@ -192,10 +196,9 @@
                     <div id="p0-a-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
                 </div>
                 <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
-                    <!-- Cubo Interativo para clicar em arestas, vertices ou faces -->
                     <div class="relative w-full h-[250px] flex items-center justify-center">
                         <svg id="p0-svg-aresta-interactive" class="w-full h-full max-w-[350px]" viewBox="0 0 300 250" fill="none">
-                            <!-- Gerado dinamicamente no JS para garantir interatividade completa -->
+                            <!-- Gerado dinamicamente no JS -->
                         </svg>
                     </div>
                 </div>
@@ -209,13 +212,17 @@
                         Ao medir as arestas de um cubo, nós temos três dimensões: <strong>Comprimento ($a$)</strong>, <strong>Largura ($a$)</strong> e <strong>Altura ($a$)</strong>.
                         Para descobrir o Volume total (o espaço interno), multiplicamos essas três arestas.
                         <br><br>
-                        <strong>Clique nos blocos na ordem correta para montar a fórmula do volume:</strong>
+                        <strong>Monte a fórmula arrastando ou clicando nas peças disponíveis. Ambas as versões são corretas:</strong>
+                        <ul class="list-disc list-inside mt-2 text-xs text-indigo-200 space-y-1">
+                            <li>$a \times a \times a = \text{Volume}$</li>
+                            <li>$\text{Volume} = a \times a \times a$</li>
+                        </ul>
                     </div>
 
                     <!-- Fórmula montando-se -->
                     <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-center items-center gap-2 min-h-[70px]">
                         <div id="p0-formula-slots" class="flex items-center gap-1 sm:gap-2">
-                            <!-- Slots serão gerados dinamicamente no JS -->
+                            <!-- Slots dinâmicos -->
                         </div>
                     </div>
 
@@ -412,20 +419,20 @@
                 <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px] relative">
                     <!-- Molde Alvo pontilhado -->
                     <div id="p1-mold-container" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-                        <!-- Será gerado dinamicamente via JS -->
+                        <!-- Gerado via JS -->
                     </div>
                     
                     <!-- Cubo Real sendo alterado pelo usuário -->
                     <div id="p1-cube-container" class="relative z-10 w-full h-[250px] flex items-center justify-center">
                         <!-- Estrutura SVG reativa -->
                         <svg id="p1-svg" class="w-full h-full transition-transform duration-300" viewBox="0 0 400 300" fill="none" stroke="currentColor">
-                            <!-- SVG será montado e alterado no Javascript de forma rica -->
+                            <!-- SVG alterado de forma rica no JS -->
                         </svg>
                     </div>
                     
                     <!-- Informação extra de apoio -->
                     <div class="w-full flex justify-between px-4 text-xs text-slate-500 border-t border-slate-900 pt-4 mt-2">
-                        <span>Aresta (a) = <span id="p1-info-edge">5 cm</span></span>
+                        <span>Aresta ($a$) = <span id="p1-info-edge">5 cm</span></span>
                         <span>Faces = 6</span>
                         <span>Vértices = 8</span>
                     </div>
@@ -446,20 +453,18 @@
                         Para medir o volume de forma simples, usamos um padrão: o <span class="text-emerald-400 font-bold">Cubo Unitário</span>. É um cubo pequenininho cujas arestas medem exatamente $1\text{ cm}$. O volume dele é chamado de $1\text{ cm}^3$ (um centímetro cúbico).
                     </p>
                     <div class="bg-indigo-950/50 border border-indigo-900/50 p-4 rounded-xl text-xs text-indigo-200">
-                        <strong>Minigame: Empilhamento de Carga!</strong><br>Você receberá caixas maiores. Sua tarefa é preenchê-las completamente usando esses cubinhos unitários de 1 cm³ e descobrir o volume contando ou multiplicando de forma inteligente as dimensões.
+                        <strong>Minigame: Empilhamento de Carga!</strong><br>Você receberá caixas maiores. Sua tarefa é preenchê-las completamente usando esses cubinhos unitários de $1\text{ cm}^3$ e descobrir o volume contando ou multiplicando de forma inteligente as dimensões.
                     </div>
                 </div>
                 <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800">
                     <div class="relative w-full h-48 flex justify-center items-center">
-                        <!-- Representação de Cubos Unitários Empilhados -->
                         <div class="grid grid-cols-3 gap-1 p-2 bg-indigo-950/30 rounded-xl border border-indigo-500/30">
-                            <!-- Cubinhos ilustrativos -->
-                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
-                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
-                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
-                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
-                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
-                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">$1\text{ cm}^3$</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">$1\text{ cm}^3$</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">$1\text{ cm}^3$</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">$1\text{ cm}^3$</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">$1\text{ cm}^3$</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">$1\text{ cm}^3$</div>
                         </div>
                     </div>
                     <div class="mt-4 text-center">
@@ -546,11 +551,10 @@
                 <!-- Painel Direito: Gráfico de Blocos Dinâmicos -->
                 <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
                     <div class="text-center mb-4">
-                        <span class="text-xs text-indigo-400 font-bold uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">Visualização de Blocos Espaciais</span>
+                        <span class="text-xs text-indigo-400 font-bold uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">Visualização de Sólidos Espaciais</span>
                     </div>
 
                     <div class="relative w-full h-[280px] flex items-center justify-center">
-                        <!-- O Canvas ou Elemento SVG de Renderização de Cubos Isométricos -->
                         <svg id="p2-svg-isometric" class="w-full h-full" viewBox="0 0 450 350" fill="none">
                             <!-- Será atualizado reativamente -->
                         </svg>
@@ -577,7 +581,6 @@
                     </div>
                 </div>
                 <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800 text-center">
-                    <!-- Fórmulas Visuais -->
                     <div class="space-y-4">
                         <div class="flex items-center gap-2 bg-slate-900 p-3 rounded-lg border border-slate-800">
                             <span class="w-8 h-8 rounded bg-indigo-500 text-white font-bold flex items-center justify-center">1</span>
@@ -589,7 +592,7 @@
                         </div>
                         <div class="flex items-center gap-2 bg-slate-900 p-3 rounded-lg border border-slate-800">
                             <span class="w-8 h-8 rounded bg-emerald-500 text-white font-bold flex items-center justify-center">3</span>
-                            <span class="text-sm text-slate-300">Achar o resultado em <strong class="text-white">cm³ ou m³</strong>!</span>
+                            <span class="text-sm text-slate-300">Achar o resultado em $\text{cm}^3$ ou $\text{m}^3$!</span>
                         </div>
                     </div>
                 </div>
@@ -617,11 +620,10 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <!-- Painel Esquerdo -->
                 <div class="lg:col-span-5 space-y-6">
                     <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
                         <p class="text-sm text-slate-300">
-                            <strong>Situação de Emergência!</strong> A nave precisa de cargas exatas de combustível de hidrogênio em tanques cúbicos. Para encher o tanque completamente, calcule seu volume em metros cúbicos ($m^3$) com base das dimensões da aresta dadas.
+                            <strong>Situação de Emergência!</strong> A nave precisa de cargas exatas de combustível de hidrogênio em tanques cúbicos. Para encher o tanque completamente, calcule seu volume em metros cúbicos ($\text{m}^3$) com base das dimensões da aresta dadas.
                         </p>
                     </div>
 
@@ -640,21 +642,19 @@
                     <div class="space-y-3">
                         <span class="block text-sm font-bold text-slate-300">Escolha o Volume correto para o tanque:</span>
                         <div id="p3-options-container" class="grid grid-cols-2 gap-3">
-                            <!-- Opções geradas por JavaScript dinamicamente -->
+                            <!-- Opções geradas dinamicamente -->
                         </div>
                     </div>
 
                     <div id="p3-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
                 </div>
 
-                <!-- Painel Direito: Tanque Enchendo de Combustível -->
                 <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
                     <div class="text-center mb-4">
                         <span class="text-xs text-emerald-400 font-bold uppercase tracking-widest bg-emerald-950 px-3 py-1 rounded-full border border-emerald-900">Nível do Combustível Quântico</span>
                     </div>
 
                     <div class="relative w-full h-[250px] flex items-center justify-center">
-                        <!-- SVG da Simulação de Tanque -->
                         <svg id="p3-svg-tank" class="w-full h-full" viewBox="0 0 400 300" fill="none">
                             <!-- Dinâmico -->
                         </svg>
@@ -683,13 +683,10 @@
                     </div>
                 </div>
                 <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800 text-center">
-                    <!-- Ilustração interativa estática Copo -->
                     <div class="relative w-32 h-44 border-b-4 border-x-2 border-indigo-400 rounded-b-xl flex items-end overflow-hidden">
-                        <!-- Líquido simulado -->
                         <div class="w-full h-1/2 bg-indigo-500/50 animate-pulse relative">
                             <div class="absolute inset-x-0 top-0 h-1 bg-indigo-300"></div>
                         </div>
-                        <!-- Linhas graduadas -->
                         <div class="absolute inset-y-0 right-2 flex flex-col justify-between text-[10px] text-indigo-300 font-mono py-2">
                             <span>- 1000 mL</span>
                             <span>- 750 mL</span>
@@ -724,7 +721,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <!-- Painel Esquerdo: Situações-Problema e Entrada de Resposta -->
                 <div class="lg:col-span-6 space-y-6">
                     <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-indigo-900/30 text-indigo-400 text-xs font-bold px-3 py-1 rounded-bl-xl font-mono">
@@ -736,7 +732,7 @@
                         </p>
                     </div>
 
-                    <!-- Controles de Dosagem de Líquido atualizados com os novos intervalos -->
+                    <!-- Controles de Dosagem de Líquido -->
                     <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
                         <div class="flex flex-col gap-3">
                             <div>
@@ -745,7 +741,6 @@
                                 <span class="text-slate-400 text-xs" id="p4-liter-equivalent">/ 0.0 Litros</span>
                             </div>
                             
-                            <!-- Grade com múltiplos botões de adição e subtração -->
                             <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
                                 <button onclick="p4AlterLiquid(250)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+250 mL</button>
                                 <button onclick="p4AlterLiquid(100)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+100 mL</button>
@@ -771,20 +766,15 @@
                     <div id="p4-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
                 </div>
 
-                <!-- Painel Direito: Copo de Vidro Graduado em tempo real -->
                 <div class="lg:col-span-6 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[380px]">
                     <div class="text-center mb-4">
                         <span class="text-xs text-indigo-400 font-bold uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">Cilindro Graduado de Líquido Quântico</span>
                     </div>
 
-                    <!-- Copo em SVG Dinâmico -->
                     <div class="relative w-full h-[280px] flex items-center justify-center">
                         <svg id="p4-svg-copo" class="w-full h-full" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Fundo do copo -->
                             <rect x="90" y="30" width="120" height="230" rx="4" fill="rgba(255, 255, 255, 0.02)" stroke="#475569" stroke-width="4" />
-                            
-                            <!-- Graduação do copo (Marcadores e Volumes) -->
-                            <!-- Gerado dinamicamente via JS -->
                         </svg>
                     </div>
                 </div>
@@ -839,7 +829,7 @@
             </div>
         </section>
 
-        <!-- JOGO - FASE 5 (SITUAÇÕES PROBLEMAS INTERATIVAS) -->
+        <!-- JOGO - FASE 5 -->
         <section id="game-phase-5" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <div class="flex justify-between items-center mb-6">
                 <div>
@@ -853,7 +843,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <!-- Painel Esquerdo: Situações-Problema e Entrada/Opções de Resposta -->
                 <div class="lg:col-span-6 space-y-6">
                     <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-pink-900/30 text-pink-400 text-xs font-bold px-3 py-1 rounded-bl-xl font-mono">
@@ -865,9 +854,9 @@
                         </p>
                     </div>
 
-                    <!-- Painel Interativo Dinâmico da Fase 5 (Muda de acordo com a questão!) -->
+                    <!-- Painel Interativo Dinâmico da Fase 5 -->
                     <div id="p5-interactive-control" class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
-                        <!-- Será preenchido dinamicamente com sliders ou botões para interação -->
+                        <!-- Será preenchido dinamicamente com sliders ou botões -->
                     </div>
 
                     <div class="flex gap-4">
@@ -879,7 +868,6 @@
                     <div id="p5-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
                 </div>
 
-                <!-- Painel Direito: SVG Dinâmico da Fase 5 -->
                 <div class="lg:col-span-6 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[380px]">
                     <div class="text-center mb-4">
                         <span class="text-xs text-cyan-400 font-bold uppercase tracking-widest bg-cyan-950 px-3 py-1 rounded-full border border-cyan-900">Projeção Dinâmica 3D do Enigma</span>
@@ -887,7 +875,7 @@
 
                     <div class="relative w-full h-[280px] flex items-center justify-center">
                         <svg id="p5-svg-projection" class="w-full h-full" viewBox="0 0 400 300" fill="none">
-                            <!-- Gerado dinamicamente para cada enigma da Fase 5 -->
+                            <!-- Gerado dinamicamente para cada enigma -->
                         </svg>
                     </div>
                 </div>
@@ -902,19 +890,18 @@
             <div class="max-w-2xl mx-auto">
                 <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-emerald-500/30">Missão Concluída</span>
                 
-                <!-- Troféu Espacial -->
                 <div class="text-6xl my-6 animate-bounce">🏆</div>
                 
                 <h2 class="font-fun text-4xl sm:text-5xl text-white mb-4">Parabéns, Comandante do Volume!</h2>
                 
-                <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed">
+                <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed font-semibold">
                     Você navegou com sucesso pelas dimensões espaciais, dominou as arestas, calculou volumes tridimensionais, solucionou dosagens de laboratório e resolveu enigmas complexos de engenharia de sólidos!
                 </p>
 
                 <!-- Estatísticas de Jogo -->
                 <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 mb-8 max-w-sm mx-auto">
                     <h4 class="font-fun text-indigo-400 text-lg mb-4">Seu Relatório de Voo</h4>
-                    <div class="space-y-3 text-left text-sm">
+                    <div class="space-y-3 text-left text-sm font-semibold">
                         <div class="flex justify-between border-b border-slate-900 pb-2">
                             <span class="text-slate-400">Pontuação Total:</span>
                             <span class="text-emerald-400 font-bold" id="final-score">0 Pontos</span>
@@ -930,8 +917,8 @@
                     </div>
                 </div>
 
-                <div class="flex gap-4 justify-center">
-                    <button onclick="restartGame()" class="font-fun bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-8 rounded-xl shadow-lg transition-colors">
+                <div class="flex gap-4 justify-center font-fun">
+                    <button onclick="restartGame()" class="bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-8 rounded-xl shadow-lg transition-colors">
                         Jogar Novamente 🔄
                     </button>
                 </div>
@@ -956,6 +943,21 @@
         let p2SuccessCount = 0;
         let p3SuccessCount = 0;
 
+        // Função utilitária para renderizar LaTeX via KaTeX dinamicamente
+        function triggerMathRender() {
+            setTimeout(() => {
+                if (typeof renderMathInElement === 'function') {
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false}
+                        ],
+                        throwOnError: false
+                    });
+                }
+            }, 30);
+        }
+
         // Permite ao jogador pular livremente para a fase desejada
         function goToPhase(phaseNum) {
             changeScreen(`screen-intro-${phaseNum}`);
@@ -966,7 +968,10 @@
         let p0CurrentSection = 'a'; // 'a', 'b', 'c'
         let p0ClickedEdges = [];
         let p0FormulaSlots = [];
-        const p0CorrectFormula = ['a', 'x', 'a', 'x', 'a', '=', 'Volume'];
+        
+        // Versões aceitáveis da fórmula do volume
+        const p0CorrectFormula1 = ['a', 'x', 'a', 'x', 'a', '=', 'Volume'];
+        const p0CorrectFormula2 = ['Volume', '=', 'a', 'x', 'a', 'x', 'a'];
         let p0LegoCount = 0;
 
         // FASE 4: ESTADO E PERGUNTAS
@@ -974,32 +979,32 @@
         let p4CurrentQuestion = 0;
         let p4UserLiquidVolume = 0; // em mL
 
-        // FASE 5: ESTADO E PERGUNTAS (NOVO)
+        // FASE 5: ESTADO E PERGUNTAS
         let p5SuccessCount = 0;
         let p5CurrentQuestion = 0;
-        let p5InteractiveValue = 0; // Valor interativo controlado na questão ativa
+        let p5InteractiveValue = 0; 
 
         // Lista de 4 questões da Fase 4 - Situações Problema de L e mL
         const p4Questions = [
             {
-                text: "Um recipiente cúbico de energia da nave tem arestas medindo exatamente 10 cm. O cientista necessita que você preencha o copo de testes com o volume equivalente à capacidade total desse recipiente cúbico. Converta o volume para mL e adicione ao copo!",
+                text: "Um recipiente cúbico de energia da nave tem arestas medindo exatamente $10\\text{ cm}$. O cientista necessita que você preencha o copo de testes com o volume equivalente à capacidade total desse recipiente cúbico. Converta o volume para $mL$ e adicione ao copo!",
                 targetVolumeMl: 1000, 
-                tip: "Lembre-se: 10 cm x 10 cm x 10 cm = 1000 cm³. E 1 cm³ equivale exatamente a 1 mL!"
+                tip: "Lembre-se: $10\\text{ cm} \\times 10\\text{ cm} \\times 10\\text{ cm} = 1000\\text{ cm}^3$. E $1\\text{ cm}^3$ equivale exatamente a $1\\text{ mL}$!"
             },
             {
-                text: "Uma embalagem espacial de combustível em formato de cubo tem arestas medindo exatamente 0.5 dm (meio decímetro). Sabendo que 1 dm³ equivale a 1 Litro, encha o copo de testes com a capacidade exata em mL correspondente a essa embalagem!",
+                text: "Uma embalagem espacial de combustível em formato de cubo tem arestas medindo exatamente $0.5\\text{ dm}$ (meio decímetro). Sabendo que $1\\text{ dm}^3$ equivale a $1\\text{ Litro}$, encha o copo de testes com a capacidade exata em $mL$ correspondente a essa embalagem!",
                 targetVolumeMl: 125, 
-                tip: "Primeiro calcule o volume do cubo: 0,5 x 0,5 x 0,5 = 0,125 dm³. Como 1 dm³ = 1 L, o volume é 0,125 Litros. Multiplique por 1000 para achar os mL!"
+                tip: "Primeiro calcule o volume do cubo: $0,5 \\times 0,5 \\times 0,5 = 0,125\\text{ dm}^3$. Como $1\\text{ dm}^3 = 1\\text{ L}$, o volume é $0,125\\text{ Litros}$. Multiplique por $1000$ para achar os $mL$!"
             },
             {
-                text: "A equipe de robótica da nave precisa misturar água oxigenada. Eles têm um reservatório em forma de cubo perfeito com 5 cm de aresta. Se o copo de testes deve conter metade do volume total dessa embalagem de 5 cm de aresta, quantos mL você deve despejar?",
+                text: "A equipe de robótica da nave precisa misturar água oxigenada. Eles têm um reservatório em forma de cubo perfeito com $5\\text{ cm}$ de aresta. Se o copo de testes deve conter metade do volume total dessa embalagem de $5\\text{ cm}$ de aresta, quantos $mL$ você deve despejar?",
                 targetVolumeMl: 62.5, 
-                tip: "Volume total do cubo: 5³ = 125 cm³. Metade disso é 62,5 mL! Use o botão de +0.5 mL juntamente com os outros para dosar perfeitamente!"
+                tip: "Volume total do cubo: $5^3 = 125\\text{ cm}^3$. Metade disso é $62.5\\text{ mL}$! Use o botão de $+0.5\\text{ mL}$ juntamente com os outros para dosar perfeitamente!"
             },
             {
-                text: "Um reservatório auxiliar de emergência de água potável tem o formato de um cubo de 0.1 m de aresta. Para reabastecer a equipe médica da nave, você precisa coletar o equivalente a exatamente 40% desse reservatório no copo graduado. Faça a conversão do volume para mL e faça a dosagem!",
+                text: "Um reservatório auxiliar de emergência de água potável tem o formato de um cubo de $0.1\\text{ m}$ de aresta. Para reabastecer a equipe médica da nave, você precisa coletar o equivalente a exatamente $40\\%$ desse reservatório no copo graduado. Faça a conversão do volume para $mL$ e faça a dosagem!",
                 targetVolumeMl: 400, 
-                tip: "Aresta de 0.1 m é igual a 1 decímetro (1 dm). Um cubo de 1 dm de aresta tem volume de 1 dm³ = 1 Litro = 1000 mL. Agora, calcule 40% de 1000 mL!"
+                tip: "Aresta de $0.1\\text{ m}$ é igual a $1\\text{ decímetro}$ ($1\\text{ dm}$). Um cubo de $1\\text{ dm}$ de aresta tem volume de $1\\text{ dm}^3 = 1\\text{ Litro} = 1000\\text{ mL}$. Agora, calcule $40\\%$ de $1000\\text{ mL}$!"
             }
         ];
 
@@ -1007,39 +1012,39 @@
         const p5Questions = [
             {
                 title: "Enigma 1: Engenharia Reversa",
-                text: "O reator central da nave possui um compartimento cúbico de resfriamento com volume exato de 216 dm³. Para podermos instalar uma nova grade de proteção, precisamos saber a medida exata da aresta deste compartimento em decímetros. Ajuste o controle deslizante para o tamanho correto!",
-                targetValue: 6, // 6*6*6 = 216
+                text: "O reator central da nave possui um compartimento cúbico de resfriamento com volume exato de $216\\text{ dm}^3$. Para podermos instalar uma nova grade de proteção, precisamos saber a medida exata da aresta deste compartimento em decímetros. Ajuste o controle deslizante para o tamanho correto!",
+                targetValue: 6, 
                 type: "slider",
                 min: 2,
                 max: 10,
                 unit: "dm",
-                tip: "Precisamos achar o número que, multiplicado por ele mesmo três vezes (a x a x a ou a³), resulte em 216. Ou seja, a raiz cúbica de 216!"
+                tip: "Precisamos achar o número que, multiplicado por ele mesmo três vezes ($a \\times a \\times a = a^3$), resulte em $216$. Ou seja, a raiz cúbica de $216$!"
             },
             {
                 title: "Enigma 2: Fusão Quântica",
-                text: "A equipe fundiu 8 cristais cúbicos pequenos de combustível quântico, cada um com volume individual de 27 cm³, para formar um único cristal cúbico gigante sem perder matéria. Qual deve ser o comprimento da aresta desse novo cristal cúbico em centímetros? Ajuste o controle deslizante!",
-                targetValue: 6, // 8 * 27 = 216 cm3. Aresta = 6 cm.
+                text: "A equipe fundiu $8$ cristais cúbicos pequenos de combustível quântico, cada um com volume individual de $27\\text{ cm}^3$, para formar um único cristal cúbico gigante sem perder matéria. Qual deve ser o comprimento da aresta desse novo cristal cúbico em centímetros? Ajuste o controle deslizante!",
+                targetValue: 6, 
                 type: "slider",
                 min: 3,
                 max: 12,
                 unit: "cm",
-                tip: "Primeiro, descubra o volume total: 8 cristais de 27 cm³ somam 216 cm³. Agora, encontre a aresta de um cubo cujo volume total é 216 cm³!"
+                tip: "Primeiro, descubra o volume total: $8$ cristais de $27\\text{ cm}^3$ somam $216\\text{ cm}^3$. Encontre a aresta de um cubo cujo volume total é $216\\text{ cm}^3$ ($6 \\times 6 \\times 6$)!"
             },
             {
                 title: "Enigma 3: Dilatação Volumétrica",
-                text: "Um bloco refrigerador cúbico de silício tem aresta de 3 cm. Sob calor extremo, as arestas sofrem dilatação e dobram de tamanho, passando a medir 6 cm de aresta. Em relação ao bloco original de 3 cm, o novo volume expandido ficou quantas vezes maior? Escolha a alternativa:",
-                targetValue: 8, // volume de 3cm = 27, volume de 6cm = 216. 216 / 27 = 8.
+                text: "Um bloco refrigerador cúbico de silício tem aresta de $3\\text{ cm}$. Sob calor extremo, as arestas sofrem dilatação e dobram de tamanho, passando a medir $6\\text{ cm}$ de aresta. Em relação ao bloco original de $3\\text{ cm}$, o novo volume expandido ficou quantas vezes maior? Escolha a alternativa:",
+                targetValue: 8, 
                 type: "options",
                 options: [2, 4, 6, 8],
-                tip: "Volume original: 3³ = 27 cm³. Novo volume com aresta dobrada (6 cm): 6³ = 216 cm³. Agora divida 216 por 27!"
+                tip: "Volume original: $3^3 = 27\\text{ cm}^3$. Novo volume com aresta dobrada ($6\\text{ cm}$): $6^3 = 216\\text{ cm}^3$. Divida $216$ por $27$!"
             },
             {
                 title: "Enigma 4: Armadura de Blindagem",
-                text: "Um processador central em formato de cubo perfeito tem aresta de 10 cm. Para protegê-lo contra radiação solar, aplicaremos uma camada uniforme de nanoshielding ao redor do processador que aumentará sua aresta total para 11 cm. Qual será o novo volume final ocupado pelo processador blindado em cm³? Digite a resposta:",
-                targetValue: 1331, // 11 * 11 * 11 = 1331
+                text: "Um processador central em formato de cubo perfeito tem aresta de $10\\text{ cm}$. Para protegê-lo contra radiação solar, aplicaremos uma camada uniforme de nanoshielding ao redor do processador que aumentará sua aresta total para $11\\text{ cm}$. Qual será o novo volume final ocupado pelo processador blindado em $\\text{cm}^3$? Digite a resposta:",
+                targetValue: 1331, 
                 type: "input",
                 placeholder: "Digite o volume...",
-                tip: "Basta calcular o volume de um cubo que agora tem aresta medindo 11 cm. Aplique a fórmula: V = a³ (11 x 11 x 11)!"
+                tip: "Basta calcular o volume de um cubo que agora tem aresta medindo $11\\text{ cm}$. Aplique a fórmula: $V = a^3$ ($11 \\times 11 \\times 11$)!"
             }
         ];
 
@@ -1087,6 +1092,7 @@
                 }
             });
             updateBadges(screenId);
+            triggerMathRender(); 
         }
 
         // Atualizador de Estética das Fases no Header
@@ -1149,7 +1155,7 @@
 
 
         // ==========================
-        //  LÓGICA DA FASE 0 (NOVA)
+        //  LÓGICA DA FASE 0 (TUTORIAL)
         // ==========================
 
         function startPhase0() {
@@ -1178,9 +1184,9 @@
             document.getElementById('p0-a-feedback').classList.add('hidden');
 
             drawP0ArestasInteractive();
+            triggerMathRender();
         }
 
-        // Desenhar cubo interativo no SVG para a seção de arestas clicáveis
         function drawP0ArestasInteractive() {
             const svg = document.getElementById('p0-svg-aresta-interactive');
             svg.innerHTML = '';
@@ -1189,7 +1195,6 @@
             const cy = 130;
             const size = 65; 
 
-            // Projeção isométrica
             const project = (x, y, z) => {
                 const rx = cx + (x - y) * size * Math.cos(Math.PI / 6);
                 const ry = cy + (x + y) * size * Math.sin(Math.PI / 6) - z * size;
@@ -1201,21 +1206,19 @@
                 project(0,0,1), project(1,0,1), project(1,1,1), project(0,1,1)
             ];
 
-            // Definição das 12 arestas: pares de vértices [v1, v2, id_aresta]
             const edges = [
                 [0, 1, 'e1'], [1, 2, 'e2'], [2, 3, 'e3'], [3, 0, 'e4'],
                 [4, 5, 'e5'], [5, 6, 'e6'], [6, 7, 'e7'], [7, 4, 'e8'],
                 [0, 4, 'e9'], [1, 5, 'e10'], [2, 6, 'e11'], [3, 7, 'e12']
             ];
 
-            // Desenhar faces como área clicável que gera aviso: "Isso é uma Face!"
             const facePoints = [
-                [0, 1, 2, 3], // base
-                [4, 5, 6, 7], // topo
-                [0, 1, 5, 4], // frente esq
-                [1, 2, 6, 5], // frente dir
-                [2, 3, 7, 6], // tras dir
-                [3, 0, 4, 7]  // tras esq
+                [0, 1, 2, 3], 
+                [4, 5, 6, 7], 
+                [0, 1, 5, 4], 
+                [1, 2, 6, 5], 
+                [2, 3, 7, 6], 
+                [3, 0, 4, 7]  
             ];
 
             facePoints.forEach((f, idx) => {
@@ -1228,7 +1231,6 @@
                 svg.appendChild(poly);
             });
 
-            // Desenhar as 12 arestas como elementos grossos e altamente interativos
             edges.forEach(e => {
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 const isSelected = p0ClickedEdges.includes(e[2]);
@@ -1240,12 +1242,11 @@
                 line.setAttribute('stroke-width', isSelected ? '7' : '4');
                 line.setAttribute('class', 'cursor-pointer hover:stroke-pink-500 hover:stroke-[8px] transition-all');
                 
-                // Mapear clique na aresta
                 line.addEventListener('click', () => {
                     if (!p0ClickedEdges.includes(e[2])) {
                         p0ClickedEdges.push(e[2]);
                         triggerP0AFeedback("aresta_ok");
-                        drawP0ArestasInteractive(); // redesenhar para pintar de verde
+                        drawP0ArestasInteractive(); 
                         
                         document.getElementById('p0-mapped-count').innerText = `${p0ClickedEdges.length} / 3`;
                         if (p0ClickedEdges.length >= 3) {
@@ -1261,7 +1262,6 @@
                 svg.appendChild(line);
             });
 
-            // Desenhar os 8 vértices que geram aviso "Isso é um vértice!"
             pts.forEach((pt, idx) => {
                 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 circle.setAttribute('cx', pt.x);
@@ -1295,6 +1295,7 @@
                 fb.innerText = "Excelente, Cadete! Módulo de arestas concluído. Preparando para a montagem de fórmulas! (+50 Pontos)";
                 updateGlobalScore(50);
             }
+            triggerMathRender();
         }
 
 
@@ -1317,6 +1318,7 @@
             renderP0FormulaSlots();
             renderP0FormulaChips();
             drawP0FormulaShow();
+            triggerMathRender();
         }
 
         function renderP0FormulaSlots() {
@@ -1326,7 +1328,7 @@
             for (let i = 0; i < 7; i++) {
                 const slot = document.createElement('div');
                 const val = p0FormulaSlots[i];
-                slot.className = `w-10 h-10 sm:w-12 sm:h-12 border-2 ${val ? 'border-indigo-500 bg-indigo-950/60 text-white font-bold' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'} rounded-xl flex items-center justify-center font-mono text-sm sm:text-base transition-all`;
+                slot.className = `w-10 h-10 sm:w-12 sm:h-12 border-2 ${val ? 'border-indigo-500 bg-indigo-950/60 text-white font-bold' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'} rounded-xl flex items-center justify-center font-mono text-xs sm:text-sm transition-all`;
                 slot.innerText = val ? val : '?';
                 slotsContainer.appendChild(slot);
             }
@@ -1336,10 +1338,10 @@
             const container = document.getElementById('p0-formula-chips');
             container.innerHTML = '';
 
-            // Shuffled options para clicar e preencher os slots
+            // Peças da equação
             const chips = ['a', 'x', 'a', 'x', 'a', '=', 'Volume'];
             // Embaralhar para o desafio
-            chips.sort((x, y) => x.localeCompare(y));
+            chips.sort(() => Math.random() - 0.5);
 
             chips.forEach(chip => {
                 const btn = document.createElement('button');
@@ -1368,23 +1370,27 @@
             if (p0FormulaSlots.length < 7) {
                 feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
                 feedback.innerText = "Insira todas as 7 peças para preencher a fórmula!";
+                triggerMathRender();
                 return;
             }
 
-            const equals = p0FormulaSlots.every((val, index) => val === p0CorrectFormula[index]);
+            // Validar as duas opções aceitáveis: a x a x a = Volume OR Volume = a x a x a
+            const equalsOption1 = p0FormulaSlots.every((val, index) => val === p0CorrectFormula1[index]);
+            const equalsOption2 = p0FormulaSlots.every((val, index) => val === p0CorrectFormula2[index]);
 
-            if (equals) {
-                feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
-                feedback.innerText = "SOLUÇÃO EXATA! Aresta (a) x Aresta (a) x Aresta (a) = Volume do Cubo! (+50 Pontos)";
+            if (equalsOption1 || equalsOption2) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                feedback.innerText = "SOLUÇÃO EXATA! Aresta ($a$) × Aresta ($a$) × Aresta ($a$) = Volume ou Volume = Aresta ($a$) × Aresta ($a$) × Aresta ($a$)! (+50 Pontos)";
                 updateGlobalScore(50);
                 
                 setTimeout(() => {
                     setupP0SectionC();
-                }, 2000);
+                }, 2500);
             } else {
                 feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
-                feedback.innerText = "Fórmula incorreta! Lembre-se: multiplicamos as 3 arestas para obter o volume (aresta x aresta x aresta = volume). Tente limpar e refazer!";
+                feedback.innerText = "Fórmula incorreta! Lembre-se: multiplicamos as 3 arestas para obter o volume (aresta x aresta x aresta = volume ou volume = aresta x aresta x aresta). Tente limpar e refazer!";
             }
+            triggerMathRender();
         }
 
         function drawP0FormulaShow() {
@@ -1420,12 +1426,10 @@
                 svg.appendChild(line);
             }
 
-            // Traseiras
             drawLine(pts[0], pts[1], '#475569', 1.5, true);
             drawLine(pts[0], pts[3], '#475569', 1.5, true);
             drawLine(pts[0], pts[4], '#475569', 1.5, true);
 
-            // Sólidas
             drawLine(pts[1], pts[2], '#ec4899', 3);
             drawLine(pts[2], pts[3], '#ec4899', 3);
             drawLine(pts[4], pts[5], '#ec4899', 3);
@@ -1436,23 +1440,19 @@
             drawLine(pts[2], pts[6], '#ec4899', 3);
             drawLine(pts[3], pts[7], '#ec4899', 3);
 
-            // Rótulos axaxa
             const drawLabel = (p, text, color) => {
                 const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 txt.setAttribute('x', p.x);
                 txt.setAttribute('y', p.y);
                 txt.setAttribute('fill', color);
-                txt.setAttribute('font-size', '14px');
+                txt.setAttribute('font-size', '12px');
                 txt.setAttribute('font-weight', 'bold');
                 txt.textContent = text;
                 svg.appendChild(txt);
             };
 
-            // Comprimento (largura do vetor base esquerdo para direito)
             drawLabel({x: (pts[1].x + pts[2].x)/2 + 10, y: (pts[1].y + pts[2].y)/2 + 15}, "a (comprimento)", "#a5b4fc");
-            // Largura
             drawLabel({x: (pts[2].x + pts[3].x)/2 - 80, y: (pts[2].y + pts[3].y)/2 + 15}, "a (largura)", "#f472b6");
-            // Altura
             drawLabel({x: pts[6].x + 10, y: (pts[2].y + pts[6].y)/2}, "a (altura)", "#34d399");
         }
 
@@ -1473,12 +1473,13 @@
             p0LegoCount = 0;
             document.getElementById('p0-c-feedback').classList.add('hidden');
             updateP0LegoVisuals();
+            triggerMathRender();
         }
 
         function p0AlterLego(amount) {
             p0LegoCount += amount;
             if (p0LegoCount < 0) p0LegoCount = 0;
-            if (p0LegoCount > 4) p0LegoCount = 4; // limite visual
+            if (p0LegoCount > 4) p0LegoCount = 4; 
 
             updateP0LegoVisuals();
         }
@@ -1486,7 +1487,6 @@
         function updateP0LegoVisuals() {
             document.getElementById('p0-lego-volume-display').innerText = `${p0LegoCount} dm³ (${p0LegoCount} Litros)`;
 
-            // Atualizar preenchimento do Lego Container
             const container = document.getElementById('p0-lego-container');
             container.innerHTML = '';
 
@@ -1497,10 +1497,10 @@
                 container.appendChild(block);
             }
 
-            // Atualizar preenchimento de fluido (Litros)
             const fluidFill = document.getElementById('p0-fluid-fill');
-            const percent = (p0LegoCount / 3) * 100; // Alvo é 3 litros
+            const percent = (p0LegoCount / 3) * 100; 
             fluidFill.style.height = `${Math.min(percent, 100)}%`;
+            triggerMathRender();
         }
 
         function checkP0Lego() {
@@ -1508,21 +1508,22 @@
             feedback.classList.remove('hidden');
 
             if (p0LegoCount === 3) {
-                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
-                feedback.innerText = "INCRÍVEL! Exatamente 3 dm³ convertidos perfeitamente para 3 Litros de energia líquida! (+100 Pontos)";
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                feedback.innerText = "INCRÍVEL! Exatamente $3\\text{ dm}^3$ convertidos perfeitamente para $3\\text{ Litros}$ de energia líquida! (+100 Pontos)";
                 updateGlobalScore(100);
 
                 setTimeout(() => {
-                    changeScreen('screen-intro-1'); // Envia o aluno para o início regular
+                    changeScreen('screen-intro-1'); 
                 }, 2000);
             } else {
                 feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
                 if (p0LegoCount < 3) {
-                    feedback.innerText = `Faltam blocos! Você colocou apenas ${p0LegoCount} dm³ (${p0LegoCount} Litros). Encha até 3 Litros!`;
+                    feedback.innerText = `Faltam blocos! Você colocou apenas $${p0LegoCount}\\text{ dm}^3$ ($${p0LegoCount}\\text{ Litros}$). Encha até 3 Litros!`;
                 } else {
-                    feedback.innerText = `Líquido transbordou! Você colocou ${p0LegoCount} dm³ (${p0LegoCount} Litros). Ajuste para apenas 3 Litros!`;
+                    feedback.innerText = `Líquido transbordou! Você colocou $${p0LegoCount}\\text{ dm}^3$ ($${p0LegoCount}\\text{ Litros}$). Ajuste para apenas 3 Litros!`;
                 }
             }
+            triggerMathRender();
         }
 
 
@@ -1552,6 +1553,7 @@
             feedback.classList.add('hidden');
             
             drawP1Cube();
+            triggerMathRender();
         }
 
         document.getElementById('p1-slider').addEventListener('input', function(e) {
@@ -1559,6 +1561,7 @@
             document.getElementById('p1-current-label').innerText = p1CurrentValue + " cm";
             document.getElementById('p1-info-edge').innerText = p1CurrentValue + " cm";
             drawP1Cube();
+            triggerMathRender();
         });
 
         function drawP1Cube() {
@@ -1666,7 +1669,7 @@
             feedback.classList.remove('hidden');
 
             if (p1CurrentValue === p1TargetValue) {
-                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
                 feedback.innerText = "Excelente! Aresta forjada com precisão milimétrica! (+50 Pontos)";
                 
                 updateGlobalScore(50);
@@ -1691,6 +1694,7 @@
                     feedback.innerText = `Grande demais! Você passou por ${diferenca} cm do molde. Ajuste!`;
                 }
             }
+            triggerMathRender();
         }
 
 
@@ -1722,6 +1726,7 @@
             feedback.classList.add('hidden');
 
             drawP2Isometric();
+            triggerMathRender();
         }
 
         function p2AddBlock() {
@@ -1847,18 +1852,20 @@
             if (isNaN(userAnswer)) {
                 feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
                 feedback.innerText = "Por favor, digite um volume válido!";
+                triggerMathRender();
                 return;
             }
 
             if (p2PlacedBlocksCount < totalBlocksNeeded) {
                 feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
-                feedback.innerText = `Você ainda não encheu a caixa inteira com cubos de 1cm³! Coloque mais blocos antes de descobrir o volume final.`;
+                feedback.innerText = `Você ainda não encheu a caixa inteira com cubos de $1\\text{ cm}^3$! Coloque mais blocos antes de descobrir o volume final.`;
+                triggerMathRender();
                 return;
             }
 
             if (userAnswer === correctAnswer) {
-                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
-                feedback.innerText = `Sensacional! Você percebeu que cabem exatamente ${correctAnswer} cubos unitários na caixa de volume ${correctAnswer} cm³! (+100 Pontos)`;
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                feedback.innerText = `Sensacional! Você percebeu que cabem exatamente ${correctAnswer} cubos unitários na caixa de volume $${correctAnswer}\\text{ cm}^3$! (+100 Pontos)`;
                 
                 updateGlobalScore(100);
                 p2SuccessCount++;
@@ -1877,6 +1884,7 @@
                 feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
                 feedback.innerText = `Incorreto. Vamos contar? Temos ${p2TargetW} de comprimento por ${p2TargetD} de largura (fazendo uma base de ${p2TargetW*p2TargetD} blocos), multiplicados por ${p2TargetH} de altura. Tente recalcular!`;
             }
+            triggerMathRender();
         }
 
 
@@ -1932,6 +1940,7 @@
             feedback.classList.add('hidden');
 
             drawP3Tank(0); 
+            triggerMathRender();
         }
 
         function p3SelectAnswer(selectedValue, buttonElement) {
@@ -1988,6 +1997,7 @@
                     });
                 }, 2000);
             }
+            triggerMathRender();
         }
 
         function drawP3Tank(fillPercent) {
@@ -2101,10 +2111,10 @@
 
             const feedback = document.getElementById('p4-feedback');
             feedback.classList.add('hidden');
+            triggerMathRender();
         }
 
         function p4AlterLiquid(amount) {
-            // Garantir que a soma lide perfeitamente com decimais como 62.5 mL
             p4UserLiquidVolume = parseFloat((p4UserLiquidVolume + amount).toFixed(1));
             if (p4UserLiquidVolume < 0) p4UserLiquidVolume = 0;
             if (p4UserLiquidVolume > 1100) p4UserLiquidVolume = 1100; 
@@ -2122,27 +2132,18 @@
             const liters = (p4UserLiquidVolume / 1000).toFixed(3);
             document.getElementById('p4-liter-equivalent').innerText = `/ ${liters} Litros`;
             drawP4Copo();
+            triggerMathRender();
         }
 
         function drawP4Copo() {
             const svg = document.getElementById('p4-svg-copo');
-            svg.innerHTML = '';
+            // Limpa exceto o copo de fundo
+            svg.innerHTML = '<rect x="90" y="30" width="120" height="230" rx="4" fill="rgba(255, 255, 255, 0.02)" stroke="#475569" stroke-width="4" />';
 
             const cupX = 90;
             const cupY = 30;
             const cupWidth = 120;
             const cupHeight = 230;
-
-            const cupBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            cupBg.setAttribute('x', cupX);
-            cupBg.setAttribute('y', cupY);
-            cupBg.setAttribute('width', cupWidth);
-            cupBg.setAttribute('height', cupHeight);
-            cupBg.setAttribute('rx', '4');
-            cupBg.setAttribute('fill', 'rgba(255, 255, 255, 0.05)');
-            cupBg.setAttribute('stroke', '#64748b');
-            cupBg.setAttribute('stroke-width', '4');
-            svg.appendChild(cupBg);
 
             const pxPerMl = 200 / 1000; 
             const liquidHeightPx = p4UserLiquidVolume * pxPerMl;
@@ -2259,7 +2260,6 @@
                     if (p4CurrentQuestion < p4Questions.length) {
                         setupP4Question();
                     } else {
-                        // Passa para a introdução da Fase 5!
                         changeScreen('screen-intro-5');
                     }
                 }, 3000);
@@ -2268,6 +2268,7 @@
                 feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
                 feedback.innerText = `A dosagem atual está incorreta! Você colocou ${p4UserLiquidVolume} mL no copo, mas precisamos de outra quantidade. Dica: ${currentData.tip}`;
             }
+            triggerMathRender();
         }
 
 
@@ -2292,7 +2293,6 @@
             const feedback = document.getElementById('p5-feedback');
             feedback.classList.add('hidden');
 
-            // Renderizar painel de controle dinâmico conforme o tipo de questão
             const controlContainer = document.getElementById('p5-interactive-control');
             controlContainer.innerHTML = '';
 
@@ -2317,15 +2317,16 @@
                     p5InteractiveValue = parseInt(e.target.value);
                     document.getElementById('p5-val-display').innerText = `${p5InteractiveValue} ${currentData.unit}`;
                     drawP5Projection();
+                    triggerMathRender();
                 });
 
             } else if (currentData.type === 'options') {
-                p5InteractiveValue = 0; // Guardará o valor selecionado
+                p5InteractiveValue = 0; 
                 
                 let optionsHtml = `<div class="grid grid-cols-2 gap-3">`;
                 currentData.options.forEach(opt => {
                     optionsHtml += `
-                        <button onclick="p5SelectOption(${opt}, this)" class="p5-opt-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-base text-slate-100 transition-all text-center">
+                        <button onclick="p5SelectOption(${opt}, this)" class="p5-opt-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-base text-slate-100 transition-all text-center focus:outline-none">
                             ${opt} vezes
                         </button>
                     `;
@@ -2334,7 +2335,7 @@
                 controlContainer.innerHTML = optionsHtml;
 
             } else if (currentData.type === 'input') {
-                p5InteractiveValue = ""; // Guardará o texto digitado
+                p5InteractiveValue = ""; 
 
                 controlContainer.innerHTML = `
                     <div class="space-y-2">
@@ -2346,26 +2347,27 @@
                 document.getElementById('p5-text-input').addEventListener('input', function(e) {
                     p5InteractiveValue = parseInt(e.target.value);
                     drawP5Projection();
+                    triggerMathRender();
                 });
             }
 
             drawP5Projection();
+            triggerMathRender();
         }
 
         function p5SelectOption(val, element) {
             p5InteractiveValue = val;
             
-            // Destacar o botão selecionado
             const btns = document.querySelectorAll('.p5-opt-btn');
             btns.forEach(btn => {
-                btn.className = "p5-opt-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-base text-slate-100 transition-all text-center";
+                btn.className = "p5-opt-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-base text-slate-100 transition-all text-center focus:outline-none";
             });
-            element.className = "p5-opt-btn bg-indigo-600 border border-indigo-400 rounded-xl py-4 font-mono font-bold text-base text-white transition-all text-center shadow-lg shadow-indigo-500/20";
+            element.className = "p5-opt-btn bg-indigo-600 border border-indigo-400 rounded-xl py-4 font-mono font-bold text-base text-white transition-all text-center shadow-lg shadow-indigo-500/20 focus:outline-none";
             
             drawP5Projection();
+            triggerMathRender();
         }
 
-        // Desenhar projeções 3D SVG específicas para os 4 enigmas avançados da Fase 5
         function drawP5Projection() {
             const svg = document.getElementById('p5-svg-projection');
             svg.innerHTML = '';
@@ -2390,28 +2392,25 @@
                 svg.appendChild(line);
             }
 
-            // Enigma 1: Cubo em engenharia reversa que altera o tamanho com o slider do usuário
             if (p5CurrentQuestion === 0) {
-                const currentSize = p5InteractiveValue * 12; // Escala visual
+                const currentSize = p5InteractiveValue * 12; 
                 const cHalf = currentSize / 2;
 
                 const pts = [
-                    {x: isoX(-cHalf, -cHalf, -cHalf), y: isoY(-cHalf, -cHalf, -cHalf)}, // 0
-                    {x: isoX(cHalf, -cHalf, -cHalf), y: isoY(cHalf, -cHalf, -cHalf)},  // 1
-                    {x: isoX(cHalf, cHalf, -cHalf), y: isoY(cHalf, cHalf, -cHalf)},   // 2
-                    {x: isoX(-cHalf, cHalf, -cHalf), y: isoY(-cHalf, cHalf, -cHalf)},  // 3
-                    {x: isoX(-cHalf, -cHalf, cHalf), y: isoY(-cHalf, -cHalf, cHalf)},  // 4
-                    {x: isoX(cHalf, -cHalf, cHalf), y: isoY(cHalf, -cHalf, cHalf)},   // 5
-                    {x: isoX(cHalf, cHalf, cHalf), y: isoY(cHalf, cHalf, cHalf)},    // 6
-                    {x: isoX(-cHalf, cHalf, cHalf), y: isoY(-cHalf, cHalf, cHalf)}    // 7
+                    {x: isoX(-cHalf, -cHalf, -cHalf), y: isoY(-cHalf, -cHalf, -cHalf)}, 
+                    {x: isoX(cHalf, -cHalf, -cHalf), y: isoY(cHalf, -cHalf, -cHalf)},  
+                    {x: isoX(cHalf, cHalf, -cHalf), y: isoY(cHalf, cHalf, -cHalf)},   
+                    {x: isoX(-cHalf, cHalf, -cHalf), y: isoY(-cHalf, cHalf, -cHalf)},  
+                    {x: isoX(-cHalf, -cHalf, cHalf), y: isoY(-cHalf, -cHalf, cHalf)},  
+                    {x: isoX(cHalf, -cHalf, cHalf), y: isoY(cHalf, -cHalf, cHalf)},   
+                    {x: isoX(cHalf, cHalf, cHalf), y: isoY(cHalf, cHalf, cHalf)},    
+                    {x: isoX(-cHalf, cHalf, cHalf), y: isoY(-cHalf, cHalf, cSelf = cHalf)}    
                 ];
 
-                // Desenhar linhas traseiras
                 drawLine(pts[0], pts[1], '#4338ca', 1, true);
                 drawLine(pts[0], pts[3], '#4338ca', 1, true);
                 drawLine(pts[0], pts[4], '#4338ca', 1, true);
 
-                // Desenhar linhas frontais sólidas
                 drawLine(pts[1], pts[2], '#06b6d4', 2.5);
                 drawLine(pts[2], pts[3], '#06b6d4', 2.5);
                 drawLine(pts[4], pts[5], '#06b6d4', 2.5);
@@ -2422,18 +2421,16 @@
                 drawLine(pts[2], pts[6], '#06b6d4', 2.5);
                 drawLine(pts[3], pts[7], '#06b6d4', 2.5);
 
-                // Rótulo de Volume em Tempo Real
                 const vol = p5InteractiveValue * p5InteractiveValue * p5InteractiveValue;
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', '30');
                 text.setAttribute('y', '50');
                 text.setAttribute('fill', '#67e8f9');
                 text.setAttribute('font-weight', 'bold');
-                text.setAttribute('font-size', '15px');
-                text.textContent = `Volume Simulado: ${vol} dm³`;
+                text.setAttribute('font-size', '14px');
+                text.textContent = `Volume do Cubo: ${vol} dm³`;
                 svg.appendChild(text);
 
-            // Enigma 2: 8 cubos pequenos se fundindo em um maior de aresta ajustável
             } else if (p5CurrentQuestion === 1) {
                 const giantSize = p5InteractiveValue * 12;
                 const gHalf = giantSize / 2;
@@ -2449,7 +2446,6 @@
                     {x: isoX(-gHalf, gHalf, gHalf), y: isoY(-gHalf, gHalf, gHalf)}    
                 ];
 
-                // Desenhar cubo translúcido
                 drawLine(pts[0], pts[1], '#4f46e5', 1, true);
                 drawLine(pts[0], pts[3], '#4f46e5', 1, true);
                 drawLine(pts[0], pts[4], '#4f46e5', 1, true);
@@ -2464,7 +2460,6 @@
                 drawLine(pts[2], pts[6], '#ec4899', 2);
                 drawLine(pts[3], pts[7], '#ec4899', 2);
 
-                // Desenhar representação dos 8 cristais menores fundidos se a aresta estiver perto do correto (6)
                 if (p5InteractiveValue === 6) {
                     const dots = [
                         {cx: 0, cy: 0, cz: 0}, {cx: 1, cy: 0, cz: 0}, {cx: 0, cy: 1, cz: 0}, {cx: 1, cy: 1, cz: 0},
@@ -2482,7 +2477,6 @@
                     });
                 }
 
-                // Volume alvo
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', '30');
                 text.setAttribute('y', '50');
@@ -2492,16 +2486,13 @@
                 text.textContent = `Fusão de 8 cubos de 27 cm³ = 216 cm³`;
                 svg.appendChild(text);
 
-            // Enigma 3: Comparação de dois cubos (Original de 3cm vs Expandido de 6cm)
             } else if (p5CurrentQuestion === 2) {
-                // Cubo Esquerdo (Original - 3cm)
-                const s1 = 30; // tamanho
+                const s1 = 30; 
                 const cx1 = 120;
                 const cy1 = 180;
                 const pL = (x, y, z) => cx1 + (x - y) * s1 * 0.86 - z * s1;
                 const pLY = (x, y, z) => cy1 + (x + y) * s1 * 0.5 - z * s1;
 
-                // Desenhar Cubinho 3cm
                 const drawSideBySide = (pX, pY, color, labelText) => {
                     const o0 = {x: pX(0,0,0), y: pY(0,0,0)};
                     const o1 = {x: pX(1,0,0), y: pY(1,0,0)};
@@ -2531,8 +2522,7 @@
 
                 drawSideBySide(pL, pLY, '#a7f3d0', "3 cm (V=27 cm³)");
 
-                // Cubo Direito (Expandido - 6cm)
-                const s2 = 45; // dobro da escala relativa
+                const s2 = 45; 
                 const cx2 = 280;
                 const cy2 = 180;
                 const pR = (x, y, z) => cx2 + (x - y) * s2 * 0.86 - z * s2;
@@ -2540,7 +2530,6 @@
 
                 drawSideBySide(pR, pRY, '#10b981', "6 cm (V=216 cm³)");
 
-                // Se o aluno selecionou uma opção, mostrar comparação matemática na tela
                 if (p5InteractiveValue > 0) {
                     const textCompare = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     textCompare.setAttribute('x', '80');
@@ -2552,12 +2541,10 @@
                     svg.appendChild(textCompare);
                 }
 
-            // Enigma 4: Processador de 10cm com camada expansível para 11cm
             } else if (p5CurrentQuestion === 3) {
-                const sCore = 80; // tamanho do core central de 10cm
+                const sCore = 80; 
                 const half1 = sCore / 2;
 
-                // Desenhar cubo central interno azul
                 const ptsCore = [
                     {x: isoX(-half1, -half1, -half1), y: isoY(-half1, -half1, -half1)},
                     {x: isoX(half1, -half1, -half1), y: isoY(half1, -half1, -half1)},
@@ -2579,7 +2566,6 @@
                 drawLine(ptsCore[2], ptsCore[6], '#3b82f6', 2);
                 drawLine(ptsCore[3], ptsCore[7], '#3b82f6', 2);
 
-                // Desenhar casca externa de blindagem pontilhada amarela (11cm)
                 const sShield = 90;
                 const half2 = sShield / 2;
                 const ptsShield = [
@@ -2603,7 +2589,6 @@
                 drawLine(ptsShield[2], ptsShield[6], '#f59e0b', 1.5, true);
                 drawLine(ptsShield[3], ptsShield[7], '#f59e0b', 1.5, true);
 
-                // Textos informativos
                 const t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 t1.setAttribute('x', '30');
                 t1.setAttribute('y', '50');
@@ -2648,7 +2633,6 @@
                     if (p5CurrentQuestion < p5Questions.length) {
                         setupP5Question();
                     } else {
-                        // Passou de tudo! Fim do jogo
                         changeScreen('screen-game-over');
                     }
                 }, 3000);
@@ -2657,6 +2641,7 @@
                 feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
                 feedback.innerText = `A resposta enviada está incorreta. Revise as suas contas e tente novamente! Dica: ${currentData.tip}`;
             }
+            triggerMathRender();
         }
 
 
