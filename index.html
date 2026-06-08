@@ -52,7 +52,8 @@
             <div class="flex items-center gap-4 bg-slate-850 p-2 rounded-xl border border-slate-700">
                 <div class="text-sm font-bold text-slate-300">Fases:</div>
                 <div class="flex flex-wrap gap-1.5 justify-center" title="Clique para selecionar e pular para uma fase!">
-                    <button id="badge-fase-1" onclick="goToPhase(1)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-md shadow-indigo-500/20 cursor-pointer hover:scale-110 transition-all focus:outline-none">1</button>
+                    <button id="badge-fase-0" onclick="goToPhase(0)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-md shadow-indigo-500/20 cursor-pointer hover:scale-110 transition-all focus:outline-none">0</button>
+                    <button id="badge-fase-1" onclick="goToPhase(1)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">1</button>
                     <button id="badge-fase-2" onclick="goToPhase(2)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">2</button>
                     <button id="badge-fase-3" onclick="goToPhase(3)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">3</button>
                     <button id="badge-fase-4" onclick="goToPhase(4)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">4</button>
@@ -83,7 +84,12 @@
                 </p>
 
                 <!-- Benefícios Pedagógicos -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-10 text-left">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 mb-10 text-left">
+                    <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
+                        <div class="text-2xl mb-1">🎮</div>
+                        <h4 class="font-bold text-slate-200 text-sm">Fase 0: Tutorial</h4>
+                        <p class="text-[11px] text-slate-400">Encontre as arestas, monte a fórmula e entenda os Litros.</p>
+                    </div>
                     <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
                         <div class="text-2xl mb-1">📐</div>
                         <h4 class="font-bold text-slate-200 text-sm">Fase 1: Arestas</h4>
@@ -111,9 +117,186 @@
                     </div>
                 </div>
 
-                <button onclick="changeScreen('screen-intro-1')" class="font-fun bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white text-lg py-4 px-10 rounded-2xl shadow-xl shadow-indigo-500/25 transform hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto">
+                <button onclick="changeScreen('screen-intro-0')" class="font-fun bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white text-lg py-4 px-10 rounded-2xl shadow-xl shadow-indigo-500/25 transform hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto">
                     Iniciar Aprendizado 🚀
                 </button>
+            </div>
+        </section>
+
+        <!-- INTRODUÇÃO TEÓRICA FASE 0 (NOVA) -->
+        <section id="screen-intro-0" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2">
+                    <span class="text-indigo-400 font-bold text-xs uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">MÓDULO DE INTEGRAÇÃO</span>
+                    <h3 class="font-fun text-3xl text-white mt-3 mb-4">Fase 0: A Base de Tudo</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Antes de acelerar nossa nave pelo hiperespaço, precisamos calibrar os computadores de navegação. Nesta fase de treinamento básico, você aprenderá de forma prática os três pilares do volume cúbico:
+                    </p>
+                    <ul class="space-y-3 text-slate-300 text-sm mb-6">
+                        <li class="flex items-start gap-2">
+                            <span class="text-pink-400">📐</span>
+                            <span><strong>Identificar arestas:</strong> Diferenciar as arestas (linhas) de vértices (cantos) e faces (superfícies).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-400">⚡</span>
+                            <span><strong>Montar a fórmula:</strong> Reunir as três dimensões ($a \times a \times a$) para erguer a fórmula do Volume.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400">🧪</span>
+                            <span><strong>Legos de Volume e Litros:</strong> Ver o volume de $1\text{ dm}^3$ se transformar fisicamente em $1\text{ Litro}$.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800">
+                    <div class="w-full flex items-center justify-center relative h-48">
+                        <!-- Holograma visual moderno -->
+                        <div class="absolute inset-0 bg-indigo-500/10 rounded-full filter blur-xl animate-pulse"></div>
+                        <i class="fa-solid fa-cube text-7xl text-indigo-400 animate-bounce"></i>
+                    </div>
+                    <span class="text-xs text-slate-400 mt-2">Mapeador Holográfico Ativo</span>
+                </div>
+            </div>
+            <div class="flex justify-end mt-8">
+                <button onclick="startPhase0()" class="font-fun bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-8 rounded-xl flex items-center gap-2 shadow-lg transition-colors">
+                    Iniciar Treinamento <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- JOGO - FASE 0 (NOVO) -->
+        <section id="game-phase-0" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                <div>
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">MINIGAME DE BASE • FASE 0</span>
+                    <h3 class="font-fun text-2xl text-white" id="p0-title">Seção 0A: Reconhecendo a Aresta</h3>
+                </div>
+                <div class="flex gap-2 text-xs">
+                    <span id="p0-step-1" class="px-2.5 py-1 rounded bg-indigo-600 text-white font-bold">0A</span>
+                    <span id="p0-step-2" class="px-2.5 py-1 rounded bg-slate-800 text-slate-500">0B</span>
+                    <span id="p0-step-3" class="px-2.5 py-1 rounded bg-slate-800 text-slate-500">0C</span>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 0A: APREENDER ARESTAS (INTERATIVO) -->
+            <div id="p0-sec-a" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-indigo-950/40 p-4 rounded-xl border border-indigo-900/40 text-sm leading-relaxed text-slate-200">
+                        <p class="font-bold text-indigo-300 mb-2">Desafio de Reconhecimento:</p>
+                        Arestas são os segmentos de reta que formam o esqueleto tridimensional do cubo. O cubo do holograma está desconfigurado. 
+                        <strong>Clique em exatamente 3 arestas (as linhas azuis)</strong> para mapear sua estrutura física e calibrar os sensores.
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-between text-sm">
+                        <span>Arestas Mapeadas:</span>
+                        <span class="text-pink-400 font-bold font-mono" id="p0-mapped-count">0 / 3</span>
+                    </div>
+                    <div id="p0-a-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                </div>
+                <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                    <!-- Cubo Interativo para clicar em arestas, vertices ou faces -->
+                    <div class="relative w-full h-[250px] flex items-center justify-center">
+                        <svg id="p0-svg-aresta-interactive" class="w-full h-full max-w-[350px]" viewBox="0 0 300 250" fill="none">
+                            <!-- Gerado dinamicamente no JS para garantir interatividade completa -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 0B: MONTAGEM DA FÓRMULA -->
+            <div id="p0-sec-b" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-indigo-950/40 p-4 rounded-xl border border-indigo-900/40 text-sm leading-relaxed text-slate-200">
+                        <p class="font-bold text-indigo-300 mb-2">Fórmula Tridimensional:</p>
+                        Ao medir as arestas de um cubo, nós temos três dimensões: <strong>Comprimento ($a$)</strong>, <strong>Largura ($a$)</strong> e <strong>Altura ($a$)</strong>.
+                        Para descobrir o Volume total (o espaço interno), multiplicamos essas três arestas.
+                        <br><br>
+                        <strong>Clique nos blocos na ordem correta para montar a fórmula do volume:</strong>
+                    </div>
+
+                    <!-- Fórmula montando-se -->
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-center items-center gap-2 min-h-[70px]">
+                        <div id="p0-formula-slots" class="flex items-center gap-1 sm:gap-2">
+                            <!-- Slots serão gerados dinamicamente no JS -->
+                        </div>
+                    </div>
+
+                    <!-- Peças de Fórmula para Clicar/Montar -->
+                    <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-800">
+                        <span class="block text-xs font-bold text-slate-400 mb-3 text-center">ELEMENTOS DISPONÍVEIS (CLIQUE PARA ENCAIXAR):</span>
+                        <div id="p0-formula-chips" class="flex flex-wrap justify-center gap-2">
+                            <!-- Chips interativos -->
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="resetP0Formula()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 px-4 rounded-xl text-xs transition-colors">Limpar Montagem 🔄</button>
+                        <button onclick="checkP0Formula()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-fun py-2.5 rounded-xl text-sm transition-colors">Validar Fórmula ⚡</button>
+                    </div>
+
+                    <div id="p0-b-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                </div>
+                <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                    <div class="relative w-full h-[250px] flex items-center justify-center">
+                        <svg id="p0-svg-formula-show" class="w-full h-full max-w-[320px]" viewBox="0 0 300 250" fill="none">
+                            <!-- Desenha cubo de dimensões axaxa -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 0C: LEGO DE VOLUME E LITROS -->
+            <div id="p0-sec-c" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-6 space-y-4">
+                    <div class="bg-indigo-950/40 p-4 rounded-xl border border-indigo-900/40 text-sm leading-relaxed text-slate-200">
+                        <p class="font-bold text-indigo-300 mb-2">Treinamento de Capacidade (Lego Cúbico):</p>
+                        Um cubo cujas arestas medem $1\text{ decímetro}$ ($10\text{ cm}$) tem o volume exato de $1\text{ dm}^3$. No nosso universo físico, **dentro de um volume de $1\text{ dm}^3$ cabe exatamente $1\text{ Litro}$ de líquido**!
+                        <br><br>
+                        <strong>Sua Missão:</strong> Adicione exatamente <strong>3 blocos Lego</strong> ($3\text{ dm}^3$) de energia no holograma para converter e encher o tanque auxiliar com <strong>3 Litros</strong>.
+                    </div>
+
+                    <!-- Controles do Lego -->
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex justify-between items-center gap-4">
+                        <div>
+                            <span class="text-xs text-slate-400 block font-bold">MEDIDOR DE CAPACIDADE:</span>
+                            <span class="text-lg font-mono font-bold text-pink-400" id="p0-lego-volume-display">0 dm³ (0 Litros)</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="p0AlterLego(1)" class="bg-indigo-600 hover:bg-indigo-500 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold transition-all shadow-lg shadow-indigo-500/10">+</button>
+                            <button onclick="p0AlterLego(-1)" class="bg-rose-600 hover:bg-rose-500 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold transition-all shadow-lg shadow-rose-500/10">-</button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="checkP0Lego()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-fun py-3.5 rounded-xl text-base transition-all shadow-xl shadow-emerald-500/10">Confirmar Combustível 🧪</button>
+                    </div>
+
+                    <div id="p0-c-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                </div>
+                <div class="lg:col-span-6 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col sm:flex-row items-center justify-center gap-6 min-h-[320px]">
+                    <!-- Área do Lego -->
+                    <div class="flex flex-col items-center">
+                        <span class="text-[11px] font-bold text-indigo-400 mb-1">COMPARTIMENTO LEGO</span>
+                        <div class="w-36 h-48 bg-slate-900 border border-slate-800 rounded-xl relative p-2 flex flex-col justify-end overflow-hidden">
+                            <div id="p0-lego-container" class="relative w-full h-full flex flex-col-reverse items-center justify-start gap-1 pb-1">
+                                <!-- Blocos lego inseridos dinamicamente -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Área da Equivalência em Litros -->
+                    <div class="flex flex-col items-center">
+                        <span class="text-[11px] font-bold text-emerald-400 mb-1">EQUIVALÊNCIA EM LITROS</span>
+                        <div class="w-24 h-48 bg-slate-900 border border-slate-800 rounded-xl relative flex items-end justify-center overflow-hidden p-1">
+                            <!-- Líquido em Litros preenchendo -->
+                            <div id="p0-fluid-fill" class="w-full bg-emerald-500/40 border-t-2 border-emerald-400 transition-all duration-500 h-[0%]"></div>
+                            <!-- Linhas de graduação -->
+                            <div class="absolute inset-y-0 right-1 flex flex-col justify-between text-[9px] text-slate-500 font-mono py-4">
+                                <span>- 3L</span>
+                                <span>- 2L</span>
+                                <span>- 1L</span>
+                                <span>- 0L</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -178,7 +361,7 @@
         <section id="game-phase-1" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">MINIGAME 1/5</span>
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">MINIGAME 2/5</span>
                     <h3 class="font-fun text-2xl text-white">A Forja da Aresta Cúbica</h3>
                 </div>
                 <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300">
@@ -298,7 +481,7 @@
         <section id="game-phase-2" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">MINIGAME 2/5</span>
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">MINIGAME 3/5</span>
                     <h3 class="font-fun text-2xl text-white">Empilhamento Cósmico</h3>
                 </div>
                 <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300">
@@ -425,7 +608,7 @@
         <section id="game-phase-3" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">MINIGAME 3/5</span>
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">MINIGAME 4/5</span>
                     <h3 class="font-fun text-2xl text-white">Reabastecimento dos Tanques</h3>
                 </div>
                 <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300">
@@ -531,7 +714,7 @@
         <section id="game-phase-4" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">MINIGAME 4/5 • LABORATÓRIO CÓSMICO</span>
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">MINIGAME 5/5 • LABORATÓRIO CÓSMICO</span>
                     <h3 class="font-fun text-2xl text-white">Fase 4: Hidratação e Dosagem Quântica</h3>
                 </div>
                 <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300 flex items-center gap-2">
@@ -608,7 +791,7 @@
             </div>
         </section>
 
-        <!-- INTRODUÇÃO TEÓRICA FASE 5 (NOVA FASE) -->
+        <!-- INTRODUÇÃO TEÓRICA FASE 5 -->
         <section id="screen-intro-5" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
             <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
                 <div class="md:w-1/2">
@@ -778,6 +961,14 @@
             changeScreen(`screen-intro-${phaseNum}`);
         }
         
+        // FASE 0: ESTADO E SEÇÕES
+        let p0SuccessCount = 0;
+        let p0CurrentSection = 'a'; // 'a', 'b', 'c'
+        let p0ClickedEdges = [];
+        let p0FormulaSlots = [];
+        const p0CorrectFormula = ['a', 'x', 'a', 'x', 'a', '=', 'Volume'];
+        let p0LegoCount = 0;
+
         // FASE 4: ESTADO E PERGUNTAS
         let p4SuccessCount = 0;
         let p4CurrentQuestion = 0;
@@ -870,6 +1061,8 @@
         function changeScreen(screenId) {
             const screens = [
                 'screen-welcome', 
+                'screen-intro-0',
+                'game-phase-0',
                 'screen-intro-1', 
                 'game-phase-1', 
                 'screen-intro-2', 
@@ -899,6 +1092,7 @@
         // Atualizador de Estética das Fases no Header
         function updateBadges(screenId) {
             const badges = [
+                document.getElementById('badge-fase-0'),
                 document.getElementById('badge-fase-1'),
                 document.getElementById('badge-fase-2'),
                 document.getElementById('badge-fase-3'),
@@ -906,7 +1100,6 @@
                 document.getElementById('badge-fase-5')
             ];
 
-            // Classe base para manter os botões interativos e responsivos ao toque/clique
             const btnBaseClass = " cursor-pointer hover:scale-110 transition-all focus:outline-none";
 
             // Resetar estilos
@@ -914,26 +1107,33 @@
                 if (b) b.className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500" + btnBaseClass;
             });
 
-            if (screenId === 'screen-intro-1' || screenId === 'game-phase-1') {
+            if (screenId === 'screen-intro-0' || screenId === 'game-phase-0') {
                 badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
+            } else if (screenId === 'screen-intro-1' || screenId === 'game-phase-1') {
+                badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
             } else if (screenId === 'screen-intro-2' || screenId === 'game-phase-2') {
                 badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
-                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-pink-600 text-white shadow-lg shadow-pink-500/30" + btnBaseClass;
+                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-pink-600 text-white shadow-lg shadow-pink-500/30" + btnBaseClass;
             } else if (screenId === 'screen-intro-3' || screenId === 'game-phase-3') {
                 badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
                 badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
-                badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
+                badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[3].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
             } else if (screenId === 'screen-intro-4' || screenId === 'game-phase-4') {
                 badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
                 badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
                 badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
-                badges[3].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-pink-600 text-white shadow-lg shadow-pink-500/30" + btnBaseClass;
+                badges[3].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[4].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-pink-600 text-white shadow-lg shadow-pink-500/30" + btnBaseClass;
             } else if (screenId === 'screen-intro-5' || screenId === 'game-phase-5') {
                 badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
                 badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
                 badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
                 badges[3].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
-                badges[4].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
+                badges[4].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[5].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
             } else if (screenId === 'screen-game-over') {
                 badges.forEach(b => {
                     if (b) b.className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
@@ -945,6 +1145,384 @@
             globalScore += points;
             document.getElementById('global-score').innerText = globalScore;
             document.getElementById('final-score').innerText = globalScore + " Pontos";
+        }
+
+
+        // ==========================
+        //  LÓGICA DA FASE 0 (NOVA)
+        // ==========================
+
+        function startPhase0() {
+            p0SuccessCount = 0;
+            p0CurrentSection = 'a';
+            p0ClickedEdges = [];
+            p0FormulaSlots = [];
+            p0LegoCount = 0;
+            
+            setupP0SectionA();
+            changeScreen('game-phase-0');
+        }
+
+        function setupP0SectionA() {
+            p0CurrentSection = 'a';
+            document.getElementById('p0-title').innerText = "Seção 0A: Reconhecendo a Aresta";
+            document.getElementById('p0-step-1').className = "px-2.5 py-1 rounded bg-indigo-600 text-white font-bold";
+            document.getElementById('p0-step-2').className = "px-2.5 py-1 rounded bg-slate-800 text-slate-500";
+            document.getElementById('p0-step-3').className = "px-2.5 py-1 rounded bg-slate-800 text-slate-500";
+            
+            document.getElementById('p0-sec-a').classList.remove('hidden');
+            document.getElementById('p0-sec-b').classList.add('hidden');
+            document.getElementById('p0-sec-c').classList.add('hidden');
+
+            document.getElementById('p0-mapped-count').innerText = `${p0ClickedEdges.length} / 3`;
+            document.getElementById('p0-a-feedback').classList.add('hidden');
+
+            drawP0ArestasInteractive();
+        }
+
+        // Desenhar cubo interativo no SVG para a seção de arestas clicáveis
+        function drawP0ArestasInteractive() {
+            const svg = document.getElementById('p0-svg-aresta-interactive');
+            svg.innerHTML = '';
+
+            const cx = 150;
+            const cy = 130;
+            const size = 65; 
+
+            // Projeção isométrica
+            const project = (x, y, z) => {
+                const rx = cx + (x - y) * size * Math.cos(Math.PI / 6);
+                const ry = cy + (x + y) * size * Math.sin(Math.PI / 6) - z * size;
+                return {x: rx, y: ry};
+            };
+
+            const pts = [
+                project(0,0,0), project(1,0,0), project(1,1,0), project(0,1,0),
+                project(0,0,1), project(1,0,1), project(1,1,1), project(0,1,1)
+            ];
+
+            // Definição das 12 arestas: pares de vértices [v1, v2, id_aresta]
+            const edges = [
+                [0, 1, 'e1'], [1, 2, 'e2'], [2, 3, 'e3'], [3, 0, 'e4'],
+                [4, 5, 'e5'], [5, 6, 'e6'], [6, 7, 'e7'], [7, 4, 'e8'],
+                [0, 4, 'e9'], [1, 5, 'e10'], [2, 6, 'e11'], [3, 7, 'e12']
+            ];
+
+            // Desenhar faces como área clicável que gera aviso: "Isso é uma Face!"
+            const facePoints = [
+                [0, 1, 2, 3], // base
+                [4, 5, 6, 7], // topo
+                [0, 1, 5, 4], // frente esq
+                [1, 2, 6, 5], // frente dir
+                [2, 3, 7, 6], // tras dir
+                [3, 0, 4, 7]  // tras esq
+            ];
+
+            facePoints.forEach((f, idx) => {
+                const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                const ptsStr = f.map(pIdx => `${pts[pIdx].x},${pts[pIdx].y}`).join(' ');
+                poly.setAttribute('points', ptsStr);
+                poly.setAttribute('fill', 'rgba(129, 140, 248, 0.05)');
+                poly.setAttribute('class', 'cursor-pointer');
+                poly.addEventListener('click', () => triggerP0AFeedback("face"));
+                svg.appendChild(poly);
+            });
+
+            // Desenhar as 12 arestas como elementos grossos e altamente interativos
+            edges.forEach(e => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                const isSelected = p0ClickedEdges.includes(e[2]);
+                line.setAttribute('x1', pts[e[0]].x);
+                line.setAttribute('y1', pts[e[0]].y);
+                line.setAttribute('x2', pts[e[1]].x);
+                line.setAttribute('y2', pts[e[1]].y);
+                line.setAttribute('stroke', isSelected ? '#10b981' : '#4f46e5');
+                line.setAttribute('stroke-width', isSelected ? '7' : '4');
+                line.setAttribute('class', 'cursor-pointer hover:stroke-pink-500 hover:stroke-[8px] transition-all');
+                
+                // Mapear clique na aresta
+                line.addEventListener('click', () => {
+                    if (!p0ClickedEdges.includes(e[2])) {
+                        p0ClickedEdges.push(e[2]);
+                        triggerP0AFeedback("aresta_ok");
+                        drawP0ArestasInteractive(); // redesenhar para pintar de verde
+                        
+                        document.getElementById('p0-mapped-count').innerText = `${p0ClickedEdges.length} / 3`;
+                        if (p0ClickedEdges.length >= 3) {
+                            triggerP0AFeedback("success_a");
+                            setTimeout(() => {
+                                setupP0SectionB();
+                            }, 2000);
+                        }
+                    } else {
+                        triggerP0AFeedback("ja_clicado");
+                    }
+                });
+                svg.appendChild(line);
+            });
+
+            // Desenhar os 8 vértices que geram aviso "Isso é um vértice!"
+            pts.forEach((pt, idx) => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', pt.x);
+                circle.setAttribute('cy', pt.y);
+                circle.setAttribute('r', '8');
+                circle.setAttribute('fill', '#f43f5e');
+                circle.setAttribute('class', 'cursor-pointer hover:scale-125 transition-transform');
+                circle.addEventListener('click', () => triggerP0AFeedback("vertice"));
+                svg.appendChild(circle);
+            });
+        }
+
+        function triggerP0AFeedback(type) {
+            const fb = document.getElementById('p0-a-feedback');
+            fb.classList.remove('hidden');
+
+            if (type === "vertice") {
+                fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Isso é um VÉRTICE (ponto vermelho)! Ele une as arestas. Clique nas linhas azuis.";
+            } else if (type === "face") {
+                fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
+                fb.innerText = "Isso é uma FACE (superfície plana)! Procure as arestas (as linhas azuis que contornam).";
+            } else if (type === "aresta_ok") {
+                fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                fb.innerText = "MUITO BEM! Aresta calibrada com sucesso.";
+            } else if (type === "ja_clicado") {
+                fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-indigo-950/80 border border-indigo-500/50 text-indigo-300";
+                fb.innerText = "Essa aresta já foi calibrada! Encontre outra.";
+            } else if (type === "success_a") {
+                fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                fb.innerText = "Excelente, Cadete! Módulo de arestas concluído. Preparando para a montagem de fórmulas! (+50 Pontos)";
+                updateGlobalScore(50);
+            }
+        }
+
+
+        // SEÇÃO 0B: CONSTRUIR FÓRMULA
+
+        function setupP0SectionB() {
+            p0CurrentSection = 'b';
+            document.getElementById('p0-title').innerText = "Seção 0B: Medindo e Construindo a Fórmula";
+            document.getElementById('p0-step-1').className = "px-2.5 py-1 rounded bg-emerald-600 text-white font-bold";
+            document.getElementById('p0-step-2').className = "px-2.5 py-1 rounded bg-indigo-600 text-white font-bold";
+            document.getElementById('p0-step-3').className = "px-2.5 py-1 rounded bg-slate-800 text-slate-500";
+            
+            document.getElementById('p0-sec-a').classList.add('hidden');
+            document.getElementById('p0-sec-b').classList.remove('hidden');
+            document.getElementById('p0-sec-c').classList.add('hidden');
+
+            p0FormulaSlots = [];
+            document.getElementById('p0-b-feedback').classList.add('hidden');
+
+            renderP0FormulaSlots();
+            renderP0FormulaChips();
+            drawP0FormulaShow();
+        }
+
+        function renderP0FormulaSlots() {
+            const slotsContainer = document.getElementById('p0-formula-slots');
+            slotsContainer.innerHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                const slot = document.createElement('div');
+                const val = p0FormulaSlots[i];
+                slot.className = `w-10 h-10 sm:w-12 sm:h-12 border-2 ${val ? 'border-indigo-500 bg-indigo-950/60 text-white font-bold' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'} rounded-xl flex items-center justify-center font-mono text-sm sm:text-base transition-all`;
+                slot.innerText = val ? val : '?';
+                slotsContainer.appendChild(slot);
+            }
+        }
+
+        function renderP0FormulaChips() {
+            const container = document.getElementById('p0-formula-chips');
+            container.innerHTML = '';
+
+            // Shuffled options para clicar e preencher os slots
+            const chips = ['a', 'x', 'a', 'x', 'a', '=', 'Volume'];
+            // Embaralhar para o desafio
+            chips.sort((x, y) => x.localeCompare(y));
+
+            chips.forEach(chip => {
+                const btn = document.createElement('button');
+                btn.className = "bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white font-bold px-3 py-2 rounded-lg text-xs sm:text-sm font-mono transition-all transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none";
+                btn.innerText = chip;
+                btn.onclick = () => {
+                    if (p0FormulaSlots.length < 7) {
+                        p0FormulaSlots.push(chip);
+                        renderP0FormulaSlots();
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function resetP0Formula() {
+            p0FormulaSlots = [];
+            renderP0FormulaSlots();
+            document.getElementById('p0-b-feedback').classList.add('hidden');
+        }
+
+        function checkP0Formula() {
+            const feedback = document.getElementById('p0-b-feedback');
+            feedback.classList.remove('hidden');
+
+            if (p0FormulaSlots.length < 7) {
+                feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
+                feedback.innerText = "Insira todas as 7 peças para preencher a fórmula!";
+                return;
+            }
+
+            const equals = p0FormulaSlots.every((val, index) => val === p0CorrectFormula[index]);
+
+            if (equals) {
+                feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                feedback.innerText = "SOLUÇÃO EXATA! Aresta (a) x Aresta (a) x Aresta (a) = Volume do Cubo! (+50 Pontos)";
+                updateGlobalScore(50);
+                
+                setTimeout(() => {
+                    setupP0SectionC();
+                }, 2000);
+            } else {
+                feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                feedback.innerText = "Fórmula incorreta! Lembre-se: multiplicamos as 3 arestas para obter o volume (aresta x aresta x aresta = volume). Tente limpar e refazer!";
+            }
+        }
+
+        function drawP0FormulaShow() {
+            const svg = document.getElementById('p0-svg-formula-show');
+            svg.innerHTML = '';
+
+            const cx = 150;
+            const cy = 150;
+            const size = 50; 
+
+            const project = (x, y, z) => {
+                const rx = cx + (x - y) * size * Math.cos(Math.PI / 6);
+                const ry = cy + (x + y) * size * Math.sin(Math.PI / 6) - z * size;
+                return {x: rx, y: ry};
+            };
+
+            const pts = [
+                project(0,0,0), project(1,0,0), project(1,1,0), project(0,1,0),
+                project(0,0,1), project(1,0,1), project(1,1,1), project(0,1,1)
+            ];
+
+            function drawLine(p1, p2, color, strokeWidth, isDashed = false) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', p1.x);
+                line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x);
+                line.setAttribute('y2', p2.y);
+                line.setAttribute('stroke', color);
+                line.setAttribute('stroke-width', strokeWidth);
+                if (isDashed) {
+                    line.setAttribute('stroke-dasharray', '4,4');
+                }
+                svg.appendChild(line);
+            }
+
+            // Traseiras
+            drawLine(pts[0], pts[1], '#475569', 1.5, true);
+            drawLine(pts[0], pts[3], '#475569', 1.5, true);
+            drawLine(pts[0], pts[4], '#475569', 1.5, true);
+
+            // Sólidas
+            drawLine(pts[1], pts[2], '#ec4899', 3);
+            drawLine(pts[2], pts[3], '#ec4899', 3);
+            drawLine(pts[4], pts[5], '#ec4899', 3);
+            drawLine(pts[5], pts[6], '#ec4899', 3);
+            drawLine(pts[6], pts[7], '#ec4899', 3);
+            drawLine(pts[7], pts[4], '#ec4899', 3);
+            drawLine(pts[1], pts[5], '#ec4899', 3);
+            drawLine(pts[2], pts[6], '#ec4899', 3);
+            drawLine(pts[3], pts[7], '#ec4899', 3);
+
+            // Rótulos axaxa
+            const drawLabel = (p, text, color) => {
+                const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                txt.setAttribute('x', p.x);
+                txt.setAttribute('y', p.y);
+                txt.setAttribute('fill', color);
+                txt.setAttribute('font-size', '14px');
+                txt.setAttribute('font-weight', 'bold');
+                txt.textContent = text;
+                svg.appendChild(txt);
+            };
+
+            // Comprimento (largura do vetor base esquerdo para direito)
+            drawLabel({x: (pts[1].x + pts[2].x)/2 + 10, y: (pts[1].y + pts[2].y)/2 + 15}, "a (comprimento)", "#a5b4fc");
+            // Largura
+            drawLabel({x: (pts[2].x + pts[3].x)/2 - 80, y: (pts[2].y + pts[3].y)/2 + 15}, "a (largura)", "#f472b6");
+            // Altura
+            drawLabel({x: pts[6].x + 10, y: (pts[2].y + pts[6].y)/2}, "a (altura)", "#34d399");
+        }
+
+
+        // SEÇÃO 0C: LEGO DE VOLUME E LITROS
+
+        function setupP0SectionC() {
+            p0CurrentSection = 'c';
+            document.getElementById('p0-title').innerText = "Seção 0C: Legos de Volume e Litros";
+            document.getElementById('p0-step-1').className = "px-2.5 py-1 rounded bg-emerald-600 text-white font-bold";
+            document.getElementById('p0-step-2').className = "px-2.5 py-1 rounded bg-emerald-600 text-white font-bold";
+            document.getElementById('p0-step-3').className = "px-2.5 py-1 rounded bg-indigo-600 text-white font-bold";
+            
+            document.getElementById('p0-sec-a').classList.add('hidden');
+            document.getElementById('p0-sec-b').classList.add('hidden');
+            document.getElementById('p0-sec-c').classList.remove('hidden');
+
+            p0LegoCount = 0;
+            document.getElementById('p0-c-feedback').classList.add('hidden');
+            updateP0LegoVisuals();
+        }
+
+        function p0AlterLego(amount) {
+            p0LegoCount += amount;
+            if (p0LegoCount < 0) p0LegoCount = 0;
+            if (p0LegoCount > 4) p0LegoCount = 4; // limite visual
+
+            updateP0LegoVisuals();
+        }
+
+        function updateP0LegoVisuals() {
+            document.getElementById('p0-lego-volume-display').innerText = `${p0LegoCount} dm³ (${p0LegoCount} Litros)`;
+
+            // Atualizar preenchimento do Lego Container
+            const container = document.getElementById('p0-lego-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < p0LegoCount; i++) {
+                const block = document.createElement('div');
+                block.className = "w-28 h-8 bg-indigo-500 hover:bg-indigo-400 border-2 border-indigo-300 rounded-lg flex items-center justify-center font-bold text-[10px] text-white shadow-lg animate-fadeIn cursor-pointer transition-all";
+                block.innerHTML = `<i class="fa-solid fa-puzzle-piece mr-1"></i>1 dm³ = 1 Litro`;
+                container.appendChild(block);
+            }
+
+            // Atualizar preenchimento de fluido (Litros)
+            const fluidFill = document.getElementById('p0-fluid-fill');
+            const percent = (p0LegoCount / 3) * 100; // Alvo é 3 litros
+            fluidFill.style.height = `${Math.min(percent, 100)}%`;
+        }
+
+        function checkP0Lego() {
+            const feedback = document.getElementById('p0-c-feedback');
+            feedback.classList.remove('hidden');
+
+            if (p0LegoCount === 3) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                feedback.innerText = "INCRÍVEL! Exatamente 3 dm³ convertidos perfeitamente para 3 Litros de energia líquida! (+100 Pontos)";
+                updateGlobalScore(100);
+
+                setTimeout(() => {
+                    changeScreen('screen-intro-1'); // Envia o aluno para o início regular
+                }, 2000);
+            } else {
+                feedback.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                if (p0LegoCount < 3) {
+                    feedback.innerText = `Faltam blocos! Você colocou apenas ${p0LegoCount} dm³ (${p0LegoCount} Litros). Encha até 3 Litros!`;
+                } else {
+                    feedback.innerText = `Líquido transbordou! Você colocou ${p0LegoCount} dm³ (${p0LegoCount} Litros). Ajuste para apenas 3 Litros!`;
+                }
+            }
         }
 
 
