@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada Espacial: Dominando o Volume do Cubo</title>
+    <!-- Tailwind CSS para Estilização Moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para Tipografia Elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Ícones adicionais -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle, #1e1b4b 0%, #0f172a 100%);
+        }
+        .font-fun {
+            font-family: 'Fredoka One', cursive;
+        }
+        /* Custom scrollbar para navegadores modernos */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1b4b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden select-none">
+
+    <!-- Header Principal -->
+    <header class="bg-slate-900/80 backdrop-blur border-b border-indigo-500/30 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 animate-pulse">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-fun text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">Cubos do Amanhã</h1>
+                    <p class="text-xs text-indigo-300">Dominando a Geometria Espacial (8º Ano)</p>
+                </div>
+            </div>
+            <!-- Painel de Progresso Global -->
+            <div class="flex items-center gap-4 bg-slate-850 p-2 rounded-xl border border-slate-700">
+                <div class="text-sm font-bold text-slate-300">Fases:</div>
+                <div class="flex flex-wrap gap-1.5 justify-center" title="Clique para selecionar e pular para uma fase!">
+                    <button id="badge-fase-1" onclick="goToPhase(1)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-md shadow-indigo-500/20 cursor-pointer hover:scale-110 transition-all focus:outline-none">1</button>
+                    <button id="badge-fase-2" onclick="goToPhase(2)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">2</button>
+                    <button id="badge-fase-3" onclick="goToPhase(3)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">3</button>
+                    <button id="badge-fase-4" onclick="goToPhase(4)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">4</button>
+                    <button id="badge-fase-5" onclick="goToPhase(5)" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500 cursor-pointer hover:scale-110 transition-all focus:outline-none">5</button>
+                </div>
+                <div class="h-6 w-[1px] bg-slate-700 hidden sm:block"></div>
+                <div class="text-sm">
+                    <span class="text-pink-400 font-bold"><i class="fas fa-star mr-1"></i>Pontos:</span>
+                    <span id="global-score" class="font-mono text-lg font-bold">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTAINER DO JOGO PRINCIPAL -->
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
+        
+        <!-- TELA DE BOAS VINDAS / INTRODUÇÃO -->
+        <section id="screen-welcome" class="bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-12 text-center shadow-2xl relative overflow-hidden backdrop-blur-md">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
+
+            <div class="max-w-2xl mx-auto">
+                <span class="bg-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-indigo-500/30">Missão Espacial Geometria</span>
+                <h2 class="font-fun text-4xl sm:text-5xl text-white mt-4 mb-6 leading-tight">Pronto para Conquistar a Terceira Dimensão?</h2>
+                <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed">
+                    Bem-vindo, Cadete! A bordo da nave espacial <span class="text-indigo-400 font-bold">Cubo-1</span>, você aprenderá como as arestas formam estruturas e como calculamos o espaço que elas ocupam no universo – o nosso famoso <span class="text-pink-400 font-bold">Volume</span>!
+                </p>
+
+                <!-- Benefícios Pedagógicos -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-10 text-left">
+                    <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
+                        <div class="text-2xl mb-1">📐</div>
+                        <h4 class="font-bold text-slate-200 text-sm">Fase 1: Arestas</h4>
+                        <p class="text-[11px] text-slate-400">Entenda as arestas e forje o molde do seu primeiro cubo.</p>
+                    </div>
+                    <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
+                        <div class="text-2xl mb-1">📦</div>
+                        <h4 class="font-bold text-slate-200 text-sm">Fase 2: Blocos</h4>
+                        <p class="text-[11px] text-slate-400">Empilhe pequenos cubos de 1cm³ e veja o volume surgir.</p>
+                    </div>
+                    <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
+                        <div class="text-2xl mb-1">⚡</div>
+                        <h4 class="font-bold text-slate-200 text-sm">Fase 3: O Cálculo</h4>
+                        <p class="text-[11px] text-slate-400">Aplique a fórmula matemática do volume tridimensional.</p>
+                    </div>
+                    <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
+                        <div class="text-2xl mb-1">🧪</div>
+                        <h4 class="font-bold text-slate-200 text-sm">Fase 4: Líquidos</h4>
+                        <p class="text-[11px] text-slate-400">Converta volumes em L e mL com precisão decimal avançada.</p>
+                    </div>
+                    <div class="bg-slate-850/50 p-3.5 rounded-2xl border border-slate-700/30">
+                        <div class="text-2xl mb-1">🔮</div>
+                        <h4 class="font-bold text-slate-200 text-sm">Fase 5: Desafios</h4>
+                        <p class="text-[11px] text-slate-400">Resolva problemas complexos de engenharia cúbica reversa.</p>
+                    </div>
+                </div>
+
+                <button onclick="changeScreen('screen-intro-1')" class="font-fun bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white text-lg py-4 px-10 rounded-2xl shadow-xl shadow-indigo-500/25 transform hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto">
+                    Iniciar Aprendizado 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- INTRODUÇÃO TEÓRICA FASE 1 -->
+        <section id="screen-intro-1" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2">
+                    <span class="text-indigo-400 font-bold text-xs uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">CONCEITO INICIAL</span>
+                    <h3 class="font-fun text-3xl text-white mt-3 mb-4">Fase 1: O Que é uma Aresta?</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Imagine que um cubo é como uma gaiola de vidro. Cada linha reta que liga os cantos dessa gaiola é chamada de <span class="text-indigo-300 font-bold">Aresta</span>!
+                    </p>
+                    <ul class="space-y-3 text-slate-300 text-sm mb-6">
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400">✓</span>
+                            <span>Um cubo possui exatamente <strong>12 arestas</strong> iguais.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400">✓</span>
+                            <span>Os cantos (pontos de encontro) são chamados de <strong>vértices</strong> (8 no total).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400">✓</span>
+                            <span>O cubo perfeito tem todas as 12 arestas com a <strong>mesma medida</strong>.</span>
+                        </li>
+                    </ul>
+                    <div class="bg-indigo-950/50 border border-indigo-900/50 p-4 rounded-xl text-xs text-indigo-200">
+                        <strong>Minigame: Forja Espacial!</strong><br>Ajuste o tamanho correto das arestas do seu protetor solar cúbico usando o controle deslizante para que ele encaixe perfeitamente no compartimento de blindagem.
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800">
+                    <!-- Ilustração interativa estática 3D simulada -->
+                    <svg class="w-48 h-48 text-indigo-400 animate-pulse" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+                        <!-- Linhas traseiras tracejadas -->
+                        <line x1="50" y1="150" x2="50" y2="50" stroke-dasharray="5 5" class="text-indigo-600" />
+                        <line x1="50" y1="150" x2="150" y2="150" stroke-dasharray="5 5" class="text-indigo-600" />
+                        <line x1="50" y1="150" x2="90" y2="110" stroke-dasharray="5 5" class="text-indigo-600" />
+                        
+                        <!-- Quadrado Frontal -->
+                        <rect x="90" y="50" width="60" height="60" class="text-pink-400" stroke-width="3" />
+                        
+                        <!-- Conectores / Arestas Laterais visíveis -->
+                        <line x1="50" y1="50" x2="90" y2="50" stroke-width="2" />
+                        <line x1="110" y1="110" x2="150" y2="110" stroke-width="2" />
+                        <line x1="110" y1="110" x2="110" y2="150" stroke-width="2" />
+                        <line x1="150" y1="110" x2="150" y2="150" stroke-width="2" />
+                        <line x1="110" y1="150" x2="150" y2="150" stroke-width="2" />
+                    </svg>
+                    <div class="mt-4 text-center">
+                        <span class="text-xs text-slate-400">Modelo Esquemático do Cubo</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end mt-8">
+                <button onclick="startPhase1()" class="font-fun bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-8 rounded-xl flex items-center gap-2 shadow-lg transition-colors">
+                    Entrar no Minigame <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- JOGO - FASE 1 -->
+        <section id="game-phase-1" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">MINIGAME 1/5</span>
+                    <h3 class="font-fun text-2xl text-white">A Forja da Aresta Cúbica</h3>
+                </div>
+                <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300">
+                    Acertos: <span id="p1-success" class="font-mono font-bold text-white text-sm">0/3</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Painel Esquerdo: Controles e Instrução -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+                        <p class="text-sm text-slate-300">
+                            <strong>Instruções:</strong> Ajuste a barra deslizante até que o cubo em formação atinja a medida exata do molde exigido pela nave espacial.
+                        </p>
+                    </div>
+
+                    <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
+                        <div class="flex justify-between text-sm font-bold text-slate-200">
+                            <span>Medida Desejada da Aresta:</span>
+                            <span class="text-pink-400 text-lg" id="p1-target">12 cm</span>
+                        </div>
+                        <div class="flex justify-between text-sm font-bold text-slate-200">
+                            <span>Medida Atual:</span>
+                            <span class="text-indigo-400 text-lg" id="p1-current-label">5 cm</span>
+                        </div>
+
+                        <!-- Slider Customizado -->
+                        <div class="pt-2">
+                            <input id="p1-slider" type="range" min="3" max="20" value="5" class="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                            <div class="flex justify-between text-slate-500 text-xs mt-1 font-mono">
+                                <span>3 cm</span>
+                                <span>10 cm</span>
+                                <span>20 cm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="p1CheckValue()" class="font-fun flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl shadow-lg transition-colors text-center">
+                            Validar Forja 🛠️
+                        </button>
+                    </div>
+                    
+                    <div id="p1-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                </div>
+
+                <!-- Painel Direito: Canvas ou Renderizadores de Geometria Dinâmica -->
+                <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px] relative">
+                    <!-- Molde Alvo pontilhado -->
+                    <div id="p1-mold-container" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+                        <!-- Será gerado dinamicamente via JS -->
+                    </div>
+                    
+                    <!-- Cubo Real sendo alterado pelo usuário -->
+                    <div id="p1-cube-container" class="relative z-10 w-full h-[250px] flex items-center justify-center">
+                        <!-- Estrutura SVG reativa -->
+                        <svg id="p1-svg" class="w-full h-full transition-transform duration-300" viewBox="0 0 400 300" fill="none" stroke="currentColor">
+                            <!-- SVG será montado e alterado no Javascript de forma rica -->
+                        </svg>
+                    </div>
+                    
+                    <!-- Informação extra de apoio -->
+                    <div class="w-full flex justify-between px-4 text-xs text-slate-500 border-t border-slate-900 pt-4 mt-2">
+                        <span>Aresta (a) = <span id="p1-info-edge">5 cm</span></span>
+                        <span>Faces = 6</span>
+                        <span>Vértices = 8</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRODUÇÃO TEÓRICA FASE 2 -->
+        <section id="screen-intro-2" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2">
+                    <span class="text-pink-400 font-bold text-xs uppercase tracking-widest bg-pink-950 px-3 py-1 rounded-full border border-pink-900">CONCEITO DO VOLUME</span>
+                    <h3 class="font-fun text-3xl text-white mt-3 mb-4">Fase 2: O Espaço Ocupado</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Agora que dominamos as arestas, o que acontece se quisermos encher esse cubo de energia? O espaço que há dentro dele é chamado de <span class="text-pink-400 font-bold">Volume</span>!
+                    </p>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Para medir o volume de forma simples, usamos um padrão: o <span class="text-emerald-400 font-bold">Cubo Unitário</span>. É um cubo pequenininho cujas arestas medem exatamente $1\text{ cm}$. O volume dele é chamado de $1\text{ cm}^3$ (um centímetro cúbico).
+                    </p>
+                    <div class="bg-indigo-950/50 border border-indigo-900/50 p-4 rounded-xl text-xs text-indigo-200">
+                        <strong>Minigame: Empilhamento de Carga!</strong><br>Você receberá caixas maiores. Sua tarefa é preenchê-las completamente usando esses cubinhos unitários de 1 cm³ e descobrir o volume contando ou multiplicando de forma inteligente as dimensões.
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800">
+                    <div class="relative w-full h-48 flex justify-center items-center">
+                        <!-- Representação de Cubos Unitários Empilhados -->
+                        <div class="grid grid-cols-3 gap-1 p-2 bg-indigo-950/30 rounded-xl border border-indigo-500/30">
+                            <!-- Cubinhos ilustrativos -->
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                            <div class="w-10 h-10 bg-indigo-500 rounded border border-indigo-300 shadow-md flex items-center justify-center text-[10px] font-bold text-white">1 cm³</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <span class="text-xs text-slate-400">Mapeamento por Cubos Unitários</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between mt-8">
+                <button onclick="changeScreen('screen-intro-1')" class="font-fun bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-6 rounded-xl transition-colors">
+                    Voltar
+                </button>
+                <button onclick="startPhase2()" class="font-fun bg-pink-600 hover:bg-pink-500 text-white py-3 px-8 rounded-xl flex items-center gap-2 shadow-lg transition-colors">
+                    Entrar no Minigame <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- JOGO - FASE 2 -->
+        <section id="game-phase-2" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">MINIGAME 2/5</span>
+                    <h3 class="font-fun text-2xl text-white">Empilhamento Cósmico</h3>
+                </div>
+                <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300">
+                    Acertos: <span id="p2-success" class="font-mono font-bold text-white text-sm">0/3</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Painel Esquerdo -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+                        <p class="text-sm text-slate-300">
+                            <strong>Desafio:</strong> Clique nos botões para ir adicionando blocos de $1\text{ cm}^3$ e preencher a caixa em 3D. Quando estiver completamente cheia, diga-nos: <strong>Qual é o volume total da caixa?</strong>
+                        </p>
+                    </div>
+
+                    <!-- Informações do Cubo Alvo -->
+                    <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 grid grid-cols-3 gap-2 text-center text-xs">
+                        <div class="bg-slate-950 p-2 rounded">
+                            <span class="text-slate-500 block">Comprimento</span>
+                            <span id="p2-target-w" class="text-slate-200 font-bold text-sm">3 cm</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded">
+                            <span class="text-slate-500 block">Largura</span>
+                            <span id="p2-target-d" class="text-slate-200 font-bold text-sm">3 cm</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded">
+                            <span class="text-slate-500 block">Altura</span>
+                            <span id="p2-target-h" class="text-slate-200 font-bold text-sm">3 cm</span>
+                        </div>
+                    </div>
+
+                    <!-- Controles de Blocos -->
+                    <div class="bg-indigo-950/40 p-4 rounded-2xl border border-indigo-900/40 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-200">Adicionar Cubos Unitários:</span>
+                            <div class="flex gap-2">
+                                <button onclick="p2AddBlock()" class="bg-indigo-600 hover:bg-indigo-500 text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">+</button>
+                                <button onclick="p2RemoveBlock()" class="bg-rose-600 hover:bg-rose-500 text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">-</button>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-400">Total de blocos colocados:</span>
+                            <span class="text-white font-mono font-bold" id="p2-placed-count">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Entrada da Resposta do Usuário -->
+                    <div class="space-y-2">
+                        <label for="p2-user-answer" class="block text-sm font-bold text-slate-300">Digite o Volume Total da Caixa ($\text{cm}^3$):</label>
+                        <div class="flex gap-2">
+                            <input id="p2-user-answer" type="number" placeholder="Digite o volume..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button onclick="p2CheckAnswer()" class="font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-6 rounded-xl shadow-lg transition-colors">
+                                Enviar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="p2-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                </div>
+
+                <!-- Painel Direito: Gráfico de Blocos Dinâmicos -->
+                <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
+                    <div class="text-center mb-4">
+                        <span class="text-xs text-indigo-400 font-bold uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">Visualização de Blocos Espaciais</span>
+                    </div>
+
+                    <div class="relative w-full h-[280px] flex items-center justify-center">
+                        <!-- O Canvas ou Elemento SVG de Renderização de Cubos Isométricos -->
+                        <svg id="p2-svg-isometric" class="w-full h-full" viewBox="0 0 450 350" fill="none">
+                            <!-- Será atualizado reativamente -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRODUÇÃO TEÓRICA FASE 3 -->
+        <section id="screen-intro-3" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2">
+                    <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest bg-emerald-950 px-3 py-1 rounded-full border border-emerald-900">A FÓRMULA MATEMÁTICA</span>
+                    <h3 class="font-fun text-3xl text-white mt-3 mb-4">Fase 3: O Segredo do Cálculo</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Será que precisamos de cubinhos de $1\text{ cm}^3$ para descobrir o volume de qualquer caixa ou cubo no universo? Claro que não!
+                    </p>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Com base na Fase 2, descobrimos que para saber o volume basta multiplicar as três dimensões: <span class="text-indigo-400 font-bold">Comprimento</span>, <span class="text-pink-400 font-bold">Largura</span> e <span class="text-amber-400 font-bold">Altura</span>! No caso de um cubo perfeito, todas essas medidas são iguais (chamadas de aresta $a$).
+                    </p>
+                    <div class="bg-indigo-950 border border-indigo-800 p-4 rounded-xl text-center font-mono my-4">
+                        <span class="text-xs text-indigo-300">FÓRMULA DO VOLUME DO CUBO:</span>
+                        <div class="text-xl sm:text-2xl text-white font-bold mt-1">Volume = a × a × a = a³</div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800 text-center">
+                    <!-- Fórmulas Visuais -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 bg-slate-900 p-3 rounded-lg border border-slate-800">
+                            <span class="w-8 h-8 rounded bg-indigo-500 text-white font-bold flex items-center justify-center">1</span>
+                            <span class="text-sm text-slate-300">Medir a Aresta <strong class="text-white">"a"</strong></span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900 p-3 rounded-lg border border-slate-800">
+                            <span class="w-8 h-8 rounded bg-pink-500 text-white font-bold flex items-center justify-center">2</span>
+                            <span class="text-sm text-slate-300">Elevar a aresta ao cubo: <strong class="text-white">a³</strong></span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900 p-3 rounded-lg border border-slate-800">
+                            <span class="w-8 h-8 rounded bg-emerald-500 text-white font-bold flex items-center justify-center">3</span>
+                            <span class="text-sm text-slate-300">Achar o resultado em <strong class="text-white">cm³ ou m³</strong>!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between mt-8">
+                <button onclick="changeScreen('screen-intro-2')" class="font-fun bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-6 rounded-xl transition-colors">
+                    Voltar
+                </button>
+                <button onclick="startPhase3()" class="font-fun bg-emerald-600 hover:bg-emerald-500 text-white py-3 px-8 rounded-xl flex items-center gap-2 shadow-lg transition-colors">
+                    Entrar no Minigame <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- JOGO - FASE 3 -->
+        <section id="game-phase-3" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">MINIGAME 3/5</span>
+                    <h3 class="font-fun text-2xl text-white">Reabastecimento dos Tanques</h3>
+                </div>
+                <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300">
+                    Acertos: <span id="p3-success" class="font-mono font-bold text-white text-sm">0/3</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Painel Esquerdo -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-850">
+                        <p class="text-sm text-slate-300">
+                            <strong>Situação de Emergência!</strong> A nave precisa de cargas exatas de combustível de hidrogênio em tanques cúbicos. Para encher o tanque completamente, calcule seu volume em metros cúbicos ($m^3$) com base das dimensões da aresta dadas.
+                        </p>
+                    </div>
+
+                    <!-- Dados do Desafio Atual -->
+                    <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-300">Aresta do Tanque (a):</span>
+                            <span class="text-emerald-400 text-lg font-bold" id="p3-edge-val">4 metros</span>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-lg text-xs text-center border border-indigo-900/50 text-indigo-200">
+                            Fórmula a ser usada: <strong>Volume = a × a × a</strong>
+                        </div>
+                    </div>
+
+                    <!-- Respostas em Múltipla Escolha -->
+                    <div class="space-y-3">
+                        <span class="block text-sm font-bold text-slate-300">Escolha o Volume correto para o tanque:</span>
+                        <div id="p3-options-container" class="grid grid-cols-2 gap-3">
+                            <!-- Opções geradas por JavaScript dinamicamente -->
+                        </div>
+                    </div>
+
+                    <div id="p3-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                </div>
+
+                <!-- Painel Direito: Tanque Enchendo de Combustível -->
+                <div class="lg:col-span-7 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
+                    <div class="text-center mb-4">
+                        <span class="text-xs text-emerald-400 font-bold uppercase tracking-widest bg-emerald-950 px-3 py-1 rounded-full border border-emerald-900">Nível do Combustível Quântico</span>
+                    </div>
+
+                    <div class="relative w-full h-[250px] flex items-center justify-center">
+                        <!-- SVG da Simulação de Tanque -->
+                        <svg id="p3-svg-tank" class="w-full h-full" viewBox="0 0 400 300" fill="none">
+                            <!-- Dinâmico -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRODUÇÃO TEÓRICA FASE 4 -->
+        <section id="screen-intro-4" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2">
+                    <span class="text-pink-400 font-bold text-xs uppercase tracking-widest bg-pink-950 px-3 py-1 rounded-full border border-pink-900">VOLUME E CAPACIDADE</span>
+                    <h3 class="font-fun text-3xl text-white mt-3 mb-4">Fase 4: Copos, Litros e Mililitros!</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        No espaço, o controle de fluidos é vital! Você sabia que existe uma relação direta e mágica entre o **volume em centímetros cúbicos ou decímetros cúbicos** e a **capacidade de líquidos**?
+                    </p>
+                    <div class="bg-indigo-950/70 border border-indigo-800 p-4 rounded-xl text-xs space-y-2 mb-4">
+                        <p class="text-emerald-300 font-mono text-center text-sm">📐 EQUIVALÊNCIAS DO CADETE 🧪</p>
+                        <p>🔹 <strong>$1\text{ cm}^3$ de volume = $1\text{ mL}$ de capacidade.</strong></p>
+                        <p>🔹 <strong>$1\text{ dm}^3$ de volume = $1\text{ Litro}$ de capacidade.</strong></p>
+                        <p>🔹 <strong>$1\text{ Litro} = 1000\text{ mL}$.</strong></p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl text-xs text-slate-300">
+                        <strong>Minigame: O Laboratório Quântico!</strong><br>O cientista chefe necessita de doses precisas. Leia o desafio, converta o volume cúbico das embalagens para Litros ou mL e utilize as bombas para dosar o copo graduado até a marca correta!
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800 text-center">
+                    <!-- Ilustração interativa estática Copo -->
+                    <div class="relative w-32 h-44 border-b-4 border-x-2 border-indigo-400 rounded-b-xl flex items-end overflow-hidden">
+                        <!-- Líquido simulado -->
+                        <div class="w-full h-1/2 bg-indigo-500/50 animate-pulse relative">
+                            <div class="absolute inset-x-0 top-0 h-1 bg-indigo-300"></div>
+                        </div>
+                        <!-- Linhas graduadas -->
+                        <div class="absolute inset-y-0 right-2 flex flex-col justify-between text-[10px] text-indigo-300 font-mono py-2">
+                            <span>- 1000 mL</span>
+                            <span>- 750 mL</span>
+                            <span>- 500 mL</span>
+                            <span>- 250 mL</span>
+                        </div>
+                    </div>
+                    <span class="text-xs text-slate-400 mt-3">Copo Graduado de Laboratório</span>
+                </div>
+            </div>
+            <div class="flex justify-between mt-8">
+                <button onclick="changeScreen('screen-intro-3')" class="font-fun bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-6 rounded-xl transition-colors">
+                    Voltar
+                </button>
+                <button onclick="startPhase4()" class="font-fun bg-pink-600 hover:bg-pink-500 text-white py-3 px-8 rounded-xl flex items-center gap-2 shadow-lg transition-colors">
+                    Entrar no Laboratório <i class="fas fa-flask"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- JOGO - FASE 4 (COPO GRADUADO / 4 QUESTÕES) -->
+        <section id="game-phase-4" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <span class="text-xs font-bold text-pink-400 uppercase tracking-widest">MINIGAME 4/5 • LABORATÓRIO CÓSMICO</span>
+                    <h3 class="font-fun text-2xl text-white">Fase 4: Hidratação e Dosagem Quântica</h3>
+                </div>
+                <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300 flex items-center gap-2">
+                    <span>Questão:</span>
+                    <span id="p4-question-index" class="font-mono font-bold text-white text-sm">1/4</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Painel Esquerdo: Situações-Problema e Entrada de Resposta -->
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-indigo-900/30 text-indigo-400 text-xs font-bold px-3 py-1 rounded-bl-xl font-mono">
+                            ENIGMA DO CIENTISTA
+                        </div>
+                        <h4 class="text-indigo-300 font-bold text-xs uppercase tracking-widest mb-2">Desafio de Capacidade</h4>
+                        <p id="p4-problem-text" class="text-slate-200 text-sm sm:text-base leading-relaxed font-semibold">
+                            <!-- Gerado dinamicamente via JS -->
+                        </p>
+                    </div>
+
+                    <!-- Controles de Dosagem de Líquido atualizados com os novos intervalos -->
+                    <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
+                        <div class="flex flex-col gap-3">
+                            <div>
+                                <span class="text-xs text-slate-400 block font-bold uppercase">Volume no Copo:</span>
+                                <span class="text-2xl font-mono font-bold text-cyan-400" id="p4-liquid-label">0 mL</span>
+                                <span class="text-slate-400 text-xs" id="p4-liter-equivalent">/ 0.0 Litros</span>
+                            </div>
+                            
+                            <!-- Grade com múltiplos botões de adição e subtração -->
+                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                                <button onclick="p4AlterLiquid(250)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+250 mL</button>
+                                <button onclick="p4AlterLiquid(100)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+100 mL</button>
+                                <button onclick="p4AlterLiquid(50)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+50 mL</button>
+                                <button onclick="p4AlterLiquid(10)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+10 mL</button>
+                                <button onclick="p4AlterLiquid(1)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+1 mL</button>
+                                <button onclick="p4AlterLiquid(0.5)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">+0.5 mL</button>
+                                <button onclick="p4AlterLiquid(-100)" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">-100 mL</button>
+                                <button onclick="p4AlterLiquid(-50)" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">-50 mL</button>
+                                <button onclick="p4AlterLiquid(-10)" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">-10 mL</button>
+                                <button onclick="p4AlterLiquid(-1)" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 px-1 rounded-lg text-xs transition-colors">-1 mL</button>
+                                <button onclick="p4ResetLiquid()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2 px-1 rounded-lg text-xs transition-colors col-span-3 sm:col-span-2">Esvaziar 🔄</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="p4ValidateAnswer()" class="font-fun flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-xl shadow-lg transition-colors text-center text-lg">
+                            Confirmar Dosagem no Copo 🧪
+                        </button>
+                    </div>
+
+                    <div id="p4-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                </div>
+
+                <!-- Painel Direito: Copo de Vidro Graduado em tempo real -->
+                <div class="lg:col-span-6 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[380px]">
+                    <div class="text-center mb-4">
+                        <span class="text-xs text-indigo-400 font-bold uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">Cilindro Graduado de Líquido Quântico</span>
+                    </div>
+
+                    <!-- Copo em SVG Dinâmico -->
+                    <div class="relative w-full h-[280px] flex items-center justify-center">
+                        <svg id="p4-svg-copo" class="w-full h-full" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Fundo do copo -->
+                            <rect x="90" y="30" width="120" height="230" rx="4" fill="rgba(255, 255, 255, 0.02)" stroke="#475569" stroke-width="4" />
+                            
+                            <!-- Graduação do copo (Marcadores e Volumes) -->
+                            <!-- Gerado dinamicamente via JS -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRODUÇÃO TEÓRICA FASE 5 (NOVA FASE) -->
+        <section id="screen-intro-5" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2">
+                    <span class="text-indigo-400 font-bold text-xs uppercase tracking-widest bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800">ANÁLISE AVANÇADA</span>
+                    <h3 class="font-fun text-3xl text-white mt-3 mb-4">Fase 5: A Câmara de Simulação Holográfica</h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Bem-vindo ao nível final de treinamento, Cadete! Aqui vamos desafiar o seu raciocínio lógico-matemático com **situações-problema espaciais complexas** de volume.
+                    </p>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4">
+                        Nesta fase, você precisará:
+                    </p>
+                    <ul class="space-y-2 text-slate-300 text-sm mb-6">
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-400">⚡</span>
+                            <span><strong>Calcular arestas de trás para a frente</strong> (se sei o volume de um cubo, qual é o valor da sua aresta?).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-400">⚡</span>
+                            <span><strong>Analisar a fusão e junção de blocos cúbicos</strong> sem perda de espaço.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-400">⚡</span>
+                            <span><strong>Estudar a dilatação térmica volumétrica</strong> tridimensional (quando a aresta dobra, o volume aumenta quantas vezes?).</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 flex flex-col items-center justify-center p-6 bg-slate-950 rounded-2xl border border-slate-800 text-center">
+                    <div class="relative w-full h-44 flex items-center justify-center">
+                        <svg class="w-40 h-40 text-cyan-400 animate-spin-slow" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="2" stroke-dasharray="8 8" opacity="0.3"></circle>
+                            <rect x="35" y="35" width="30" height="30" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" class="text-pink-500"></rect>
+                            <circle cx="50" cy="50" r="5" fill="currentColor"></circle>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-slate-400">Núcleo Simulador Quântico</span>
+                </div>
+            </div>
+            <div class="flex justify-between mt-8">
+                <button onclick="changeScreen('screen-intro-4')" class="font-fun bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-6 rounded-xl transition-colors">
+                    Voltar
+                </button>
+                <button onclick="startPhase5()" class="font-fun bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-8 rounded-xl flex items-center gap-2 shadow-lg transition-colors">
+                    Entrar na Simulação <i class="fas fa-microscope"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- JOGO - FASE 5 (SITUAÇÕES PROBLEMAS INTERATIVAS) -->
+        <section id="game-phase-5" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 shadow-2xl backdrop-blur-md">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">MINIGAME 5/5 • DESAFIOS AVANÇADOS</span>
+                    <h3 class="font-fun text-2xl text-white">Desafios de Engenharia Holográfica</h3>
+                </div>
+                <div class="bg-indigo-950 border border-indigo-800 rounded-lg px-3 py-1.5 text-xs text-indigo-300 flex items-center gap-2">
+                    <span>Desafio:</span>
+                    <span id="p5-question-index" class="font-mono font-bold text-white text-sm">1/4</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Painel Esquerdo: Situações-Problema e Entrada/Opções de Resposta -->
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-pink-900/30 text-pink-400 text-xs font-bold px-3 py-1 rounded-bl-xl font-mono">
+                            ENIGMA CÁLCULO CÚBICO
+                        </div>
+                        <h4 class="text-indigo-300 font-bold text-xs uppercase tracking-widest mb-2" id="p5-problem-title">Problema</h4>
+                        <p id="p5-problem-text" class="text-slate-200 text-sm sm:text-base leading-relaxed font-semibold">
+                            <!-- Dinâmico -->
+                        </p>
+                    </div>
+
+                    <!-- Painel Interativo Dinâmico da Fase 5 (Muda de acordo com a questão!) -->
+                    <div id="p5-interactive-control" class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
+                        <!-- Será preenchido dinamicamente com sliders ou botões para interação -->
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="p5ValidateAnswer()" class="font-fun flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-4 rounded-xl shadow-lg transition-colors text-center text-lg">
+                            Confirmar Solução Holográfica 🔮
+                        </button>
+                    </div>
+
+                    <div id="p5-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                </div>
+
+                <!-- Painel Direito: SVG Dinâmico da Fase 5 -->
+                <div class="lg:col-span-6 bg-slate-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[380px]">
+                    <div class="text-center mb-4">
+                        <span class="text-xs text-cyan-400 font-bold uppercase tracking-widest bg-cyan-950 px-3 py-1 rounded-full border border-cyan-900">Projeção Dinâmica 3D do Enigma</span>
+                    </div>
+
+                    <div class="relative w-full h-[280px] flex items-center justify-center">
+                        <svg id="p5-svg-projection" class="w-full h-full" viewBox="0 0 400 300" fill="none">
+                            <!-- Gerado dinamicamente para cada enigma da Fase 5 -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA FINAL DO VENCEDOR -->
+        <section id="screen-game-over" class="hidden bg-slate-900/60 border border-slate-700/50 rounded-3xl p-6 sm:p-12 text-center shadow-2xl relative overflow-hidden backdrop-blur-md">
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl"></div>
+
+            <div class="max-w-2xl mx-auto">
+                <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-emerald-500/30">Missão Concluída</span>
+                
+                <!-- Troféu Espacial -->
+                <div class="text-6xl my-6 animate-bounce">🏆</div>
+                
+                <h2 class="font-fun text-4xl sm:text-5xl text-white mb-4">Parabéns, Comandante do Volume!</h2>
+                
+                <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed">
+                    Você navegou com sucesso pelas dimensões espaciais, dominou as arestas, calculou volumes tridimensionais, solucionou dosagens de laboratório e resolveu enigmas complexos de engenharia de sólidos!
+                </p>
+
+                <!-- Estatísticas de Jogo -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 mb-8 max-w-sm mx-auto">
+                    <h4 class="font-fun text-indigo-400 text-lg mb-4">Seu Relatório de Voo</h4>
+                    <div class="space-y-3 text-left text-sm">
+                        <div class="flex justify-between border-b border-slate-900 pb-2">
+                            <span class="text-slate-400">Pontuação Total:</span>
+                            <span class="text-emerald-400 font-bold" id="final-score">0 Pontos</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-900 pb-2">
+                            <span class="text-slate-400">Classificação:</span>
+                            <span class="text-pink-400 font-bold">Líder Supremo da Tridimensionalidade</span>
+                        </div>
+                        <div class="flex justify-between pb-1">
+                            <span class="text-slate-400">Dificuldade Vencida:</span>
+                            <span class="text-slate-200">8º Ano Completo + Laboratório + Projeções</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 justify-center">
+                    <button onclick="restartGame()" class="font-fun bg-indigo-600 hover:bg-indigo-500 text-white py-3 px-8 rounded-xl shadow-lg transition-colors">
+                        Jogar Novamente 🔄
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-slate-950/80 border-t border-slate-900 py-4 px-6 text-center text-xs text-slate-500">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>Desenvolvido com fins pedagógicos de Matemática - Alinhado com a BNCC do 8º Ano</span>
+            <span>Estudo do Volume de Prismas e Cubos</span>
+        </div>
+    </footer>
+
+    <!-- LOGICA DO JOGO JAVASCRIPT -->
+    <script>
+        // ESTADO GLOBAL DO JOGO
+        let globalScore = 0;
+        let p1SuccessCount = 0;
+        let p2SuccessCount = 0;
+        let p3SuccessCount = 0;
+
+        // Permite ao jogador pular livremente para a fase desejada
+        function goToPhase(phaseNum) {
+            changeScreen(`screen-intro-${phaseNum}`);
+        }
+        
+        // FASE 4: ESTADO E PERGUNTAS
+        let p4SuccessCount = 0;
+        let p4CurrentQuestion = 0;
+        let p4UserLiquidVolume = 0; // em mL
+
+        // FASE 5: ESTADO E PERGUNTAS (NOVO)
+        let p5SuccessCount = 0;
+        let p5CurrentQuestion = 0;
+        let p5InteractiveValue = 0; // Valor interativo controlado na questão ativa
+
+        // Lista de 4 questões da Fase 4 - Situações Problema de L e mL
+        const p4Questions = [
+            {
+                text: "Um recipiente cúbico de energia da nave tem arestas medindo exatamente 10 cm. O cientista necessita que você preencha o copo de testes com o volume equivalente à capacidade total desse recipiente cúbico. Converta o volume para mL e adicione ao copo!",
+                targetVolumeMl: 1000, 
+                tip: "Lembre-se: 10 cm x 10 cm x 10 cm = 1000 cm³. E 1 cm³ equivale exatamente a 1 mL!"
+            },
+            {
+                text: "Uma embalagem espacial de combustível em formato de cubo tem arestas medindo exatamente 0.5 dm (meio decímetro). Sabendo que 1 dm³ equivale a 1 Litro, encha o copo de testes com a capacidade exata em mL correspondente a essa embalagem!",
+                targetVolumeMl: 125, 
+                tip: "Primeiro calcule o volume do cubo: 0,5 x 0,5 x 0,5 = 0,125 dm³. Como 1 dm³ = 1 L, o volume é 0,125 Litros. Multiplique por 1000 para achar os mL!"
+            },
+            {
+                text: "A equipe de robótica da nave precisa misturar água oxigenada. Eles têm um reservatório em forma de cubo perfeito com 5 cm de aresta. Se o copo de testes deve conter metade do volume total dessa embalagem de 5 cm de aresta, quantos mL você deve despejar?",
+                targetVolumeMl: 62.5, 
+                tip: "Volume total do cubo: 5³ = 125 cm³. Metade disso é 62,5 mL! Use o botão de +0.5 mL juntamente com os outros para dosar perfeitamente!"
+            },
+            {
+                text: "Um reservatório auxiliar de emergência de água potável tem o formato de um cubo de 0.1 m de aresta. Para reabastecer a equipe médica da nave, você precisa coletar o equivalente a exatamente 40% desse reservatório no copo graduado. Faça a conversão do volume para mL e faça a dosagem!",
+                targetVolumeMl: 400, 
+                tip: "Aresta de 0.1 m é igual a 1 decímetro (1 dm). Um cubo de 1 dm de aresta tem volume de 1 dm³ = 1 Litro = 1000 mL. Agora, calcule 40% de 1000 mL!"
+            }
+        ];
+
+        // Lista de 4 questões pedagógicas para a Fase 5 (Novas Questões de Volume do Cubo)
+        const p5Questions = [
+            {
+                title: "Enigma 1: Engenharia Reversa",
+                text: "O reator central da nave possui um compartimento cúbico de resfriamento com volume exato de 216 dm³. Para podermos instalar uma nova grade de proteção, precisamos saber a medida exata da aresta deste compartimento em decímetros. Ajuste o controle deslizante para o tamanho correto!",
+                targetValue: 6, // 6*6*6 = 216
+                type: "slider",
+                min: 2,
+                max: 10,
+                unit: "dm",
+                tip: "Precisamos achar o número que, multiplicado por ele mesmo três vezes (a x a x a ou a³), resulte em 216. Ou seja, a raiz cúbica de 216!"
+            },
+            {
+                title: "Enigma 2: Fusão Quântica",
+                text: "A equipe fundiu 8 cristais cúbicos pequenos de combustível quântico, cada um com volume individual de 27 cm³, para formar um único cristal cúbico gigante sem perder matéria. Qual deve ser o comprimento da aresta desse novo cristal cúbico em centímetros? Ajuste o controle deslizante!",
+                targetValue: 6, // 8 * 27 = 216 cm3. Aresta = 6 cm.
+                type: "slider",
+                min: 3,
+                max: 12,
+                unit: "cm",
+                tip: "Primeiro, descubra o volume total: 8 cristais de 27 cm³ somam 216 cm³. Agora, encontre a aresta de um cubo cujo volume total é 216 cm³!"
+            },
+            {
+                title: "Enigma 3: Dilatação Volumétrica",
+                text: "Um bloco refrigerador cúbico de silício tem aresta de 3 cm. Sob calor extremo, as arestas sofrem dilatação e dobram de tamanho, passando a medir 6 cm de aresta. Em relação ao bloco original de 3 cm, o novo volume expandido ficou quantas vezes maior? Escolha a alternativa:",
+                targetValue: 8, // volume de 3cm = 27, volume de 6cm = 216. 216 / 27 = 8.
+                type: "options",
+                options: [2, 4, 6, 8],
+                tip: "Volume original: 3³ = 27 cm³. Novo volume com aresta dobrada (6 cm): 6³ = 216 cm³. Agora divida 216 por 27!"
+            },
+            {
+                title: "Enigma 4: Armadura de Blindagem",
+                text: "Um processador central em formato de cubo perfeito tem aresta de 10 cm. Para protegê-lo contra radiação solar, aplicaremos uma camada uniforme de nanoshielding ao redor do processador que aumentará sua aresta total para 11 cm. Qual será o novo volume final ocupado pelo processador blindado em cm³? Digite a resposta:",
+                targetValue: 1331, // 11 * 11 * 11 = 1331
+                type: "input",
+                placeholder: "Digite o volume...",
+                tip: "Basta calcular o volume de um cubo que agora tem aresta medindo 11 cm. Aplique a fórmula: V = a³ (11 x 11 x 11)!"
+            }
+        ];
+
+        // FASE 1: VARS E CONFIGS
+        let p1TargetValue = 10;
+        let p1CurrentValue = 5;
+
+        // FASE 2: VARS E CONFIGS
+        let p2TargetW = 3;
+        let p2TargetD = 3;
+        let p2TargetH = 3;
+        let p2PlacedBlocksCount = 0;
+
+        // FASE 3: VARS E CONFIGS
+        let p3CurrentEdge = 4;
+        let p3Options = [];
+
+        // Atualizador de Tela Genérico
+        function changeScreen(screenId) {
+            const screens = [
+                'screen-welcome', 
+                'screen-intro-1', 
+                'game-phase-1', 
+                'screen-intro-2', 
+                'game-phase-2', 
+                'screen-intro-3', 
+                'game-phase-3', 
+                'screen-intro-4',
+                'game-phase-4',
+                'screen-intro-5',
+                'game-phase-5',
+                'screen-game-over'
+            ];
+            screens.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (id === screenId) {
+                        element.classList.remove('hidden');
+                        element.classList.add('animate-fadeIn');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                }
+            });
+            updateBadges(screenId);
+        }
+
+        // Atualizador de Estética das Fases no Header
+        function updateBadges(screenId) {
+            const badges = [
+                document.getElementById('badge-fase-1'),
+                document.getElementById('badge-fase-2'),
+                document.getElementById('badge-fase-3'),
+                document.getElementById('badge-fase-4'),
+                document.getElementById('badge-fase-5')
+            ];
+
+            // Classe base para manter os botões interativos e responsivos ao toque/clique
+            const btnBaseClass = " cursor-pointer hover:scale-110 transition-all focus:outline-none";
+
+            // Resetar estilos
+            badges.forEach(b => {
+                if (b) b.className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-slate-800 text-slate-500" + btnBaseClass;
+            });
+
+            if (screenId === 'screen-intro-1' || screenId === 'game-phase-1') {
+                badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
+            } else if (screenId === 'screen-intro-2' || screenId === 'game-phase-2') {
+                badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-pink-600 text-white shadow-lg shadow-pink-500/30" + btnBaseClass;
+            } else if (screenId === 'screen-intro-3' || screenId === 'game-phase-3') {
+                badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
+            } else if (screenId === 'screen-intro-4' || screenId === 'game-phase-4') {
+                badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[3].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-pink-600 text-white shadow-lg shadow-pink-500/30" + btnBaseClass;
+            } else if (screenId === 'screen-intro-5' || screenId === 'game-phase-5') {
+                badges[0].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[1].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[2].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[3].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                badges[4].className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-600 text-white shadow-lg shadow-indigo-500/30" + btnBaseClass;
+            } else if (screenId === 'screen-game-over') {
+                badges.forEach(b => {
+                    if (b) b.className = "w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-emerald-600 text-white" + btnBaseClass;
+                });
+            }
+        }
+
+        function updateGlobalScore(points) {
+            globalScore += points;
+            document.getElementById('global-score').innerText = globalScore;
+            document.getElementById('final-score').innerText = globalScore + " Pontos";
+        }
+
+
+        // ==========================
+        //  LÓGICA DA FASE 1 (ARESTA)
+        // ==========================
+
+        function startPhase1() {
+            p1SuccessCount = 0;
+            document.getElementById('p1-success').innerText = p1SuccessCount + "/3";
+            generateNewP1Task();
+            changeScreen('game-phase-1');
+        }
+
+        function generateNewP1Task() {
+            p1TargetValue = Math.floor(Math.random() * 13) + 6;
+            document.getElementById('p1-target').innerText = p1TargetValue + " cm";
+            
+            p1CurrentValue = 4;
+            const slider = document.getElementById('p1-slider');
+            slider.value = p1CurrentValue;
+            
+            document.getElementById('p1-current-label').innerText = p1CurrentValue + " cm";
+            document.getElementById('p1-info-edge').innerText = p1CurrentValue + " cm";
+            
+            const feedback = document.getElementById('p1-feedback');
+            feedback.classList.add('hidden');
+            
+            drawP1Cube();
+        }
+
+        document.getElementById('p1-slider').addEventListener('input', function(e) {
+            p1CurrentValue = parseInt(e.target.value);
+            document.getElementById('p1-current-label').innerText = p1CurrentValue + " cm";
+            document.getElementById('p1-info-edge').innerText = p1CurrentValue + " cm";
+            drawP1Cube();
+        });
+
+        function drawP1Cube() {
+            const svg = document.getElementById('p1-svg');
+            svg.innerHTML = '';
+
+            const cx = 200;
+            const cy = 160;
+            const scale = 8; 
+
+            const isoX = (x, y, z) => cx + (x - y) * Math.cos(Math.PI / 6);
+            const isoY = (x, y, z) => cy + (x + y) * Math.sin(Math.PI / 6) - z;
+
+            function drawEdge(p1, p2, color, strokeWidth, isDashed = false) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', p1.x);
+                line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x);
+                line.setAttribute('y2', p2.y);
+                line.setAttribute('stroke', color);
+                line.setAttribute('stroke-width', strokeWidth);
+                if (isDashed) {
+                    line.setAttribute('stroke-dasharray', '4,4');
+                }
+                svg.appendChild(line);
+            }
+
+            const moldSize = p1TargetValue * scale;
+            const mHalf = moldSize / 2;
+            const moldPoints = [
+                {x: isoX(-mHalf, -mHalf, -mHalf), y: isoY(-mHalf, -mHalf, -mHalf)}, 
+                {x: isoX(mHalf, -mHalf, -mHalf), y: isoY(mHalf, -mHalf, -mHalf)},  
+                {x: isoX(mHalf, mHalf, -mHalf), y: isoY(mHalf, mHalf, -mHalf)},   
+                {x: isoX(-mHalf, mHalf, -mHalf), y: isoY(-mHalf, mHalf, -mHalf)},  
+                {x: isoX(-mHalf, -mHalf, mHalf), y: isoY(-mHalf, -mHalf, mHalf)},  
+                {x: isoX(mHalf, -mHalf, mHalf), y: isoY(mHalf, -mHalf, mHalf)},   
+                {x: isoX(mHalf, mHalf, mHalf), y: isoY(mHalf, mHalf, mHalf)},    
+                {x: isoX(-mHalf, mHalf, mHalf), y: isoY(-mHalf, mHalf, mHalf)}    
+            ];
+
+            drawEdge(moldPoints[0], moldPoints[1], '#475569', 1.5, true);
+            drawEdge(moldPoints[0], moldPoints[3], '#475569', 1.5, true);
+            drawEdge(moldPoints[0], moldPoints[4], '#475569', 1.5, true);
+
+            drawEdge(moldPoints[1], moldPoints[2], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[2], moldPoints[3], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[4], moldPoints[5], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[5], moldPoints[6], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[6], moldPoints[7], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[7], moldPoints[4], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[1], moldPoints[5], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[2], moldPoints[6], '#ec4899', 1.5, true);
+            drawEdge(moldPoints[3], moldPoints[7], '#ec4899', 1.5, true);
+
+            const currentSize = p1CurrentValue * scale;
+            const cHalf = currentSize / 2;
+            const curPoints = [
+                {x: isoX(-cHalf, -cHalf, -cHalf), y: isoY(-cHalf, -cHalf, -cHalf)}, 
+                {x: isoX(cHalf, -cHalf, -cHalf), y: isoY(cHalf, -cHalf, -cHalf)},  
+                {x: isoX(cHalf, cHalf, -cHalf), y: isoY(cHalf, cHalf, -cHalf)},   
+                {x: isoX(-cHalf, cHalf, -cHalf), y: isoY(-cHalf, cHalf, -cHalf)},  
+                {x: isoX(-cHalf, -cHalf, cHalf), y: isoY(-cHalf, -cHalf, cHalf)},  
+                {x: isoX(cHalf, -cHalf, cHalf), y: isoY(cHalf, -cHalf, cHalf)},   
+                {x: isoX(cHalf, cHalf, cHalf), y: isoY(cHalf, cHalf, cHalf)},    
+                {x: isoX(-cHalf, cHalf, cHalf), y: isoY(-cHalf, cHalf, cHalf)}    
+            ];
+
+            drawEdge(curPoints[0], curPoints[1], '#4f46e5', 1, true);
+            drawEdge(curPoints[0], curPoints[3], '#4f46e5', 1, true);
+            drawEdge(curPoints[0], curPoints[4], '#4f46e5', 1, true);
+
+            drawEdge(curPoints[1], curPoints[2], '#6366f1', 3);
+            drawEdge(curPoints[2], curPoints[3], '#6366f1', 3);
+            drawEdge(curPoints[4], curPoints[5], '#6366f1', 3);
+            drawEdge(curPoints[5], curPoints[6], '#6366f1', 3);
+            drawEdge(curPoints[6], curPoints[7], '#6366f1', 3);
+            drawEdge(curPoints[7], curPoints[4], '#6366f1', 3);
+            drawEdge(curPoints[1], curPoints[5], '#6366f1', 3);
+            drawEdge(curPoints[2], curPoints[6], '#6366f1', 3);
+            drawEdge(curPoints[3], curPoints[7], '#6366f1', 3);
+
+            curPoints.forEach((pt, index) => {
+                if (index !== 0) { 
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', pt.x);
+                    circle.setAttribute('cy', pt.y);
+                    circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', '#818cf8');
+                    svg.appendChild(circle);
+                }
+            });
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', curPoints[6].x + 10);
+            text.setAttribute('y', curPoints[6].y - 10);
+            text.setAttribute('fill', '#a5b4fc');
+            text.setAttribute('font-size', '12px');
+            text.setAttribute('font-weight', 'bold');
+            text.textContent = `a = ${p1CurrentValue} cm`;
+            svg.appendChild(text);
+        }
+
+        function p1CheckValue() {
+            const feedback = document.getElementById('p1-feedback');
+            feedback.classList.remove('hidden');
+
+            if (p1CurrentValue === p1TargetValue) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                feedback.innerText = "Excelente! Aresta forjada com precisão milimétrica! (+50 Pontos)";
+                
+                updateGlobalScore(50);
+                p1SuccessCount++;
+                document.getElementById('p1-success').innerText = p1SuccessCount + "/3";
+
+                if (p1SuccessCount >= 3) {
+                    setTimeout(() => {
+                        changeScreen('screen-intro-2');
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        generateNewP1Task();
+                    }, 2000);
+                }
+            } else {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                const diferenca = Math.abs(p1CurrentValue - p1TargetValue);
+                if (p1CurrentValue < p1TargetValue) {
+                    feedback.innerText = `Muito pequeno! Falta aumentar mais ${diferenca} cm. Tente novamente!`;
+                } else {
+                    feedback.innerText = `Grande demais! Você passou por ${diferenca} cm do molde. Ajuste!`;
+                }
+            }
+        }
+
+
+        // ===================================
+        //  LÓGICA DA FASE 2 (CUBOS UNITÁRIOS)
+        // ===================================
+
+        function startPhase2() {
+            p2SuccessCount = 0;
+            document.getElementById('p2-success').innerText = p2SuccessCount + "/3";
+            generateNewP2Task();
+            changeScreen('game-phase-2');
+        }
+
+        function generateNewP2Task() {
+            p2TargetW = Math.floor(Math.random() * 3) + 2; 
+            p2TargetD = Math.floor(Math.random() * 2) + 2; 
+            p2TargetH = Math.floor(Math.random() * 3) + 2; 
+
+            document.getElementById('p2-target-w').innerText = p2TargetW + " cm";
+            document.getElementById('p2-target-d').innerText = p2TargetD + " cm";
+            document.getElementById('p2-target-h').innerText = p2TargetH + " cm";
+
+            p2PlacedBlocksCount = 0;
+            document.getElementById('p2-placed-count').innerText = p2PlacedBlocksCount;
+            document.getElementById('p2-user-answer').value = '';
+
+            const feedback = document.getElementById('p2-feedback');
+            feedback.classList.add('hidden');
+
+            drawP2Isometric();
+        }
+
+        function p2AddBlock() {
+            const maxBlocks = p2TargetW * p2TargetD * p2TargetH;
+            if (p2PlacedBlocksCount < maxBlocks) {
+                p2PlacedBlocksCount++;
+                document.getElementById('p2-placed-count').innerText = p2PlacedBlocksCount;
+                drawP2Isometric();
+            }
+        }
+
+        function p2RemoveBlock() {
+            if (p2PlacedBlocksCount > 0) {
+                p2PlacedBlocksCount--;
+                document.getElementById('p2-placed-count').innerText = p2PlacedBlocksCount;
+                drawP2Isometric();
+            }
+        }
+
+        function drawP2Isometric() {
+            const svg = document.getElementById('p2-svg-isometric');
+            svg.innerHTML = '';
+
+            const cx = 225;
+            const cy = 250;
+            const size = 30; 
+
+            const project = (x, y, z) => {
+                const rx = cx + (x - y) * size * Math.cos(Math.PI / 6);
+                const ry = cy + (x + y) * size * Math.sin(Math.PI / 6) - z * size;
+                return {x: rx, y: ry};
+            };
+
+            let blocksToDraw = p2PlacedBlocksCount;
+
+            let grid = [];
+            for (let x = 0; x < p2TargetW; x++) {
+                grid[x] = [];
+                for (let y = 0; y < p2TargetD; y++) {
+                    grid[x][y] = [];
+                    for (let z = 0; z < p2TargetH; z++) {
+                        grid[x][y][z] = false;
+                    }
+                }
+            }
+
+            let placed = 0;
+            for (let z = 0; z < p2TargetH; z++) {
+                for (let y = 0; y < p2TargetD; y++) {
+                    for (let x = 0; x < p2TargetW; x++) {
+                        if (placed < blocksToDraw) {
+                            grid[x][y][z] = true;
+                            placed++;
+                        }
+                    }
+                }
+            }
+
+            function drawSingleIsometricCube(x, y, z, colorFaceTop, colorFaceRight, colorFaceLeft) {
+                const p0 = project(x, y, z);
+                const p1 = project(x + 1, y, z);
+                const p2 = project(x + 1, y + 1, z);
+                const p3 = project(x, y + 1, z);
+                const p4 = project(x, y, z + 1);
+                const p5 = project(x + 1, y, z + 1);
+                const p6 = project(x + 1, y + 1, z + 1);
+                const p7 = project(x, y + 1, z + 1);
+
+                const faceTop = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                faceTop.setAttribute('points', `${p4.x},${p4.y} ${p5.x},${p5.y} ${p6.x},${p6.y} ${p7.x},${p7.y}`);
+                faceTop.setAttribute('fill', colorFaceTop);
+                faceTop.setAttribute('stroke', '#312e81');
+                faceTop.setAttribute('stroke-width', '1');
+                svg.appendChild(faceTop);
+
+                const faceLeft = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                faceLeft.setAttribute('points', `${p0.x},${p0.y} ${p3.x},${p3.y} ${p7.x},${p7.y} ${p4.x},${p4.y}`);
+                faceLeft.setAttribute('fill', colorFaceLeft);
+                faceLeft.setAttribute('stroke', '#312e81');
+                faceLeft.setAttribute('stroke-width', '1');
+                svg.appendChild(faceLeft);
+
+                const faceRight = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                faceRight.setAttribute('points', `${p1.x},${p1.y} ${p2.x},${p2.y} ${p6.x},${p6.y} ${p5.x},${p5.y}`);
+                faceRight.setAttribute('fill', colorFaceRight);
+                faceRight.setAttribute('stroke', '#312e81');
+                faceRight.setAttribute('stroke-width', '1');
+                svg.appendChild(faceRight);
+            }
+
+            for (let z = 0; z < p2TargetH; z++) {
+                for (let y = 0; y < p2TargetD; y++) {
+                    for (let x = 0; x < p2TargetW; x++) {
+                        if (grid[x][y][z]) {
+                            drawSingleIsometricCube(x, y, z, '#818cf8', '#4f46e5', '#3730a3');
+                        } else {
+                            const p4 = project(x, y, z + 1);
+                            const p5 = project(x + 1, y, z + 1);
+                            const p6 = project(x + 1, y + 1, z + 1);
+                            const p7 = project(x, y + 1, z + 1);
+
+                            const wireframe = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                            wireframe.setAttribute('points', `${p4.x},${p4.y} ${p5.x},${p5.y} ${p6.x},${p6.y} ${p7.x},${p7.y}`);
+                            wireframe.setAttribute('fill', 'rgba(236, 72, 153, 0.04)');
+                            wireframe.setAttribute('stroke', 'rgba(236, 72, 153, 0.25)');
+                            wireframe.setAttribute('stroke-width', '1');
+                            wireframe.setAttribute('stroke-dasharray', '2,2');
+                            svg.appendChild(wireframe);
+                        }
+                    }
+                }
+            }
+        }
+
+        function p2CheckAnswer() {
+            const userAnswer = parseInt(document.getElementById('p2-user-answer').value);
+            const feedback = document.getElementById('p2-feedback');
+            feedback.classList.remove('hidden');
+
+            const correctAnswer = p2TargetW * p2TargetD * p2TargetH;
+            const totalBlocksNeeded = p2TargetW * p2TargetD * p2TargetH;
+
+            if (isNaN(userAnswer)) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
+                feedback.innerText = "Por favor, digite um volume válido!";
+                return;
+            }
+
+            if (p2PlacedBlocksCount < totalBlocksNeeded) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
+                feedback.innerText = `Você ainda não encheu a caixa inteira com cubos de 1cm³! Coloque mais blocos antes de descobrir o volume final.`;
+                return;
+            }
+
+            if (userAnswer === correctAnswer) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                feedback.innerText = `Sensacional! Você percebeu que cabem exatamente ${correctAnswer} cubos unitários na caixa de volume ${correctAnswer} cm³! (+100 Pontos)`;
+                
+                updateGlobalScore(100);
+                p2SuccessCount++;
+                document.getElementById('p2-success').innerText = p2SuccessCount + "/3";
+
+                if (p2SuccessCount >= 3) {
+                    setTimeout(() => {
+                        changeScreen('screen-intro-3');
+                    }, 2500);
+                } else {
+                    setTimeout(() => {
+                        generateNewP2Task();
+                    }, 2500);
+                }
+            } else {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                feedback.innerText = `Incorreto. Vamos contar? Temos ${p2TargetW} de comprimento por ${p2TargetD} de largura (fazendo uma base de ${p2TargetW*p2TargetD} blocos), multiplicados por ${p2TargetH} de altura. Tente recalcular!`;
+            }
+        }
+
+
+        // =====================================
+        //  LÓGICA DA FASE 3 (FÓRMULA / TANQUES)
+        // =====================================
+
+        function startPhase3() {
+            p3SuccessCount = 0;
+            document.getElementById('p3-success').innerText = p3SuccessCount + "/3";
+            generateNewP3Task();
+            changeScreen('game-phase-3');
+        }
+
+        function generateNewP3Task() {
+            p3CurrentEdge = Math.floor(Math.random() * 7) + 2; 
+            document.getElementById('p3-edge-val').innerText = p3CurrentEdge + " metros";
+
+            const volumeCorreto = p3CurrentEdge * p3CurrentEdge * p3CurrentEdge;
+            p3Options = [volumeCorreto];
+            
+            const erroMultiplicarPorTres = p3CurrentEdge * 3;
+            if (erroMultiplicarPorTres !== volumeCorreto && !p3Options.includes(erroMultiplicarPorTres)) {
+                p3Options.push(erroMultiplicarPorTres);
+            }
+            
+            const erroQuadrado = p3CurrentEdge * p3CurrentEdge;
+            if (erroQuadrado !== volumeCorreto && !p3Options.includes(erroQuadrado)) {
+                p3Options.push(erroQuadrado);
+            }
+
+            while (p3Options.length < 4) {
+                const randomOffset = Math.floor(Math.random() * 20) + 5;
+                const opt = volumeCorreto + (Math.random() > 0.5 ? randomOffset : -randomOffset);
+                if (opt > 0 && !p3Options.includes(opt)) {
+                    p3Options.push(opt);
+                }
+            }
+
+            p3Options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('p3-options-container');
+            container.innerHTML = '';
+            p3Options.forEach(opt => {
+                const button = document.createElement('button');
+                button.className = "bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-lg text-slate-100 transition-all text-center";
+                button.innerHTML = `${opt} m³`;
+                button.onclick = () => p3SelectAnswer(opt, button);
+                container.appendChild(button);
+            });
+
+            const feedback = document.getElementById('p3-feedback');
+            feedback.classList.add('hidden');
+
+            drawP3Tank(0); 
+        }
+
+        function p3SelectAnswer(selectedValue, buttonElement) {
+            const correctAnswer = p3CurrentEdge * p3CurrentEdge * p3CurrentEdge;
+            const feedback = document.getElementById('p3-feedback');
+            feedback.classList.remove('hidden');
+
+            const allButtons = document.getElementById('p3-options-container').querySelectorAll('button');
+            allButtons.forEach(btn => btn.disabled = true);
+
+            if (selectedValue === correctAnswer) {
+                buttonElement.className = "bg-emerald-600/30 border border-emerald-500 rounded-xl py-4 font-mono font-bold text-lg text-emerald-400 transition-all text-center";
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-bounce";
+                feedback.innerText = `EXCELENTE! Volume de ${correctAnswer} m³ está correto! Tanque em processo de abastecimento espacial... (+150 Pontos)`;
+
+                let fillPercent = 0;
+                const interval = setInterval(() => {
+                    fillPercent += 5;
+                    drawP3Tank(fillPercent);
+                    if (fillPercent >= 100) {
+                        clearInterval(interval);
+                    }
+                }, 40);
+
+                updateGlobalScore(150);
+                p3SuccessCount++;
+                document.getElementById('p3-success').innerText = p3SuccessCount + "/3";
+
+                setTimeout(() => {
+                    if (p3SuccessCount >= 3) {
+                        changeScreen('screen-intro-4');
+                    } else {
+                        generateNewP3Task();
+                    }
+                }, 2500);
+
+            } else {
+                buttonElement.className = "bg-rose-600/30 border border-rose-500 rounded-xl py-4 font-mono font-bold text-lg text-rose-400 transition-all text-center";
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                
+                if (selectedValue === p3CurrentEdge * 3) {
+                    feedback.innerText = `Cuidado com a pegadinha! Você multiplicou a aresta por 3 (${p3CurrentEdge} × 3). Lembre-se que volume é largura × comprimento × altura (${p3CurrentEdge} × ${p3CurrentEdge} × ${p3CurrentEdge})!`;
+                } else if (selectedValue === p3CurrentEdge * p3CurrentEdge) {
+                    feedback.innerText = `Quase! Você calculou a área de apenas uma das faces (a² = ${p3CurrentEdge * p3CurrentEdge} m²). Para o Volume total do cubo, multiplique a área pela terceira dimensão (a³)!`;
+                } else {
+                    feedback.innerText = `A resposta não é essa. Lembre-se da regra: Volume = aresta × aresta × aresta. Refaça a conta!`;
+                }
+
+                setTimeout(() => {
+                    allButtons.forEach(btn => {
+                        if (!btn.classList.contains('bg-rose-600/30')) {
+                            btn.disabled = false;
+                        }
+                    });
+                }, 2000);
+            }
+        }
+
+        function drawP3Tank(fillPercent) {
+            const svg = document.getElementById('p3-svg-tank');
+            svg.innerHTML = '';
+
+            const cx = 200;
+            const cy = 200;
+            const size = 110; 
+
+            const project = (x, y, z) => {
+                const rx = cx + (x - y) * size * Math.cos(Math.PI / 6);
+                const ry = cy + (x + y) * size * Math.sin(Math.PI / 6) - z * size;
+                return {x: rx, y: ry};
+            };
+
+            const p0 = project(0, 0, 0);
+            const p1 = project(1, 0, 0);
+            const p2 = project(1, 1, 0);
+            const p3 = project(0, 1, 0);
+            const p4 = project(0, 0, 1);
+            const p5 = project(1, 0, 1);
+            const p6 = project(1, 1, 1);
+            const p7 = project(0, 1, 1);
+
+            if (fillPercent > 0) {
+                const hLevel = fillPercent / 100;
+
+                const l0 = project(0, 0, 0);
+                const l1 = project(1, 0, 0);
+                const l2 = project(1, 1, 0);
+                const l3 = project(0, 1, 0);
+                const l4 = project(0, 0, hLevel);
+                const l5 = project(1, 0, hLevel);
+                const l6 = project(1, 1, hLevel);
+                const l7 = project(0, 1, hLevel);
+
+                const liqTop = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                liqTop.setAttribute('points', `${l4.x},${l4.y} ${l5.x},${l5.y} ${l6.x},${l6.y} ${l7.x},${l7.y}`);
+                liqTop.setAttribute('fill', '#10b981'); 
+                liqTop.setAttribute('opacity', '0.8');
+                liqTop.setAttribute('stroke', '#34d399');
+                liqTop.setAttribute('stroke-width', '1');
+                svg.appendChild(liqTop);
+
+                const liqLeft = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                liqLeft.setAttribute('points', `${l0.x},${l0.y} ${l3.x},${l3.y} ${l7.x},${l7.y} ${l4.x},${l4.y}`);
+                liqLeft.setAttribute('fill', '#047857');
+                liqLeft.setAttribute('opacity', '0.7');
+                svg.appendChild(liqLeft);
+
+                const liqRight = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                liqRight.setAttribute('points', `${l1.x},${l1.y} ${l2.x},${l2.y} ${l6.x},${l6.y} ${l5.x},${l5.y}`);
+                liqRight.setAttribute('fill', '#065f46');
+                liqRight.setAttribute('opacity', '0.7');
+                svg.appendChild(liqRight);
+            }
+
+            const wireframe = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            wireframe.setAttribute('points', `${p4.x},${p4.y} ${p5.x},${p5.y} ${p6.x},${p6.y} ${p7.x},${p7.y}`);
+            wireframe.setAttribute('stroke', '#475569');
+            wireframe.setAttribute('stroke-width', '2');
+            svg.appendChild(wireframe);
+
+            const lines = [
+                [p0, p4], [p1, p5], [p2, p6], [p3, p7],
+                [p0, p1], [p1, p2], [p2, p3], [p3, p0]
+            ];
+            lines.forEach(pair => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', pair[0].x);
+                line.setAttribute('y1', pair[0].y);
+                line.setAttribute('x2', pair[1].x);
+                line.setAttribute('y2', pair[1].y);
+                line.setAttribute('stroke', '#64748b');
+                line.setAttribute('stroke-width', '1.5');
+                svg.appendChild(line);
+            });
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', '165');
+            text.setAttribute('y', '290');
+            text.setAttribute('fill', '#34d399');
+            text.setAttribute('font-weight', 'bold');
+            text.setAttribute('font-size', '14px');
+            text.textContent = `Preenchimento: ${fillPercent}%`;
+            svg.appendChild(text);
+        }
+
+
+        // ===============================================
+        //  LÓGICA DA FASE 4 (LABORATÓRIO: COPO GRADUADO)
+        // ===============================================
+
+        function startPhase4() {
+            p4SuccessCount = 0;
+            p4CurrentQuestion = 0;
+            p4UserLiquidVolume = 0;
+            document.getElementById('p4-question-index').innerText = "1/4";
+            setupP4Question();
+            changeScreen('game-phase-4');
+        }
+
+        function setupP4Question() {
+            const currentData = p4Questions[p4CurrentQuestion];
+            document.getElementById('p4-question-index').innerText = `${p4CurrentQuestion + 1}/4`;
+            document.getElementById('p4-problem-text').innerText = currentData.text;
+            
+            p4UserLiquidVolume = 0;
+            updateP4LiquidDisplay();
+
+            const feedback = document.getElementById('p4-feedback');
+            feedback.classList.add('hidden');
+        }
+
+        function p4AlterLiquid(amount) {
+            // Garantir que a soma lide perfeitamente com decimais como 62.5 mL
+            p4UserLiquidVolume = parseFloat((p4UserLiquidVolume + amount).toFixed(1));
+            if (p4UserLiquidVolume < 0) p4UserLiquidVolume = 0;
+            if (p4UserLiquidVolume > 1100) p4UserLiquidVolume = 1100; 
+            
+            updateP4LiquidDisplay();
+        }
+
+        function p4ResetLiquid() {
+            p4UserLiquidVolume = 0;
+            updateP4LiquidDisplay();
+        }
+
+        function updateP4LiquidDisplay() {
+            document.getElementById('p4-liquid-label').innerText = p4UserLiquidVolume + " mL";
+            const liters = (p4UserLiquidVolume / 1000).toFixed(3);
+            document.getElementById('p4-liter-equivalent').innerText = `/ ${liters} Litros`;
+            drawP4Copo();
+        }
+
+        function drawP4Copo() {
+            const svg = document.getElementById('p4-svg-copo');
+            svg.innerHTML = '';
+
+            const cupX = 90;
+            const cupY = 30;
+            const cupWidth = 120;
+            const cupHeight = 230;
+
+            const cupBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            cupBg.setAttribute('x', cupX);
+            cupBg.setAttribute('y', cupY);
+            cupBg.setAttribute('width', cupWidth);
+            cupBg.setAttribute('height', cupHeight);
+            cupBg.setAttribute('rx', '4');
+            cupBg.setAttribute('fill', 'rgba(255, 255, 255, 0.05)');
+            cupBg.setAttribute('stroke', '#64748b');
+            cupBg.setAttribute('stroke-width', '4');
+            svg.appendChild(cupBg);
+
+            const pxPerMl = 200 / 1000; 
+            const liquidHeightPx = p4UserLiquidVolume * pxPerMl;
+
+            if (p4UserLiquidVolume > 0) {
+                const liquid = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                liquid.setAttribute('x', cupX + 4);
+                liquid.setAttribute('y', cupY + cupHeight - liquidHeightPx - 2);
+                liquid.setAttribute('width', cupWidth - 8);
+                liquid.setAttribute('height', liquidHeightPx);
+                liquid.setAttribute('fill', '#06b6d4'); 
+                liquid.setAttribute('opacity', '0.75');
+                svg.appendChild(liquid);
+
+                const surface = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+                surface.setAttribute('cx', cupX + cupWidth / 2);
+                surface.setAttribute('cy', cupY + cupHeight - liquidHeightPx - 2);
+                surface.setAttribute('rx', (cupWidth - 8) / 2);
+                surface.setAttribute('ry', '4');
+                surface.setAttribute('fill', '#22d3ee');
+                svg.appendChild(surface);
+            }
+
+            for (let ml = 100; ml <= 1000; ml += 100) {
+                const markerY = cupY + cupHeight - (ml * pxPerMl) - 2;
+                
+                const lineL = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineL.setAttribute('x1', cupX);
+                lineL.setAttribute('y1', markerY);
+                lineL.setAttribute('x2', cupX + (ml % 500 === 0 ? 15 : 8)); 
+                lineL.setAttribute('y2', markerY);
+                lineL.setAttribute('stroke', '#94a3b8');
+                lineL.setAttribute('stroke-width', '1.5');
+                svg.appendChild(lineL);
+
+                if (ml === 250 || ml === 500 || ml === 750 || ml === 1000) {
+                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    label.setAttribute('x', cupX + cupWidth + 8);
+                    label.setAttribute('y', markerY + 4);
+                    label.setAttribute('fill', '#94a3b8');
+                    label.setAttribute('font-size', '10px');
+                    label.setAttribute('font-family', 'monospace');
+                    label.textContent = `${ml} mL`;
+                    svg.appendChild(label);
+
+                    const lineR = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    lineR.setAttribute('x1', cupX + cupWidth - 12);
+                    lineR.setAttribute('y1', markerY);
+                    lineR.setAttribute('x2', cupX + cupWidth);
+                    lineR.setAttribute('y2', markerY);
+                    lineR.setAttribute('stroke', '#64748b');
+                    svg.appendChild(lineR);
+                }
+            }
+            
+            if (p4CurrentQuestion === 1) {
+                const specialY = cupY + cupHeight - (125 * pxPerMl) - 2;
+                const spLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                spLabel.setAttribute('x', cupX + cupWidth + 8);
+                spLabel.setAttribute('y', specialY + 4);
+                spLabel.setAttribute('fill', '#ec4899');
+                spLabel.setAttribute('font-size', '10px');
+                spLabel.setAttribute('font-family', 'monospace');
+                spLabel.textContent = `125 mL *`;
+                svg.appendChild(spLabel);
+
+                const lineSp = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineSp.setAttribute('x1', cupX);
+                lineSp.setAttribute('y1', specialY);
+                lineSp.setAttribute('x2', cupX + 18);
+                lineSp.setAttribute('y2', specialY);
+                lineSp.setAttribute('stroke', '#ec4899');
+                svg.appendChild(lineSp);
+            }
+
+            if (p4CurrentQuestion === 2) {
+                const specialY = cupY + cupHeight - (62.5 * pxPerMl) - 2;
+                const spLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                spLabel.setAttribute('x', cupX + cupWidth + 8);
+                spLabel.setAttribute('y', specialY + 4);
+                spLabel.setAttribute('fill', '#ec4899');
+                spLabel.setAttribute('font-size', '10px');
+                spLabel.setAttribute('font-family', 'monospace');
+                spLabel.textContent = `62.5 mL *`;
+                svg.appendChild(spLabel);
+
+                const lineSp = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineSp.setAttribute('x1', cupX);
+                lineSp.setAttribute('y1', specialY);
+                lineSp.setAttribute('x2', cupX + 18);
+                lineSp.setAttribute('y2', specialY);
+                lineSp.setAttribute('stroke', '#ec4899');
+                svg.appendChild(lineSp);
+            }
+        }
+
+        function p4ValidateAnswer() {
+            const currentData = p4Questions[p4CurrentQuestion];
+            const target = currentData.targetVolumeMl;
+            const feedback = document.getElementById('p4-feedback');
+            feedback.classList.remove('hidden');
+
+            const tolerance = 0.1; 
+
+            if (Math.abs(p4UserLiquidVolume - target) <= tolerance) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                feedback.innerText = `Sensacional! Dosagem perfeita de exatamente ${target} mL! Cientista Satisfeito. (+200 Pontos)`;
+                
+                updateGlobalScore(200);
+                p4SuccessCount++;
+
+                setTimeout(() => {
+                    p4CurrentQuestion++;
+                    if (p4CurrentQuestion < p4Questions.length) {
+                        setupP4Question();
+                    } else {
+                        // Passa para a introdução da Fase 5!
+                        changeScreen('screen-intro-5');
+                    }
+                }, 3000);
+
+            } else {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                feedback.innerText = `A dosagem atual está incorreta! Você colocou ${p4UserLiquidVolume} mL no copo, mas precisamos de outra quantidade. Dica: ${currentData.tip}`;
+            }
+        }
+
+
+        // ========================================================
+        //  LÓGICA DA FASE 5 (CÂMARA HOLOGRÁFICA: DESAFIOS CUBOS)
+        // ========================================================
+
+        function startPhase5() {
+            p5SuccessCount = 0;
+            p5CurrentQuestion = 0;
+            p5InteractiveValue = 0;
+            setupP5Question();
+            changeScreen('game-phase-5');
+        }
+
+        function setupP5Question() {
+            const currentData = p5Questions[p5CurrentQuestion];
+            document.getElementById('p5-question-index').innerText = `${p5CurrentQuestion + 1}/4`;
+            document.getElementById('p5-problem-title').innerText = currentData.title;
+            document.getElementById('p5-problem-text').innerText = currentData.text;
+
+            const feedback = document.getElementById('p5-feedback');
+            feedback.classList.add('hidden');
+
+            // Renderizar painel de controle dinâmico conforme o tipo de questão
+            const controlContainer = document.getElementById('p5-interactive-control');
+            controlContainer.innerHTML = '';
+
+            if (currentData.type === 'slider') {
+                p5InteractiveValue = currentData.min;
+                
+                controlContainer.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm font-bold text-slate-200">
+                            <span>Ajustar Aresta do Cubo:</span>
+                            <span class="text-pink-400 text-lg font-mono" id="p5-val-display">${p5InteractiveValue} ${currentData.unit}</span>
+                        </div>
+                        <input id="p5-slider-input" type="range" min="${currentData.min}" max="${currentData.max}" value="${p5InteractiveValue}" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                        <div class="flex justify-between text-slate-500 text-xs font-mono">
+                            <span>${currentData.min} ${currentData.unit}</span>
+                            <span>${currentData.max} ${currentData.unit}</span>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('p5-slider-input').addEventListener('input', function(e) {
+                    p5InteractiveValue = parseInt(e.target.value);
+                    document.getElementById('p5-val-display').innerText = `${p5InteractiveValue} ${currentData.unit}`;
+                    drawP5Projection();
+                });
+
+            } else if (currentData.type === 'options') {
+                p5InteractiveValue = 0; // Guardará o valor selecionado
+                
+                let optionsHtml = `<div class="grid grid-cols-2 gap-3">`;
+                currentData.options.forEach(opt => {
+                    optionsHtml += `
+                        <button onclick="p5SelectOption(${opt}, this)" class="p5-opt-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-base text-slate-100 transition-all text-center">
+                            ${opt} vezes
+                        </button>
+                    `;
+                });
+                optionsHtml += `</div>`;
+                controlContainer.innerHTML = optionsHtml;
+
+            } else if (currentData.type === 'input') {
+                p5InteractiveValue = ""; // Guardará o texto digitado
+
+                controlContainer.innerHTML = `
+                    <div class="space-y-2">
+                        <label for="p5-text-input" class="block text-sm font-bold text-slate-300">Insira a resposta numérica:</label>
+                        <input id="p5-text-input" type="number" placeholder="${currentData.placeholder}" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-center font-mono text-lg">
+                    </div>
+                `;
+
+                document.getElementById('p5-text-input').addEventListener('input', function(e) {
+                    p5InteractiveValue = parseInt(e.target.value);
+                    drawP5Projection();
+                });
+            }
+
+            drawP5Projection();
+        }
+
+        function p5SelectOption(val, element) {
+            p5InteractiveValue = val;
+            
+            // Destacar o botão selecionado
+            const btns = document.querySelectorAll('.p5-opt-btn');
+            btns.forEach(btn => {
+                btn.className = "p5-opt-btn bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-indigo-500 rounded-xl py-4 font-mono font-bold text-base text-slate-100 transition-all text-center";
+            });
+            element.className = "p5-opt-btn bg-indigo-600 border border-indigo-400 rounded-xl py-4 font-mono font-bold text-base text-white transition-all text-center shadow-lg shadow-indigo-500/20";
+            
+            drawP5Projection();
+        }
+
+        // Desenhar projeções 3D SVG específicas para os 4 enigmas avançados da Fase 5
+        function drawP5Projection() {
+            const svg = document.getElementById('p5-svg-projection');
+            svg.innerHTML = '';
+
+            const cx = 200;
+            const cy = 160;
+
+            const isoX = (x, y, z) => cx + (x - y) * Math.cos(Math.PI / 6);
+            const isoY = (x, y, z) => cy + (x + y) * Math.sin(Math.PI / 6) - z;
+
+            function drawLine(p1, p2, color, strokeWidth, isDashed = false) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', p1.x);
+                line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x);
+                line.setAttribute('y2', p2.y);
+                line.setAttribute('stroke', color);
+                line.setAttribute('stroke-width', strokeWidth);
+                if (isDashed) {
+                    line.setAttribute('stroke-dasharray', '4,4');
+                }
+                svg.appendChild(line);
+            }
+
+            // Enigma 1: Cubo em engenharia reversa que altera o tamanho com o slider do usuário
+            if (p5CurrentQuestion === 0) {
+                const currentSize = p5InteractiveValue * 12; // Escala visual
+                const cHalf = currentSize / 2;
+
+                const pts = [
+                    {x: isoX(-cHalf, -cHalf, -cHalf), y: isoY(-cHalf, -cHalf, -cHalf)}, // 0
+                    {x: isoX(cHalf, -cHalf, -cHalf), y: isoY(cHalf, -cHalf, -cHalf)},  // 1
+                    {x: isoX(cHalf, cHalf, -cHalf), y: isoY(cHalf, cHalf, -cHalf)},   // 2
+                    {x: isoX(-cHalf, cHalf, -cHalf), y: isoY(-cHalf, cHalf, -cHalf)},  // 3
+                    {x: isoX(-cHalf, -cHalf, cHalf), y: isoY(-cHalf, -cHalf, cHalf)},  // 4
+                    {x: isoX(cHalf, -cHalf, cHalf), y: isoY(cHalf, -cHalf, cHalf)},   // 5
+                    {x: isoX(cHalf, cHalf, cHalf), y: isoY(cHalf, cHalf, cHalf)},    // 6
+                    {x: isoX(-cHalf, cHalf, cHalf), y: isoY(-cHalf, cHalf, cHalf)}    // 7
+                ];
+
+                // Desenhar linhas traseiras
+                drawLine(pts[0], pts[1], '#4338ca', 1, true);
+                drawLine(pts[0], pts[3], '#4338ca', 1, true);
+                drawLine(pts[0], pts[4], '#4338ca', 1, true);
+
+                // Desenhar linhas frontais sólidas
+                drawLine(pts[1], pts[2], '#06b6d4', 2.5);
+                drawLine(pts[2], pts[3], '#06b6d4', 2.5);
+                drawLine(pts[4], pts[5], '#06b6d4', 2.5);
+                drawLine(pts[5], pts[6], '#06b6d4', 2.5);
+                drawLine(pts[6], pts[7], '#06b6d4', 2.5);
+                drawLine(pts[7], pts[4], '#06b6d4', 2.5);
+                drawLine(pts[1], pts[5], '#06b6d4', 2.5);
+                drawLine(pts[2], pts[6], '#06b6d4', 2.5);
+                drawLine(pts[3], pts[7], '#06b6d4', 2.5);
+
+                // Rótulo de Volume em Tempo Real
+                const vol = p5InteractiveValue * p5InteractiveValue * p5InteractiveValue;
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', '30');
+                text.setAttribute('y', '50');
+                text.setAttribute('fill', '#67e8f9');
+                text.setAttribute('font-weight', 'bold');
+                text.setAttribute('font-size', '15px');
+                text.textContent = `Volume Simulado: ${vol} dm³`;
+                svg.appendChild(text);
+
+            // Enigma 2: 8 cubos pequenos se fundindo em um maior de aresta ajustável
+            } else if (p5CurrentQuestion === 1) {
+                const giantSize = p5InteractiveValue * 12;
+                const gHalf = giantSize / 2;
+
+                const pts = [
+                    {x: isoX(-gHalf, -gHalf, -gHalf), y: isoY(-gHalf, -gHalf, -gHalf)}, 
+                    {x: isoX(gHalf, -gHalf, -gHalf), y: isoY(gHalf, -gHalf, -gHalf)},  
+                    {x: isoX(gHalf, gHalf, -gHalf), y: isoY(gHalf, gHalf, -gHalf)},   
+                    {x: isoX(-gHalf, gHalf, -gHalf), y: isoY(-gHalf, gHalf, -gHalf)},  
+                    {x: isoX(-gHalf, -gHalf, gHalf), y: isoY(-gHalf, -gHalf, gHalf)},  
+                    {x: isoX(gHalf, -gHalf, gHalf), y: isoY(gHalf, -gHalf, gHalf)},   
+                    {x: isoX(gHalf, gHalf, gHalf), y: isoY(gHalf, gHalf, gHalf)},    
+                    {x: isoX(-gHalf, gHalf, gHalf), y: isoY(-gHalf, gHalf, gHalf)}    
+                ];
+
+                // Desenhar cubo translúcido
+                drawLine(pts[0], pts[1], '#4f46e5', 1, true);
+                drawLine(pts[0], pts[3], '#4f46e5', 1, true);
+                drawLine(pts[0], pts[4], '#4f46e5', 1, true);
+
+                drawLine(pts[1], pts[2], '#ec4899', 2);
+                drawLine(pts[2], pts[3], '#ec4899', 2);
+                drawLine(pts[4], pts[5], '#ec4899', 2);
+                drawLine(pts[5], pts[6], '#ec4899', 2);
+                drawLine(pts[6], pts[7], '#ec4899', 2);
+                drawLine(pts[7], pts[4], '#ec4899', 2);
+                drawLine(pts[1], pts[5], '#ec4899', 2);
+                drawLine(pts[2], pts[6], '#ec4899', 2);
+                drawLine(pts[3], pts[7], '#ec4899', 2);
+
+                // Desenhar representação dos 8 cristais menores fundidos se a aresta estiver perto do correto (6)
+                if (p5InteractiveValue === 6) {
+                    const dots = [
+                        {cx: 0, cy: 0, cz: 0}, {cx: 1, cy: 0, cz: 0}, {cx: 0, cy: 1, cz: 0}, {cx: 1, cy: 1, cz: 0},
+                        {cx: 0, cy: 0, cz: 1}, {cx: 1, cy: 0, cz: 1}, {cx: 0, cy: 1, cz: 1}, {cx: 1, cy: 1, cz: 1}
+                    ];
+                    dots.forEach(d => {
+                        const spot = isoX((d.cx-0.5)*gHalf, (d.cy-0.5)*gHalf, (d.cz-0.5)*gHalf);
+                        const spotY = isoY((d.cx-0.5)*gHalf, (d.cy-0.5)*gHalf, (d.cz-0.5)*gHalf);
+                        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        circle.setAttribute('cx', spot);
+                        circle.setAttribute('cy', spotY);
+                        circle.setAttribute('r', '5');
+                        circle.setAttribute('fill', '#f43f5e');
+                        svg.appendChild(circle);
+                    });
+                }
+
+                // Volume alvo
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', '30');
+                text.setAttribute('y', '50');
+                text.setAttribute('fill', '#f43f5e');
+                text.setAttribute('font-weight', 'bold');
+                text.setAttribute('font-size', '14px');
+                text.textContent = `Fusão de 8 cubos de 27 cm³ = 216 cm³`;
+                svg.appendChild(text);
+
+            // Enigma 3: Comparação de dois cubos (Original de 3cm vs Expandido de 6cm)
+            } else if (p5CurrentQuestion === 2) {
+                // Cubo Esquerdo (Original - 3cm)
+                const s1 = 30; // tamanho
+                const cx1 = 120;
+                const cy1 = 180;
+                const pL = (x, y, z) => cx1 + (x - y) * s1 * 0.86 - z * s1;
+                const pLY = (x, y, z) => cy1 + (x + y) * s1 * 0.5 - z * s1;
+
+                // Desenhar Cubinho 3cm
+                const drawSideBySide = (pX, pY, color, labelText) => {
+                    const o0 = {x: pX(0,0,0), y: pY(0,0,0)};
+                    const o1 = {x: pX(1,0,0), y: pY(1,0,0)};
+                    const o2 = {x: pX(1,1,0), y: pY(1,1,0)};
+                    const o3 = {x: pX(0,1,0), y: pY(0,1,0)};
+                    const o4 = {x: pX(0,0,1), y: pY(0,0,1)};
+                    const o5 = {x: pX(1,0,1), y: pY(1,0,1)};
+                    const o6 = {x: pX(1,1,1), y: pY(1,1,1)};
+                    const o7 = {x: pX(0,1,1), y: pY(0,1,1)};
+
+                    drawLine(o0, o1, color, 1.5); drawLine(o1, o2, color, 1.5);
+                    drawLine(o2, o3, color, 1.5); drawLine(o3, o0, color, 1.5);
+                    drawLine(o4, o5, color, 1.5); drawLine(o5, o6, color, 1.5);
+                    drawLine(o6, o7, color, 1.5); drawLine(o7, o4, color, 1.5);
+                    drawLine(o0, o4, color, 1.5); drawLine(o1, o5, color, 1.5);
+                    drawLine(o2, o6, color, 1.5); drawLine(o3, o7, color, 1.5);
+
+                    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    txt.setAttribute('x', o2.x - 10);
+                    txt.setAttribute('y', o6.y - 10);
+                    txt.setAttribute('fill', color);
+                    txt.setAttribute('font-size', '11px');
+                    txt.setAttribute('font-weight', 'bold');
+                    txt.textContent = labelText;
+                    svg.appendChild(txt);
+                };
+
+                drawSideBySide(pL, pLY, '#a7f3d0', "3 cm (V=27 cm³)");
+
+                // Cubo Direito (Expandido - 6cm)
+                const s2 = 45; // dobro da escala relativa
+                const cx2 = 280;
+                const cy2 = 180;
+                const pR = (x, y, z) => cx2 + (x - y) * s2 * 0.86 - z * s2;
+                const pRY = (x, y, z) => cy2 + (x + y) * s2 * 0.5 - z * s2;
+
+                drawSideBySide(pR, pRY, '#10b981', "6 cm (V=216 cm³)");
+
+                // Se o aluno selecionou uma opção, mostrar comparação matemática na tela
+                if (p5InteractiveValue > 0) {
+                    const textCompare = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    textCompare.setAttribute('x', '80');
+                    textCompare.setAttribute('y', '50');
+                    textCompare.setAttribute('fill', p5InteractiveValue === 8 ? '#34d399' : '#f87171');
+                    textCompare.setAttribute('font-weight', 'bold');
+                    textCompare.setAttribute('font-size', '15px');
+                    textCompare.textContent = `Sua escolha: ${p5InteractiveValue} vezes`;
+                    svg.appendChild(textCompare);
+                }
+
+            // Enigma 4: Processador de 10cm com camada expansível para 11cm
+            } else if (p5CurrentQuestion === 3) {
+                const sCore = 80; // tamanho do core central de 10cm
+                const half1 = sCore / 2;
+
+                // Desenhar cubo central interno azul
+                const ptsCore = [
+                    {x: isoX(-half1, -half1, -half1), y: isoY(-half1, -half1, -half1)},
+                    {x: isoX(half1, -half1, -half1), y: isoY(half1, -half1, -half1)},
+                    {x: isoX(half1, half1, -half1), y: isoY(half1, half1, -half1)},
+                    {x: isoX(-half1, half1, -half1), y: isoY(-half1, half1, -half1)},
+                    {x: isoX(-half1, -half1, half1), y: isoY(-half1, -half1, half1)},
+                    {x: isoX(half1, -half1, half1), y: isoY(half1, -half1, half1)},
+                    {x: isoX(half1, half1, half1), y: isoY(half1, half1, half1)},
+                    {x: isoX(-half1, half1, half1), y: isoY(-half1, half1, half1)}
+                ];
+
+                drawLine(ptsCore[1], ptsCore[2], '#3b82f6', 2);
+                drawLine(ptsCore[2], ptsCore[3], '#3b82f6', 2);
+                drawLine(ptsCore[4], ptsCore[5], '#3b82f6', 2);
+                drawLine(ptsCore[5], ptsCore[6], '#3b82f6', 2);
+                drawLine(ptsCore[6], ptsCore[7], '#3b82f6', 2);
+                drawLine(ptsCore[7], ptsCore[4], '#3b82f6', 2);
+                drawLine(ptsCore[1], ptsCore[5], '#3b82f6', 2);
+                drawLine(ptsCore[2], ptsCore[6], '#3b82f6', 2);
+                drawLine(ptsCore[3], ptsCore[7], '#3b82f6', 2);
+
+                // Desenhar casca externa de blindagem pontilhada amarela (11cm)
+                const sShield = 90;
+                const half2 = sShield / 2;
+                const ptsShield = [
+                    {x: isoX(-half2, -half2, -half2), y: isoY(-half2, -half2, -half2)},
+                    {x: isoX(half2, -half2, -half2), y: isoY(half2, -half2, -half2)},
+                    {x: isoX(half2, half2, -half2), y: isoY(half2, half2, -half2)},
+                    {x: isoX(-half2, half2, -half2), y: isoY(-half2, half2, -half2)},
+                    {x: isoX(-half2, -half2, half2), y: isoY(-half2, -half2, half2)},
+                    {x: isoX(half2, -half2, half2), y: isoY(half2, -half2, half2)},
+                    {x: isoX(half2, half2, half2), y: isoY(half2, half2, half2)},
+                    {x: isoX(-half2, half2, half2), y: isoY(-half2, half2, half2)}
+                ];
+
+                drawLine(ptsShield[1], ptsShield[2], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[2], ptsShield[3], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[4], ptsShield[5], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[5], ptsShield[6], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[6], ptsShield[7], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[7], ptsShield[4], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[1], ptsShield[5], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[2], ptsShield[6], '#f59e0b', 1.5, true);
+                drawLine(ptsShield[3], ptsShield[7], '#f59e0b', 1.5, true);
+
+                // Textos informativos
+                const t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                t1.setAttribute('x', '30');
+                t1.setAttribute('y', '50');
+                t1.setAttribute('fill', '#60a5fa');
+                t1.setAttribute('font-size', '12px');
+                t1.textContent = `Processador Interno (a = 10 cm)`;
+                svg.appendChild(t1);
+
+                const t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                t2.setAttribute('x', '30');
+                t2.setAttribute('y', '70');
+                t2.setAttribute('fill', '#fbbf24');
+                t2.setAttribute('font-size', '12px');
+                t2.textContent = `Aresta com Blindagem (a = 11 cm)`;
+                svg.appendChild(t2);
+            }
+        }
+
+        function p5ValidateAnswer() {
+            const currentData = p5Questions[p5CurrentQuestion];
+            const target = currentData.targetValue;
+            const feedback = document.getElementById('p5-feedback');
+            feedback.classList.remove('hidden');
+
+            let isCorrect = false;
+
+            if (currentData.type === 'slider' || currentData.type === 'options') {
+                isCorrect = (p5InteractiveValue === target);
+            } else if (currentData.type === 'input') {
+                isCorrect = (parseInt(p5InteractiveValue) === target);
+            }
+
+            if (isCorrect) {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                feedback.innerText = `PERFEITO! Você resolveu o enigma com sucesso! (+250 Pontos)`;
+                
+                updateGlobalScore(250);
+                p5SuccessCount++;
+
+                setTimeout(() => {
+                    p5CurrentQuestion++;
+                    if (p5CurrentQuestion < p5Questions.length) {
+                        setupP5Question();
+                    } else {
+                        // Passou de tudo! Fim do jogo
+                        changeScreen('screen-game-over');
+                    }
+                }, 3000);
+
+            } else {
+                feedback.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                feedback.innerText = `A resposta enviada está incorreta. Revise as suas contas e tente novamente! Dica: ${currentData.tip}`;
+            }
+        }
+
+
+        // Reiniciar Jogo por completo
+        function restartGame() {
+            globalScore = 0;
+            p1SuccessCount = 0;
+            p2SuccessCount = 0;
+            p3SuccessCount = 0;
+            p4SuccessCount = 0;
+            p5SuccessCount = 0;
+            document.getElementById('global-score').innerText = '0';
+            changeScreen('screen-welcome');
+        }
+
+        // Garantir o carregamento limpo e início de fluxo do app
+        window.onload = function() {
+            changeScreen('screen-welcome');
+        };
+    </script>
+</body>
+</html>
