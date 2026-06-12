@@ -159,7 +159,7 @@
         </section>
 
         <!-- CONTAINER UNIVERSAL DE EXIBIÇÃO DE FASES E SIMULADORES ATIVOS -->
-        <section id="screen-game-container" class="hidden">
+        <section id="screen-game-container" class="hidden flex-grow flex flex-col w-full h-full">
             <!-- Painel Superior de Navegação Rápida -->
             <div class="bg-slate-900/80 border border-slate-800 p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 sm:mb-6 shadow-md">
                 <div class="text-center sm:text-left">
@@ -171,7 +171,7 @@
             </div>
 
             <!-- ÁREA DO CONTEÚDO ATIVO -->
-            <div id="active-phase-content" class="bg-slate-900/60 border border-slate-700/50 rounded-3xl p-5 sm:p-8 shadow-2xl backdrop-blur-md relative overflow-hidden">
+            <div id="active-phase-content" class="bg-slate-900/60 border border-slate-700/50 rounded-3xl p-5 sm:p-8 shadow-2xl backdrop-blur-md relative overflow-hidden flex-grow">
                 <!-- Inserido dinamicamente via JavaScript -->
             </div>
         </section>
@@ -234,7 +234,7 @@
             paralelepipedo: { title: "Volume do Paralelepípedo", phasesCount: 8, phasesName: ["Três Dimensões", "Estrutura da Fórmula", "Simulador Isométrico", "Carga e Densidade", "Encaixe no Hangar", "Altura Oculta", "Prova Espacial I", "Prova Espacial II"] },
             quadrado: { title: "Área do Quadrado", phasesCount: 8, phasesName: ["Eixos Lado a Lado", "A Fórmula da Potência", "Malha Holográfica Ativa", "Proporção de Lados", "Área vs Perímetro", "Painel Solar", "Prova Espacial I", "Prova Espacial II"] },
             retangulo: { title: "Área do Retângulo", phasesCount: 8, phasesName: ["Base e Altura", "Fórmula Ortogonal", "Ladrilhos Refratários", "Moldura de Proteção", "Otimização de Paddock", "Proporção Estelar", "Prova Espacial I", "Prova Espacial II"] },
-            triangulo: { title: "Área do Triângulo", phasesCount: 8, phasesName: ["A Metade do Retângulo", "A Divisão por 2", "Simulador de Vértices", "Cavalieri em Ação", "Vela Fotônica", "Cápsula Composta", "Prova Espacial I", "Prova Espacial II"] }
+            triangulo: { title: "Área do Triângulo", phasesCount: 8, phasesName: ["A Metade do Retângulo", "A Divisão por 2", "Simulador de Vértices", "Transformação", "Vela Fotônica", "Altura Certa", "Prova Espacial I", "Prova Espacial II"] }
         };
 
         // Estado Interno dos Mini-jogos
@@ -307,8 +307,8 @@
             ['screen-welcome', 'screen-hub', 'screen-game-container', 'screen-victory'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
-                    if(id === screenId) { el.classList.remove('hidden'); el.classList.add('animate-fadeIn'); }
-                    else { el.classList.add('hidden'); }
+                    if(id === screenId) { el.classList.remove('hidden'); el.classList.add('animate-fadeIn'); el.style.display = (id === 'screen-game-container') ? 'flex' : 'block'; }
+                    else { el.classList.add('hidden'); el.style.display = 'none'; }
                 }
             });
             document.getElementById('btn-back-hub').classList.toggle('hidden', ['screen-hub', 'screen-welcome', 'screen-victory'].includes(screenId));
@@ -332,6 +332,53 @@
             changeScreen('screen-hub');
         }
 
+        function startTopic(topic) {
+            activeTopic = topic;
+            activePhase = 0;
+            document.getElementById('topic-active-title').innerText = topicsData[topic].title;
+            
+            // Inicializar estados do tópico
+            if(topic === 'cubo') cuboState = { clickedEdges: [], currentVal: 5, targetVal: 12, placedBlocks: 0, selectedFormula: [], p4Volume: 0, p4Question: 0, p5Question: 0, p5Val: 0 };
+            if(topic === 'paralelepipedo') paraState = { clickedDimensions: [], selectedFormula: [], w: 4, d: 3, h: 5, p5Height: 3 };
+            if(topic === 'quadrado') quadState = { clickedSides: [], selectedFormula: [], size: 4, p3Choice: null };
+            if(topic === 'retangulo') retState = { clickedSides: [], selectedFormula: [], base: 6, height: 3, p4W: 8, p4H: 4 };
+            if(topic === 'triangulo') triState = { clickedParts: [], selectedFormula: [], base: 6, height: 4, vertexOffset: 0 };
+            
+            generateStepper();
+            changeScreen('screen-game-container');
+            loadPhaseContent();
+        }
+
+        function generateStepper() {
+            const container = document.getElementById('topic-stepper-container');
+            container.innerHTML = '';
+            document.getElementById('topic-active-subtitle').innerText = `Fase ${activePhase + 1} de 8: ${topicsData[activeTopic].phasesName[activePhase]}`;
+            for(let i=0; i<8; i++) {
+                const dot = document.createElement('div');
+                let colorClass = 'bg-slate-700';
+                if(i === activePhase) {
+                    if(activeTopic === 'cubo') colorClass = 'bg-indigo-500 scale-125 shadow-[0_0_10px_#6366f1]';
+                    if(activeTopic === 'paralelepipedo') colorClass = 'bg-pink-500 scale-125 shadow-[0_0_10px_#ec4899]';
+                    if(activeTopic === 'quadrado') colorClass = 'bg-emerald-500 scale-125 shadow-[0_0_10px_#10b981]';
+                    if(activeTopic === 'retangulo') colorClass = 'bg-cyan-500 scale-125 shadow-[0_0_10px_#06b6d4]';
+                    if(activeTopic === 'triangulo') colorClass = 'bg-purple-500 scale-125 shadow-[0_0_10px_#a855f7]';
+                } else if(i < activePhase) {
+                    colorClass = 'bg-emerald-500'; // Finalizadas sempre verdes
+                }
+                dot.className = `w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all ${colorClass}`;
+                container.appendChild(dot);
+            }
+        }
+
+        function loadPhaseContent() {
+            if(activeTopic === 'cubo') renderCuboPhase();
+            else if(activeTopic === 'paralelepipedo') renderParalelepipedoPhase();
+            else if(activeTopic === 'quadrado') renderQuadradoPhase();
+            else if(activeTopic === 'retangulo') renderRetanguloPhase();
+            else if(activeTopic === 'triangulo') renderTrianguloPhase();
+            triggerMathRender();
+        }
+
         function updateGlobalScore(points) {
             globalScore += points;
             document.getElementById('global-score').innerText = globalScore;
@@ -342,47 +389,6 @@
             document.getElementById('victory-topic-name').innerText = topicsData[activeTopic].title;
             updateGlobalScore(500);
             changeScreen('screen-victory');
-        }
-
-        // === INICIA O TÓPICO E RENOVA A MEMÓRIA ===
-        function startTopic(topicKey) {
-            if(topicKey === 'cubo') cuboState = { clickedEdges: [], selectedFormula: [], currentVal: 5, targetVal: 10, placedBlocks: 0, p4Question: 0, p4Volume: 0, p5Question: 0, p5Val: 0 };
-            if(topicKey === 'paralelepipedo') paraState = { clickedDimensions: [], selectedFormula: [], w: 4, d: 3, h: 5, p3Weight: 0, p4Crates: 0, p5Height: 3 };
-            if(topicKey === 'quadrado') quadState = { clickedSides: [], selectedFormula: [], size: 5, p3Choice: null, p4Matched: false, p5Perimeter: 0 };
-            if(topicKey === 'retangulo') retState = { clickedSides: [], selectedFormula: [], base: 6, height: 4, p3OuterW: 10, p3OuterH: 8, p3InnerW: 8, p3InnerH: 6, p4W: 8, p4H: 4, p5W: 10 };
-            if(topicKey === 'triangulo') triState = { clickedCut: false, selectedFormula: [], base: 6, height: 5, p3VertexShift: 0, p4Height: 5, p5CombinedAnswer: 0 };
-
-            activeTopic = topicKey;
-            activePhase = 0;
-            document.getElementById('topic-active-title').innerText = topicsData[topicKey].title;
-            generateStepper();
-            loadPhaseContent();
-            changeScreen('screen-game-container');
-        }
-
-        function generateStepper() {
-            const container = document.getElementById('topic-stepper-container');
-            container.innerHTML = '';
-            for (let i = 0; i < topicsData[activeTopic].phasesCount; i++) {
-                const btn = document.createElement('button');
-                btn.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-[10px] sm:text-xs transition-all cursor-pointer focus:outline-none flex-shrink-0 ${i === activePhase ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30 ring-2 ring-indigo-400/50' : 'bg-slate-800 text-slate-500 hover:bg-slate-700'}`;
-                btn.innerText = i + 1;
-                btn.title = topicsData[activeTopic].phasesName[i];
-                btn.onclick = () => { activePhase = i; generateStepper(); loadPhaseContent(); };
-                container.appendChild(btn);
-            }
-        }
-
-        function loadPhaseContent() {
-            document.getElementById('topic-active-subtitle').innerText = `Módulo ${activePhase + 1}: ${topicsData[activeTopic].phasesName[activePhase]}`;
-            
-            if (activeTopic === 'cubo') renderCuboPhase();
-            else if (activeTopic === 'paralelepipedo') renderParalelepipedoPhase();
-            else if (activeTopic === 'quadrado') renderQuadradoPhase();
-            else if (activeTopic === 'retangulo') renderRetanguloPhase();
-            else if (activeTopic === 'triangulo') renderTrianguloPhase();
-            
-            triggerMathRender();
         }
 
         // Template Universal de Exames Escolares (Fases 6 e 7)
@@ -514,8 +520,8 @@
                             <div class="bg-indigo-950/40 p-4 rounded-2xl border border-indigo-900/40 flex flex-col sm:flex-row sm:justify-between items-center gap-3">
                                 <span class="text-sm font-bold">Adicionar Cubos:</span>
                                 <div class="flex gap-2">
-                                    <button onclick="alterCuboBlocks(1)" class="bg-indigo-600 hover:bg-indigo-500 text-white w-12 h-12 rounded-xl font-bold text-xl shadow-md">+</button>
-                                    <button onclick="alterCuboBlocks(-1)" class="bg-rose-600 hover:bg-rose-500 text-white w-12 h-12 rounded-xl font-bold text-xl shadow-md">-</button>
+                                    <button onclick="alterCuboBlocks(1)" class="bg-indigo-600 hover:bg-indigo-500 text-white w-12 h-12 rounded-xl font-bold text-xl shadow-md focus:outline-none">+</button>
+                                    <button onclick="alterCuboBlocks(-1)" class="bg-rose-600 hover:bg-rose-500 text-white w-12 h-12 rounded-xl font-bold text-xl shadow-md focus:outline-none">-</button>
                                 </div>
                             </div>
                             <div class="bg-slate-950 p-3 rounded-lg text-center text-xs">Blocos colocados: <span id="p2-placed-count" class="font-bold text-pink-400 text-sm">${cuboState.placedBlocks}</span> / 27</div>
@@ -622,7 +628,7 @@
             }
         }
 
-        // Funções Específicas do Cubo
+        // --- SUB-MÉTODOS DO CUBO ---
         function drawCuboP0Concept() {
             const svg = document.getElementById('cubo-svg-concept');
             if(!svg) return;
@@ -677,10 +683,10 @@
         function triggerCuboP0Feedback(type) {
             const fb = document.getElementById('cubo-p0-feedback');
             fb.classList.remove('hidden');
-            if (type === 'face') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400"; fb.innerText = "Isso é uma FACE! Clique nas linhas azuis contornantes."; }
-            if (type === 'vertice') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400"; fb.innerText = "Isso é um VÉRTICE (canto)! Clique nas linhas azuis."; }
-            if (type === 'aresta_ok') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400"; fb.innerText = "Aresta mapeada!"; }
-            if (type === 'success') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse"; fb.innerText = "Excelente! Mapeamento concluído. (+50 Pontos)"; updateGlobalScore(50); }
+            if (type === 'face') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/85 border border-rose-500/50 text-rose-300"; fb.innerText = "Isso é uma FACE (superfície)! Clique nas linhas azuis."; }
+            if (type === 'vertice') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-rose-950/85 border border-rose-500/50 text-rose-300"; fb.innerText = "Isso é um VÉRTICE (ponto vermelho)! Ele une as arestas. Clique nas linhas azuis."; }
+            if (type === 'aresta_ok') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/85 border border-emerald-500/50 text-emerald-400"; fb.innerText = "Aresta mapeada com sucesso!"; }
+            if (type === 'success') { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/85 border border-emerald-500/50 text-emerald-400 animate-pulse"; fb.innerText = "Excelente! Mapeamento concluído. (+50 Pontos)"; updateGlobalScore(50); }
         }
 
         function drawCuboP1Slider() {
@@ -688,30 +694,7 @@
             if(!svg) return;
             svg.innerHTML = '';
             const cx = 150, cy = 130, scale = 6;
-            const project = (x, y, z) => ({ x: cx + (x - y) * Math.cos(Math.PI / 6), y: cy + (x + y) * Math.sin(Math.PI / 6) - z });
 
-            const drawBox = (val, color, w, dashed) => {
-                const s = val * scale; const h = s / 2;
-                const pts = [
-                    project(-h*size, -h*size, -h*size), project(h*size, -h*size, -h*size),
-                    project(h*size, h*size, -h*size), project(-h*size, h*size, -h*size),
-                    project(-h*size, -h*size, h*size), project(h*size, -h*size, h*size),
-                    project(h*size, h*size, h*size), project(-h*size, h*size, h*size)
-                ];
-                const drawLine = (p1, p2) => {
-                    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y);
-                    l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
-                    l.setAttribute('stroke', color); l.setAttribute('stroke-width', w);
-                    if(dashed) l.setAttribute('stroke-dasharray', '3,3');
-                    svg.appendChild(l);
-                };
-                drawLine(pts[1], pts[2]); drawLine(pts[2], pts[3]);
-                drawLine(pts[4], pts[5]); drawLine(pts[5], pts[6]); drawLine(pts[6], pts[7]); drawLine(pts[7], pts[4]);
-                drawLine(pts[1], pts[5]); drawLine(pts[2], pts[6]); drawLine(pts[3], pts[7]);
-            };
-            
-            // To simplify math in this isolated block, just draw visually appealing boxes
             const sT = cuboState.targetVal * 6; const sC = cuboState.currentVal * 6;
             const ptsT = [ {x:cx, y:cy-sT}, {x:cx+sT*0.86, y:cy-sT*0.5}, {x:cx, y:cy}, {x:cx-sT*0.86, y:cy-sT*0.5}, {x:cx, y:cy+sT}, {x:cx+sT*0.86, y:cy+sT*0.5}, {x:cx-sT*0.86, y:cy+sT*0.5} ];
             const ptsC = [ {x:cx, y:cy-sC}, {x:cx+sC*0.86, y:cy-sC*0.5}, {x:cx, y:cy}, {x:cx-sC*0.86, y:cy-sC*0.5}, {x:cx, y:cy+sC}, {x:cx+sC*0.86, y:cy+sC*0.5}, {x:cx-sC*0.86, y:cy+sC*0.5} ];
@@ -996,8 +979,209 @@
         }
 
         // ==========================================
-        //  MÓDULO 2: PARALELEPÍPEDO ESPECÍFICAS
+        //  MÓDULO 2: VOLUME DO PARALELEPÍPEDO ESPECÍFICAS
         // ==========================================
+        function renderParalelepipedoPhase() {
+            const container = document.getElementById('active-phase-content');
+            
+            if (activePhase === 0) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-pink-400">Conceito e Dimensões</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Diferente do cubo perfeito, o paralelepípedo possui 3 dimensões que podem ser completamente distintas: 
+                                <strong>Comprimento ($c$)</strong>, <strong>Largura ($l$)</strong> e <strong>Altura ($a$)</strong>.
+                                <br><br>
+                                <strong>Clique nos três contornos coloridos no prisma ao lado</strong> para identificar e mapear cada dimensão.
+                            </p>
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-between text-sm font-bold font-mono">
+                                <span>Mapeado:</span>
+                                <span class="text-pink-400" id="para-mapped-dims">Nenhum</span>
+                            </div>
+                            <div id="para-p0-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <svg id="para-svg-concept" class="w-full h-full max-w-[350px] min-h-[250px]" viewBox="0 0 350 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawParaConceptSVG();
+            } else if (activePhase === 1) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-pink-400">Fórmula de Três Eixos</h4>
+                            <p class="text-sm text-slate-300">Para obter o volume de um paralelepípedo reto, basta multiplicar comprimento, largura e altura. Encaixe as peças na ordem adequada:</p>
+                            
+                            <div class="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 flex justify-center items-center gap-2 min-h-[80px]">
+                                <div id="para-formula-slots" class="flex flex-wrap justify-center items-center gap-1.5 sm:gap-2"></div>
+                            </div>
+                            
+                            <div class="bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-3">
+                                <span class="block text-xs font-bold text-slate-400 text-center uppercase tracking-wider mb-2">Elementos Disponíveis:</span>
+                                <div id="para-formula-chips" class="flex flex-wrap justify-center gap-2"></div>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-2 mt-4">
+                                <button onclick="resetParaFormula()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 sm:py-4 px-6 rounded-xl text-sm font-bold transition-all focus:outline-none">Limpar 🔄</button>
+                                <button onclick="validateParaFormula()" class="w-full sm:flex-grow bg-pink-600 hover:bg-pink-500 text-white font-fun py-3 sm:py-4 rounded-xl text-base sm:text-lg shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-pink-500/30">Validar Fórmula ⚡</button>
+                            </div>
+                            <div id="para-p1-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-6 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <i class="fa-solid fa-cubes-stacked text-8xl sm:text-9xl text-pink-500/20"></i>
+                        </div>
+                    </div>
+                `;
+                setupParaFormulaMontagem();
+            } else if (activePhase === 2) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-5">
+                            <h4 class="font-fun text-xl sm:text-2xl text-pink-400">Simulador Dinâmico</h4>
+                            <p class="text-sm text-slate-300">Modifique as três dimensões e calcule qual o volume total do contêiner em metros cúbicos ($\\text{m}^3$):</p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Comprimento ($c$):</span><span class="text-pink-400 font-mono text-lg" id="para-w-display">4m</span></div>
+                                    <input id="para-slider-w" type="range" min="2" max="8" value="${paraState.w}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-pink-500">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Largura ($l$):</span><span class="text-pink-400 font-mono text-lg" id="para-d-display">3m</span></div>
+                                    <input id="para-slider-d" type="range" min="2" max="6" value="${paraState.d}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-pink-500">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Altura ($a$):</span><span class="text-pink-400 font-mono text-lg" id="para-h-display">5m</span></div>
+                                    <input id="para-slider-h" type="range" min="2" max="8" value="${paraState.h}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-pink-500">
+                                </div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Digite o Volume calculado ($\\text{m}^3$):</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="para-p2-answer" type="number" placeholder="Digite..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkParaVolume()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="para-p2-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
+                            <svg id="para-svg-sim" class="w-full h-full max-w-[400px] min-h-[250px]" viewBox="0 0 400 300" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawParaSimulationSVG();
+                
+                ['w', 'd', 'h'].forEach(dim => {
+                    document.getElementById(`para-slider-${dim}`).addEventListener('input', function(e) {
+                        paraState[dim] = parseInt(e.target.value);
+                        document.getElementById(`para-${dim}-display`).innerText = paraState[dim] + "m";
+                        drawParaSimulationSVG();
+                    });
+                });
+            } else if (activePhase === 3) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-pink-400">Cálculo de Carga Física</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Cada metro cúbico ($\\text{m}^3$) de combustível de plasma pesa <strong>$150\\text{ kg}$</strong>. Ajuste o contêiner e responda qual será o peso total da carga transportada.
+                            </p>
+                            <div class="bg-indigo-950/40 p-4 sm:p-5 rounded-2xl border border-indigo-900/40 space-y-3 text-sm">
+                                <div class="flex justify-between"><span>Comprimento:</span><span class="font-bold text-pink-400 font-mono">5 m</span></div>
+                                <div class="flex justify-between"><span>Largura:</span><span class="font-bold text-pink-400 font-mono">4 m</span></div>
+                                <div class="flex justify-between"><span>Altura:</span><span class="font-bold text-pink-400 font-mono">3 m</span></div>
+                                <div class="border-t border-indigo-900/80 pt-3 mt-2 flex justify-between"><span>Peso por $\\text{m}^3$:</span><span class="font-bold text-yellow-400 font-mono">150 kg</span></div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Qual o Peso Total em kg?</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="para-p3-answer" type="number" placeholder="Peso em kg..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left shadow-inner">
+                                    <button onclick="checkParaP3()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Confirmar</button>
+                                </div>
+                            </div>
+                            <div id="para-p3-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="para-svg-p3" class="w-full h-full max-w-[350px] min-h-[250px]" viewBox="0 0 350 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawParaP3SVG();
+            } else if (activePhase === 4) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-pink-400">Empilhamento de Suprimentos</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Desejamos carregar caixas de suprimentos com dimensões $2\\text{ m} \\times 1\\text{ m} \\times 1\\text{ m}$ (Volume = $2\\text{ m}^3$) em um hangar de carga de $6\\text{ m} \\times 4\\text{ m} \\times 3\\text{ m}$.
+                                Quantas caixas de suprimento cabem no hangar sem sofrer deformações?
+                            </p>
+                            <div class="bg-indigo-950/40 p-4 sm:p-5 rounded-2xl border border-indigo-900/40 text-sm space-y-2">
+                                <div><span class="text-slate-400">Hangar:</span> $6\\text{ m} \\times 4\\text{ m} \\times 3\\text{ m}$</div>
+                                <div><span class="text-slate-400">Volume do Hangar:</span> <span class="font-mono text-pink-400">$72\\text{ m}^3$</span></div>
+                                <div class="border-t border-indigo-900/60 pt-2 mt-2"><span class="text-slate-400">Caixa (Unidade):</span> $2\\text{ m} \\times 1\\text{ m} \\times 1\\text{ m}$ ($2\\text{ m}^3$)</div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Total de caixas suportadas:</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="para-p4-answer" type="number" placeholder="Quantidade..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left shadow-inner">
+                                    <button onclick="checkParaP4()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="para-p4-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="para-svg-p4" class="w-full h-full max-w-[350px] min-h-[250px]" viewBox="0 0 350 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawParaP4SVG();
+            } else if (activePhase === 5) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-pink-400">Altura do Reator</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                O reator da nave precisa ter um volume total exato de <strong>$120\\text{ m}^3$</strong>. 
+                                A base do reator tem comprimento $6\\text{ m}$ e largura $4\\text{ m}$. Ajuste o controle deslizante para definir a altura exata que calibra o reator.
+                            </p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div class="flex justify-between text-sm font-bold"><span>Altura do Reator ($a$):</span><span class="text-yellow-400 text-lg font-mono" id="para-p5-height-display">3 m</span></div>
+                                <input id="para-p5-slider" type="range" min="2" max="8" value="3" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-pink-500">
+                                <div class="flex justify-between text-sm border-t border-indigo-900/80 pt-3 text-slate-400">
+                                    <span>Volume Alvo:</span><span class="text-white font-bold font-mono text-lg">120 m³</span>
+                                </div>
+                            </div>
+                            <button onclick="checkParaP5()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-fun py-4 text-lg rounded-xl shadow-lg mt-4 focus:outline-none focus:ring-4 focus:ring-emerald-500/30">Acionar Reator ⚡</button>
+                            <div id="para-p5-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold text-slate-100"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="para-svg-p5" class="w-full h-full max-w-[350px] min-h-[250px]" viewBox="0 0 350 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawParaP5SVG();
+                document.getElementById('para-p5-slider').addEventListener('input', function(e) {
+                    paraState.p5Height = parseInt(e.target.value);
+                    document.getElementById('para-p5-height-display').innerText = paraState.p5Height + " m";
+                    drawParaP5SVG();
+                });
+            } else if (activePhase === 6) {
+                renderExamPhase('para', 6, "Desafio Escolar I: Piscina Hidropônica", 
+                    "Uma piscina de treinamento tem o formato de paralelepípedo medindo $8\\text{ m}$ de comprimento, $5\\text{ m}$ de largura e $1.5\\text{ m}$ de profundidade total. Se nós enchermos essa piscina com água até atingir a altura de $1.2\\text{ m}$, qual será o volume exato da água em metros cúbicos ($m^3$)?",
+                    "Volume de Água ($m^3$):",
+                    "<strong>Passo 1:</strong> Preste muita atenção na pegadinha! A água não enche a piscina até o topo. Portanto, a dimensão da altura que você deve usar é $1.2\\text{ m}$ (a altura da água), e não $1.5\\text{ m}$.<br><strong>Passo 2:</strong> Agora basta calcular o volume: $8 \\times 5 \\times 1.2$.",
+                    48);
+            } else if (activePhase === 7) {
+                renderExamPhase('para', 7, "Desafio Escolar II: Duto de Ventilação Espacial", 
+                    "Temos um duto de ventilação retangular onde a base já possui uma área estabelecida de $0.4\\text{ m}^2$ (ou seja, o comprimento vezes a largura já está calculado). Para que este duto transporte um volume exato de $2\\text{ m}^3$ de ar, qual deve ser o comprimento total do duto (a sua altura estendida em metros)?",
+                    "Comprimento/Altura do Duto (m):",
+                    "<strong>Passo 1:</strong> Lembre-se da regra de ouro: O volume de um prisma/paralelepípedo é sempre a <strong>Área da Base vezes a Altura</strong> ($V = A_b \\times h$).<br><strong>Passo 2:</strong> Se o Volume é $2$ e a Área da Base é $0.4$, então $2 = 0.4 \\times h$. Basta dividir o volume pela área ($2 / 0.4$)!",
+                    5);
+            }
+        }
+
+        // --- SUB-MÉTODOS DO PARALELEPÍPEDO ---
         function drawParaConceptSVG() {
             const svg = document.getElementById('para-svg-concept');
             if(!svg) return;
@@ -1008,7 +1192,8 @@
 
             const lineTraseira = (p1, p2) => {
                 const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y); l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
+                l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y);
+                l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
                 l.setAttribute('stroke', '#334155'); l.setAttribute('stroke-width', '1.5'); l.setAttribute('stroke-dasharray', '3,3');
                 svg.appendChild(l);
             };
@@ -1017,7 +1202,8 @@
             const drawConceptEdge = (p1, p2, dimKey, color, labelText) => {
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 const isSel = paraState.clickedDimensions.includes(dimKey);
-                line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y); line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+                line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
                 line.setAttribute('stroke', isSel ? '#10b981' : color); line.setAttribute('stroke-width', isSel ? '7' : '4');
                 line.setAttribute('class', 'cursor-pointer hover:stroke-yellow-400 transition-all');
                 line.onclick = () => {
@@ -1061,7 +1247,7 @@
             for (let i = 0; i < 7; i++) {
                 const d = document.createElement('div');
                 const val = paraState.selectedFormula[i];
-                d.className = `w-10 h-10 border-2 rounded-xl flex items-center justify-center font-bold text-xs ${val ? 'border-pink-500 bg-pink-950/60' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'}`;
+                d.className = `w-10 h-10 border-2 rounded-xl flex items-center justify-center font-bold text-xs ${val ? 'border-pink-500 bg-pink-950/60 text-white' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'}`;
                 d.innerText = val ? val : '?';
                 slots.appendChild(d);
             }
@@ -1115,7 +1301,8 @@
             
             const lTraseira = (p1, p2) => {
                 const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y); l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
+                l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y);
+                l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
                 l.setAttribute('stroke', '#334155'); l.setAttribute('stroke-width', '1.5'); l.setAttribute('stroke-dasharray', '3,3');
                 svg.appendChild(l);
             };
@@ -1123,7 +1310,8 @@
 
             const lSolida = (p1, p2, color) => {
                 const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y); l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
+                l.setAttribute('x1', p1.x); l.setAttribute('y1', p1.y);
+                l.setAttribute('x2', p2.x); l.setAttribute('y2', p2.y);
                 l.setAttribute('stroke', color); l.setAttribute('stroke-width', '3');
                 svg.appendChild(l);
             };
@@ -1157,7 +1345,6 @@
             const svg = document.getElementById('para-svg-p3');
             if(!svg) return;
             svg.innerHTML = '';
-            // Basic representation of a 5x4x3 box
             const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             r.setAttribute('x', '100'); r.setAttribute('y', '80'); r.setAttribute('width', '150'); r.setAttribute('height', '90');
             r.setAttribute('fill', 'rgba(236, 72, 153, 0.2)'); r.setAttribute('stroke', '#ec4899'); r.setAttribute('stroke-width', '3');
@@ -1183,7 +1370,6 @@
             const svg = document.getElementById('para-svg-p4');
             if(!svg) return;
             svg.innerHTML = '';
-            // Hangar representation
             const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             r.setAttribute('x', '50'); r.setAttribute('y', '50'); r.setAttribute('width', '200'); r.setAttribute('height', '150');
             r.setAttribute('fill', 'rgba(59, 130, 246, 0.1)'); r.setAttribute('stroke', '#3b82f6'); r.setAttribute('stroke-dasharray', '4,4');
@@ -1209,7 +1395,6 @@
             const svg = document.getElementById('para-svg-p5');
             if(!svg) return;
             svg.innerHTML = '';
-            // Reactor representation scaling with height
             const h = paraState.p5Height * 15;
             const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             r.setAttribute('x', '100'); r.setAttribute('y', 200 - h); r.setAttribute('width', '150'); r.setAttribute('height', h);
@@ -1231,10 +1416,1351 @@
             }
         }
 
-        // STARTUP
-        window.onload = function() {
-            changeScreen('screen-welcome');
-        };
+        // ==========================================
+        //  MÓDULO 3: ÁREA DO QUADRADO ESPECÍFICAS
+        // ==========================================
+        function renderQuadradoPhase() {
+            const container = document.getElementById('active-phase-content');
+            
+            if (activePhase === 0) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-emerald-400">Os Lados Iguais</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                O quadrado possui quatro lados de comprimentos iguais e ângulos retos de $90^\\circ$. Para calcular a sua superfície bidimensional (área), analisamos os seus lados.
+                                <br><br>
+                                <strong>Clique em exatamente 2 lados adjacentes</strong> do quadrado luminoso ao lado para identificar o par de eixos necessários ao cálculo.
+                            </p>
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-between text-sm font-bold">
+                                <span>Eixos Mapeados:</span>
+                                <span class="text-emerald-400 font-mono" id="quad-mapped-count">0 / 2</span>
+                            </div>
+                            <div id="quad-p0-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="quad-svg-concept" class="w-full h-full max-w-[280px] min-h-[250px]" viewBox="0 0 250 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawQuadConceptSVG();
+            } else if (activePhase === 1) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-emerald-400">Fórmula de Segunda Ordem</h4>
+                            <p class="text-sm text-slate-300">Multiplicar o lado por ele mesmo ($l \\times l$) equivale a elevar a medida ao quadrado ($l^2$). Construa a equação matemática arrastando as peças:</p>
+                            
+                            <div class="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 flex justify-center items-center gap-2 min-h-[80px]">
+                                <div id="quad-formula-slots" class="flex flex-wrap justify-center items-center gap-1.5 sm:gap-2"></div>
+                            </div>
+                            
+                            <div class="bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-3">
+                                <span class="block text-xs font-bold text-slate-400 text-center uppercase tracking-wider mb-2">Elementos Disponíveis:</span>
+                                <div id="quad-formula-chips" class="flex flex-wrap justify-center gap-2"></div>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-2 mt-4">
+                                <button onclick="resetQuadFormula()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 sm:py-4 px-6 rounded-xl text-sm font-bold transition-all focus:outline-none">Limpar 🔄</button>
+                                <button onclick="validateQuadFormula()" class="w-full sm:flex-grow bg-emerald-600 hover:bg-emerald-500 text-white font-fun py-3 sm:py-4 rounded-xl text-base sm:text-lg shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-emerald-500/30">Validar Fórmula ⚡</button>
+                            </div>
+                            <div id="quad-p1-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-6 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <i class="fa-solid fa-shapes text-8xl sm:text-9xl text-emerald-500/20"></i>
+                        </div>
+                    </div>
+                `;
+                setupQuadFormulaMontagem();
+            } else if (activePhase === 2) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-5">
+                            <h4 class="font-fun text-xl sm:text-2xl text-emerald-400">Malha Holográfica Ativa</h4>
+                            <p class="text-sm text-slate-300">Modifique a aresta lateral do quadrado e observe a geração automática de quadrículas unitárias de $1\\text{ cm}^2$:</p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4">
+                                <div class="flex justify-between text-sm font-bold mb-2">
+                                    <span>Lado ($l$):</span>
+                                    <span class="text-emerald-400 text-xl font-mono" id="quad-size-display">${quadState.size} cm</span>
+                                </div>
+                                <input id="quad-slider" type="range" min="2" max="10" value="${quadState.size}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-emerald-500">
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Área da figura gerada ($A$ em $\\text{cm}^2$):</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="quad-p2-answer" type="number" placeholder="Digite..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkQuadArea()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="quad-p2-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
+                            <svg id="quad-svg-sim" class="w-full h-full max-w-[280px] min-h-[250px]" viewBox="0 0 250 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawQuadSimulationSVG();
+                document.getElementById('quad-slider').addEventListener('input', function(e) {
+                    quadState.size = parseInt(e.target.value);
+                    document.getElementById('quad-size-display').innerText = quadState.size + " cm";
+                    drawQuadSimulationSVG();
+                });
+            } else if (activePhase === 3) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-emerald-400">Escalabilidade de Lados</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Se dobrarmos o comprimento do lado de uma placa protetora quadrada de $3\\text{ cm}$ para $6\\text{ cm}$, a área final da placa será multiplicada por quanto?
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4" id="quad-p3-options">
+                                <button onclick="selectQuadP3(2, this)" class="bg-slate-800 text-slate-200 text-sm font-semibold p-4 rounded-xl border border-slate-700 hover:bg-emerald-800 transition-colors focus:outline-none">2 vezes</button>
+                                <button onclick="selectQuadP3(4, this)" class="bg-slate-800 text-slate-200 text-sm font-semibold p-4 rounded-xl border border-slate-700 hover:bg-emerald-800 transition-colors focus:outline-none">4 vezes</button>
+                                <button onclick="selectQuadP3(8, this)" class="bg-slate-800 text-slate-200 text-sm font-semibold p-4 rounded-xl border border-slate-700 hover:bg-emerald-800 transition-colors focus:outline-none">8 vezes</button>
+                                <button onclick="selectQuadP3(16, this)" class="bg-slate-800 text-slate-200 text-sm font-semibold p-4 rounded-xl border border-slate-700 hover:bg-emerald-800 transition-colors focus:outline-none">16 vezes</button>
+                            </div>
+                            <button onclick="checkQuadP3()" class="w-full bg-indigo-600 hover:bg-indigo-500 font-fun py-4 text-lg rounded-xl mt-4 shadow-lg transition-colors focus:outline-none focus:ring-4 focus:ring-indigo-500/30">Confirmar Hipótese 🪐</button>
+                            <div id="quad-p3-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-6 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="quad-svg-p3" class="w-full h-full max-w-[300px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawQuadP3SVG();
+            } else if (activePhase === 4) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-emerald-400">Quadrado Místico de Equilíbrio</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Existe apenas uma medida de lado inteiro para a qual o valor numérico da <strong>Área ($l \\times l$)</strong> coincide exatamente com o valor numérico do <strong>Perímetro ($4 \\times l$)</strong>.
+                                Ajuste o controle deslizante abaixo e descubra essa medida.
+                            </p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div class="flex justify-between text-sm font-bold mb-1"><span>Lado selecionado ($l$):</span><span class="text-emerald-400 text-lg font-mono" id="quad-p4-side-display">2 cm</span></div>
+                                <input id="quad-p4-slider" type="range" min="1" max="8" value="2" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-emerald-500">
+                                <div class="grid grid-cols-2 gap-3 pt-3 border-t border-indigo-900/60 text-sm">
+                                    <div class="bg-slate-900/50 p-2 rounded-lg text-center">Área:<br><span id="quad-p4-area-val" class="font-bold text-pink-400 text-lg font-mono">4 cm²</span></div>
+                                    <div class="bg-slate-900/50 p-2 rounded-lg text-center">Perímetro:<br><span id="quad-p4-per-val" class="font-bold text-blue-400 text-lg font-mono">8 cm</span></div>
+                                </div>
+                            </div>
+                            <button onclick="checkQuadP4()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-fun py-4 text-lg rounded-xl shadow-lg transition-colors mt-2">Reivindicar Equilíbrio 🔗</button>
+                            <div id="quad-p4-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="quad-svg-p4" class="w-full h-full max-w-[300px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawQuadP4SVG();
+                document.getElementById('quad-p4-slider').addEventListener('input', function(e) {
+                    const side = parseInt(e.target.value);
+                    document.getElementById('quad-p4-side-display').innerText = side + " cm";
+                    document.getElementById('quad-p4-area-val').innerText = (side * side) + " cm²";
+                    document.getElementById('quad-p4-per-val').innerText = (4 * side) + " cm";
+                    drawQuadP4SVG(side);
+                });
+            } else if (activePhase === 5) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-emerald-400">Painel Solar Estelar</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Um painel solar quadrado precisa capturar exatamente <strong>$64\\text{ m}^2$</strong> de energia solar. Qual é o perímetro físico total de molduras de titânio que precisaremos instalar nas suas 4 bordas?
+                            </p>
+                            <div class="bg-indigo-950/40 p-4 rounded-xl border border-indigo-900/40 text-sm text-slate-300 space-y-2 font-mono">
+                                <div>Área Alvo = $64\\text{ m}^2$</div>
+                                <div>Moldura Necessária = Perímetro ($4 \\times l$)</div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Perímetro necessário em metros:</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="quad-p5-answer" type="number" placeholder="Perímetro..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkQuadP5()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="quad-p5-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="quad-svg-p5" class="w-full h-full max-w-[300px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawQuadP5SVG();
+            } else if (activePhase === 6) {
+                renderExamPhase('quad', 6, "Desafio Escolar I: A Cerca Espacial", 
+                    "Uma área de plantio em Marte tem a forma de um quadrado e o seu perímetro é de $36\\text{ m}$. Qual é a área exata desta plantação espacial em metros quadrados ($m^2$)?",
+                    "Área Total ($m^2$):",
+                    "<strong>Passo 1:</strong> O perímetro é a soma dos $4$ lados de um quadrado. Divida $36$ por $4$ para achar a medida de um lado ($l$).<br><strong>Passo 2:</strong> Após encontrar o lado, use a fórmula da área ($A = l \\times l$).",
+                    81);
+            } else if (activePhase === 7) {
+                renderExamPhase('quad', 7, "Desafio Escolar II: Radar em Expansão", 
+                    "Uma placa de radar quadrada possui uma área de $144\\text{ cm}^2$. Nossa equipe de blindagem precisa colocar um revestimento nas bordas (Perímetro) deste radar. Qual o perímetro dele em centímetros?",
+                    "Perímetro da Placa (cm):",
+                    "<strong>Passo 1:</strong> Se a área é $144$, qual número que multiplicado por si mesmo ($l^2$) dá $144$? (Calcule a raiz quadrada!).<br><strong>Passo 2:</strong> Agora que você achou a medida de um lado (que é $12$), multiplique por $4$ para saber o perímetro total.",
+                    48);
+            }
+        }
+
+        // --- SUB-MÉTODOS DO QUADRADO ---
+        function drawQuadConceptSVG() {
+            const svg = document.getElementById('quad-svg-concept');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const size = 150; const offset = 50;
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', offset); rect.setAttribute('y', offset);
+            rect.setAttribute('width', size); rect.setAttribute('height', size);
+            rect.setAttribute('fill', 'rgba(16,185,129,0.05)');
+            rect.setAttribute('stroke', '#1e293b');
+            rect.setAttribute('stroke-width', '2');
+            svg.appendChild(rect);
+
+            const drawConceptSide = (x1, y1, x2, y2, id, label) => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                const isSelected = quadState.clickedSides.includes(id);
+                line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+                line.setAttribute('stroke', isSelected ? '#10b981' : '#3b82f6');
+                line.setAttribute('stroke-width', isSelected ? '7' : '4');
+                line.setAttribute('class', 'cursor-pointer hover:stroke-pink-500 transition-all');
+                line.onclick = () => {
+                    if (!quadState.clickedSides.includes(id)) {
+                        quadState.clickedSides.push(id);
+                        const fb = document.getElementById('quad-p0-feedback');
+                        fb.classList.remove('hidden');
+                        fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                        fb.innerText = `Você mapeou o lado ${label}!`;
+                        drawQuadConceptSVG();
+                        
+                        document.getElementById('quad-mapped-count').innerText = `${quadState.clickedSides.length} / 2`;
+                        
+                        if (quadState.clickedSides.length >= 2) {
+                            fb.innerText = "Perfeito! Dois lados mapeados representam o cálculo da área. (+50 Score)";
+                            updateGlobalScore(50);
+                            setTimeout(() => { activePhase = 1; generateStepper(); loadPhaseContent(); }, 2500);
+                        }
+                    }
+                };
+                svg.appendChild(line);
+            };
+            drawConceptSide(offset, offset + size, offset + size, offset + size, 'bottom', "Inferior (l)");
+            drawConceptSide(offset, offset, offset, offset + size, 'left', "Esquerdo (l)");
+            drawConceptSide(offset + size, offset, offset + size, offset + size, 'right', "Direito (l)");
+            drawConceptSide(offset, offset, offset + size, offset, 'top', "Superior (l)");
+        }
+
+        function setupQuadFormulaMontagem() {
+            const slots = document.getElementById('quad-formula-slots');
+            slots.innerHTML = '';
+            const hasPower = quadState.selectedFormula.includes('²');
+            const targetLength = hasPower ? 4 : 5;
+            for (let i = 0; i < targetLength; i++) {
+                const d = document.createElement('div');
+                const val = quadState.selectedFormula[i];
+                d.className = `w-10 h-10 border-2 rounded-xl flex items-center justify-center font-bold text-xs sm:text-sm ${val ? 'border-emerald-500 bg-emerald-950/60' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'}`;
+                d.innerText = val ? val : '?';
+                slots.appendChild(d);
+            }
+            const chips = ['l', 'x', 'l', '²', '=', 'Área'];
+            const chipsDiv = document.getElementById('quad-formula-chips');
+            chipsDiv.innerHTML = '';
+            chips.forEach(chip => {
+                const b = document.createElement('button');
+                b.className = "bg-slate-800 text-slate-200 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-mono text-sm hover:bg-emerald-600 focus:outline-none transition-all shadow-md";
+                b.innerText = chip;
+                b.onclick = () => {
+                    const limit = (quadState.selectedFormula.includes('²') || chip === '²') ? 4 : 5;
+                    if(quadState.selectedFormula.length < limit) {
+                        quadState.selectedFormula.push(chip);
+                        setupQuadFormulaMontagem();
+                    }
+                };
+                chipsDiv.appendChild(b);
+            });
+        }
+
+        function resetQuadFormula() { quadState.selectedFormula = []; setupQuadFormulaMontagem(); document.getElementById('quad-p1-feedback').classList.add('hidden'); }
+
+        function validateQuadFormula() {
+            const fb = document.getElementById('quad-p1-feedback');
+            fb.classList.remove('hidden');
+            const correct = formulasAcceptable.quad.some(arr => quadState.selectedFormula.length === arr.length && quadState.selectedFormula.every((v, i) => v === arr[i]));
+            if (correct) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Área homologada! Área = l x l ou Área = l² (+50 Pontos)";
+                updateGlobalScore(50);
+                setTimeout(() => { activePhase = 2; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Fórmula incorreta! Tente construir l x l = Área ou l² = Área.";
+            }
+        }
+
+        function drawQuadSimulationSVG() {
+            const svg = document.getElementById('quad-svg-sim');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const step = 200 / 10;
+            const sizePx = quadState.size * step;
+            const offset = 25;
+            const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            r.setAttribute('x', offset); r.setAttribute('y', offset);
+            r.setAttribute('width', sizePx); r.setAttribute('height', sizePx);
+            r.setAttribute('fill', 'rgba(16,185,129,0.15)'); r.setAttribute('stroke', '#10b981'); r.setAttribute('stroke-width', '3');
+            svg.appendChild(r);
+
+            for (let i = 1; i < quadState.size; i++) {
+                const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineH.setAttribute('x1', offset); lineH.setAttribute('y1', offset + i*step);
+                lineH.setAttribute('x2', offset + sizePx); lineH.setAttribute('y2', offset + i*step);
+                lineH.setAttribute('stroke', 'rgba(16,185,129,0.3)'); svg.appendChild(lineH);
+
+                const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineV.setAttribute('x1', offset + i*step); lineV.setAttribute('y1', offset);
+                lineV.setAttribute('x2', offset + i*step); lineV.setAttribute('y2', offset + sizePx);
+                lineV.setAttribute('stroke', 'rgba(16,185,129,0.3)'); svg.appendChild(lineV);
+            }
+        }
+
+        function checkQuadArea() {
+            const ans = parseInt(document.getElementById('quad-p2-answer').value);
+            const fb = document.getElementById('quad-p2-feedback');
+            fb.classList.remove('hidden');
+            const correctAnswer = quadState.size * quadState.size;
+            if (ans === correctAnswer) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = `Perfeito! A área é exatamente ${correctAnswer} cm²! (+100 Pontos)`;
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 3; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = `Incorreto. Multiplique o lado por si mesmo.`;
+            }
+        }
+
+        function drawQuadP3SVG() {
+            const svg = document.getElementById('quad-svg-p3');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const drawBox = (x, y, s, label, fill) => {
+                const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                r.setAttribute('x', x); r.setAttribute('y', y);
+                r.setAttribute('width', s); r.setAttribute('height', s);
+                r.setAttribute('fill', fill); r.setAttribute('stroke', '#10b981'); r.setAttribute('stroke-width', '2');
+                svg.appendChild(r);
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x + s/2); text.setAttribute('y', y + s + 20);
+                text.setAttribute('fill', '#cbd5e1'); text.setAttribute('font-size', '12'); text.setAttribute('text-anchor', 'middle');
+                text.textContent = label; svg.appendChild(text);
+            };
+            drawBox(30, 60, 60, "Aresta: 3cm", 'rgba(16, 185, 129, 0.1)');
+            drawBox(160, 30, 120, "Aresta: 6cm", 'rgba(236, 72, 153, 0.15)');
+        }
+
+        function selectQuadP3(choice, btn) {
+            quadState.p3Choice = choice;
+            document.querySelectorAll('#quad-p3-options button').forEach(b => b.className = "bg-slate-800 text-slate-200 text-sm font-semibold p-4 rounded-xl border border-slate-700 hover:bg-emerald-800 focus:outline-none");
+            btn.className = "bg-emerald-600 text-white text-sm font-semibold p-4 rounded-xl border border-emerald-500 shadow-md focus:outline-none";
+        }
+
+        function checkQuadP3() {
+            const fb = document.getElementById('quad-p3-feedback');
+            fb.classList.remove('hidden');
+            if(quadState.p3Choice === null) { fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400"; fb.innerText = "Selecione uma opção!"; return; }
+            if (quadState.p3Choice === 4) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                fb.innerText = "Exato! Dobrando o lado, a área quadruplica! (+100 Pontos)";
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 4; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto! Placa 3x3 = 9. Placa 6x6 = 36.";
+            }
+        }
+
+        function drawQuadP4SVG(side = 2) {
+            const svg = document.getElementById('quad-svg-p4');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const pxSize = side * 22; const ox = 150 - pxSize/2; const oy = 120 - pxSize/2;
+            const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            r.setAttribute('x', ox); r.setAttribute('y', oy); r.setAttribute('width', pxSize); r.setAttribute('height', pxSize);
+            r.setAttribute('fill', 'rgba(16, 185, 129, 0.2)'); r.setAttribute('stroke', '#10b981'); r.setAttribute('stroke-width', '3');
+            svg.appendChild(r);
+        }
+
+        function checkQuadP4() {
+            const side = parseInt(document.getElementById('quad-p4-slider').value);
+            const fb = document.getElementById('quad-p4-feedback');
+            fb.classList.remove('hidden');
+            if (side === 4) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                fb.innerText = "Parabéns! No quadrado de lado 4, área (16) e perímetro (16) coincidem! (+100 Pontos)";
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 5; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Essa aresta não equilibra área e perímetro!";
+            }
+        }
+
+        function drawQuadP5SVG() {
+            const svg = document.getElementById('quad-svg-p5');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            r.setAttribute('x', '75'); r.setAttribute('y', '50'); r.setAttribute('width', '150'); r.setAttribute('height', '150');
+            r.setAttribute('fill', 'url(#solar-gradient)'); r.setAttribute('stroke', '#38bdf8'); r.setAttribute('stroke-width', '4');
+            svg.appendChild(r);
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            grad.setAttribute('id', 'solar-gradient');
+            grad.innerHTML = `<stop offset="0%" stop-color="#0284c7"/><stop offset="100%" stop-color="#0369a1"/>`;
+            defs.appendChild(grad); svg.appendChild(defs);
+        }
+
+        function checkQuadP5() {
+            const ans = parseInt(document.getElementById('quad-p5-answer').value);
+            const fb = document.getElementById('quad-p5-feedback');
+            fb.classList.remove('hidden');
+            if(ans === 32) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                fb.innerText = "Perfeito! Aresta lateral = 8m e perímetro = 32m! (+150 Pontos)";
+                updateGlobalScore(150);
+                setTimeout(() => { activePhase = 6; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto! Se a área é 64, o lado é 8. Multiplique por 4.";
+            }
+        }
+
+        // ==========================================
+        //  MÓDULO 4: ÁREA DO RETÂNGULO ESPECÍFICAS
+        // ==========================================
+        function renderRetanguloPhase() {
+            const container = document.getElementById('active-phase-content');
+            if (activePhase === 0) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-cyan-400">Base e Altura</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                O retângulo possui lados opostos de mesma medida, porém eixos adjacentes distintos denominados <strong>Base ($b$)</strong> e <strong>Altura ($h$)</strong>.
+                                <br><br>
+                                <strong>Clique no lado da base (em azul) e no lado de altura (em rosa)</strong> para calibrar o computador com os dados necessários.
+                            </p>
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-between text-xs font-bold">
+                                <span>Arestas Identificadas:</span><span class="text-cyan-400 font-mono" id="ret-mapped-count">Nenhuma</span>
+                            </div>
+                            <div id="ret-p0-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="ret-svg-concept" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawRetConceptSVG();
+            } else if (activePhase === 1) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-cyan-400">Estrutura de Fórmula Ortogonal</h4>
+                            <p class="text-sm text-slate-300">Para descobrir o número de ladrilhos ou a área que o retângulo cobre, multiplicamos a base pela altura. Organize a fórmula interativa:</p>
+                            <div class="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 flex justify-center items-center gap-2 min-h-[80px]">
+                                <div id="ret-formula-slots" class="flex flex-wrap justify-center items-center gap-1.5 sm:gap-2"></div>
+                            </div>
+                            <div class="bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-3">
+                                <span class="block text-xs font-bold text-slate-400 text-center uppercase tracking-wider mb-2">Elementos Disponíveis:</span>
+                                <div id="ret-formula-chips" class="flex flex-wrap justify-center gap-2"></div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 mt-4">
+                                <button onclick="resetRetFormula()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 sm:py-4 px-6 rounded-xl text-sm font-bold transition-all focus:outline-none">Limpar 🔄</button>
+                                <button onclick="validateRetFormula()" class="w-full sm:flex-grow bg-cyan-600 hover:bg-cyan-500 text-white font-fun py-3 sm:py-4 rounded-xl text-base sm:text-lg shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-cyan-500/30">Validar Fórmula ⚡</button>
+                            </div>
+                            <div id="ret-p1-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-6 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <i class="fa-solid fa-border-all text-8xl sm:text-9xl text-cyan-500/20"></i>
+                        </div>
+                    </div>
+                `;
+                setupRetFormulaMontagem();
+            } else if (activePhase === 2) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-5">
+                            <h4 class="font-fun text-xl sm:text-2xl text-cyan-400">Ladrilhos Refratários</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">Ajuste as duas arestas do refratário da nave e decida quantos ladrilhos de proteção de $1\\text{ cm}^2$ cobrirão toda a superfície:</p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Base ($b$):</span><span class="text-cyan-400 font-mono text-lg" id="ret-b-display">${retState.base} cm</span></div>
+                                    <input id="ret-slider-b" type="range" min="3" max="10" value="${retState.base}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-cyan-500">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Altura ($h$):</span><span class="text-cyan-400 font-mono text-lg" id="ret-h-display">${retState.height} cm</span></div>
+                                    <input id="ret-slider-h" type="range" min="2" max="8" value="${retState.height}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-cyan-500">
+                                </div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Qual a Área da superfície refratária ($\\text{cm}^2$):</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="ret-p2-answer" type="number" placeholder="Digite..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkRetArea()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="ret-p2-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
+                            <svg id="ret-svg-sim" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawRetSimulationSVG();
+                document.getElementById('ret-slider-b').addEventListener('input', function(e) {
+                    retState.base = parseInt(e.target.value);
+                    document.getElementById('ret-b-display').innerText = retState.base + " cm";
+                    drawRetSimulationSVG();
+                });
+                document.getElementById('ret-slider-h').addEventListener('input', function(e) {
+                    retState.height = parseInt(e.target.value);
+                    document.getElementById('ret-h-display').innerText = retState.height + " cm";
+                    drawRetSimulationSVG();
+                });
+            } else if (activePhase === 3) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-cyan-400">Área Livre da Moldura</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Uma placa de revestimento externa mede $10\\text{ m} \\times 8\\text{ m}$. No seu interior, há uma janela de controle retangular que mede $8\\text{ m} \\times 6\\text{ m}$.
+                                Qual é a área restante, ou seja, a área apenas da moldura blindada?
+                            </p>
+                            <div class="bg-indigo-950/40 p-4 sm:p-5 rounded-xl border border-indigo-900/40 text-sm space-y-2 font-mono">
+                                <div><span class="text-slate-400 font-sans">Retângulo Externo:</span> $10\\text{ m} \\times 8\\text{ m}$</div>
+                                <div class="text-pink-400"><span class="text-slate-400 font-sans">Janela Interna:</span> $8\\text{ m} \\times 6\\text{ m}$</div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Área da moldura em $m^2$:</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="ret-p3-answer" type="number" placeholder="Digite a área..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkRetP3()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="ret-p3-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="ret-svg-p3" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawRetP3SVG();
+            } else if (activePhase === 4) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-cyan-400">Paddock de Contenção</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Você tem <strong>24 metros</strong> lineares de cabos de plasma eletromagnéticos para cercar um paddock retangular.
+                                Ajuste a largura e a altura para descobrir quais dimensões geram a <strong>maior área possível de confinamento</strong>.
+                            </p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div class="flex justify-between font-bold text-sm"><span>Base ($b$):</span><span class="text-cyan-400 font-mono text-lg" id="ret-p4-b-display">8 m</span></div>
+                                <input id="ret-p4-slider" type="range" min="2" max="10" value="8" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-cyan-500">
+                                <div class="flex justify-between font-bold text-sm"><span>Altura ($h$):</span><span class="text-cyan-400 font-mono text-lg" id="ret-p4-h-display">4 m</span></div>
+                                <div class="border-t border-indigo-900/60 pt-3 mt-2 flex flex-col gap-1 text-sm font-mono font-bold">
+                                    <span class="text-slate-400">Perímetro Conectado: 24m</span>
+                                    <span class="text-yellow-400 text-lg">Área Calculada: <span id="ret-p4-area-display">32 m²</span></span>
+                                </div>
+                            </div>
+                            <button onclick="checkRetP4()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-fun py-4 text-lg rounded-xl shadow-lg mt-2">Confirmar Otimização ⚡</button>
+                            <div id="ret-p4-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="ret-svg-p4" class="w-full h-full max-w-[320px]" viewBox="0 0 320 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawRetP4SVG();
+                document.getElementById('ret-p4-slider').addEventListener('input', function(e) {
+                    retState.p4W = parseInt(e.target.value);
+                    retState.p4H = 12 - retState.p4W; // Perímetro 2*(w+h)=24 -> w+h=12
+                    document.getElementById('ret-p4-b-display').innerText = retState.p4W + " m";
+                    document.getElementById('ret-p4-h-display').innerText = retState.p4H + " m";
+                    document.getElementById('ret-p4-area-display').innerText = (retState.p4W * retState.p4H) + " m²";
+                    drawRetP4SVG();
+                });
+            } else if (activePhase === 5) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-cyan-400">Proporção Estelar</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Uma tela de radar deve ser projetada de forma que a sua <strong>altura ($h$) seja exatamente metade de sua base ($b$)</strong>.
+                                Se definirmos a base do radar como $10\\text{ cm}$, qual será a área total da tela (o total de micro-LEDs de $1\\text{ cm}^2$ necessários)?
+                            </p>
+                            <div class="bg-indigo-950/40 p-4 sm:p-5 rounded-xl border border-indigo-900/40 text-sm text-slate-300 space-y-2 font-mono">
+                                <div>Comprimento base ($b$) = <span class="text-cyan-400">10 cm</span></div>
+                                <div>Altura ($h$) = <span class="text-pink-400">Metade da base</span></div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Área total ($\\text{cm}^2$):</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="ret-p5-answer" type="number" placeholder="Área..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkRetP5()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="ret-p5-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="ret-svg-p5" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawRetP5SVG();
+            } else if (activePhase === 6) {
+                renderExamPhase('retangulo', 6, "Desafio Escolar I: A Quadra Esportiva", 
+                    "Para um torneio de gravidade zero, engenheiros precisam pintar o piso de uma quadra retangular inteira. A quadra possui $25\\text{ m}$ de comprimento (base) e $12\\text{ m}$ de largura (altura). Qual é a área total que precisará ser pintada?",
+                    "Área Total ($m^2$):",
+                    "<strong>Passo Único:</strong> Multiplique a base pela altura ($A = b \\times h$). Faça o cálculo: $25 \\times 12$.",
+                    300);
+            } else if (activePhase === 7) {
+                renderExamPhase('retangulo', 7, "Desafio Escolar II: Enigma do Perímetro", 
+                    "Um campo de pouso retangular tem uma área total de $200\\text{ m}^2$. Nós sabemos que o comprimento (base) desse campo é de $20\\text{ m}$. Para cercar todo esse campo com luzes de LED, qual é o Perímetro do campo?",
+                    "Perímetro (m):",
+                    "<strong>Passo 1:</strong> Encontre a largura (h). Se Área = b x h, então $200 = 20 \\times h$. Divida $200$ por $20$ para achar a altura ($h=10$).<br><strong>Passo 2:</strong> Calcule o perímetro somando todos os lados: $20 + 20 + 10 + 10$.",
+                    60);
+            }
+        }
+
+        function drawRetConceptSVG() {
+            const svg = document.getElementById('ret-svg-concept');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const w = 200, h = 100, ox = 50, oy = 75;
+            
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', ox); rect.setAttribute('y', oy);
+            rect.setAttribute('width', w); rect.setAttribute('height', h);
+            rect.setAttribute('fill', 'rgba(6,182,212,0.05)');
+            rect.setAttribute('stroke', '#1e293b'); rect.setAttribute('stroke-width', '2');
+            svg.appendChild(rect);
+
+            const drawLine = (x1, y1, x2, y2, id, color, label) => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                const isSelected = retState.clickedSides.includes(id);
+                line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+                line.setAttribute('stroke', isSelected ? '#10b981' : color);
+                line.setAttribute('stroke-width', isSelected ? '7' : '4');
+                line.setAttribute('class', 'cursor-pointer hover:opacity-75 transition-all');
+                line.onclick = () => {
+                    if (!retState.clickedSides.includes(id)) {
+                        retState.clickedSides.push(id);
+                        const fb = document.getElementById('ret-p0-feedback');
+                        fb.classList.remove('hidden');
+                        fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                        fb.innerText = `Você identificou a ${label}!`;
+                        drawRetConceptSVG();
+                        
+                        document.getElementById('ret-mapped-count').innerText = retState.clickedSides.join(', ').toUpperCase();
+                        
+                        if (retState.clickedSides.length >= 2) {
+                            fb.innerText = "Excelente! Mapeamento das dimensões base concluído. (+50 Score)";
+                            updateGlobalScore(50);
+                            setTimeout(() => { activePhase = 1; generateStepper(); loadPhaseContent(); }, 2500);
+                        }
+                    }
+                };
+                svg.appendChild(line);
+            };
+            
+            drawLine(ox, oy+h, ox+w, oy+h, 'base', '#06b6d4', 'BASE (b)'); // bottom
+            drawLine(ox+w, oy, ox+w, oy+h, 'altura', '#ec4899', 'ALTURA (h)'); // right
+            
+            // Decorative dashed lines
+            const lineTop = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            lineTop.setAttribute('x1', ox); lineTop.setAttribute('y1', oy); lineTop.setAttribute('x2', ox+w); lineTop.setAttribute('y2', oy);
+            lineTop.setAttribute('stroke', '#475569'); lineTop.setAttribute('stroke-dasharray', '4'); svg.appendChild(lineTop);
+            
+            const lineLeft = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            lineLeft.setAttribute('x1', ox); lineLeft.setAttribute('y1', oy); lineLeft.setAttribute('x2', ox); lineLeft.setAttribute('y2', oy+h);
+            lineLeft.setAttribute('stroke', '#475569'); lineLeft.setAttribute('stroke-dasharray', '4'); svg.appendChild(lineLeft);
+        }
+
+        function setupRetFormulaMontagem() {
+            const slots = document.getElementById('ret-formula-slots');
+            slots.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const d = document.createElement('div');
+                const val = retState.selectedFormula[i];
+                d.className = `w-10 h-10 border-2 rounded-xl flex items-center justify-center font-bold text-sm ${val ? 'border-cyan-500 bg-cyan-950/60 text-white' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'}`;
+                d.innerText = val ? val : '?';
+                slots.appendChild(d);
+            }
+            const chips = ['b', 'x', 'h', '=', 'Área'];
+            chips.sort(() => Math.random() - 0.5);
+            const chipsDiv = document.getElementById('ret-formula-chips');
+            chipsDiv.innerHTML = '';
+            chips.forEach(chip => {
+                const b = document.createElement('button');
+                b.className = "bg-slate-800 text-slate-200 px-5 py-2.5 rounded-xl font-mono text-sm hover:bg-cyan-600 focus:outline-none transition-all shadow-md";
+                b.innerText = chip;
+                b.onclick = () => {
+                    if(retState.selectedFormula.length < 5) {
+                        retState.selectedFormula.push(chip);
+                        setupRetFormulaMontagem();
+                    }
+                };
+                chipsDiv.appendChild(b);
+            });
+        }
+
+        function resetRetFormula() { retState.selectedFormula = []; setupRetFormulaMontagem(); document.getElementById('ret-p1-feedback').classList.add('hidden'); }
+
+        function validateRetFormula() {
+            const fb = document.getElementById('ret-p1-feedback');
+            fb.classList.remove('hidden');
+            const correct = formulasAcceptable.ret.some(arr => retState.selectedFormula.length === arr.length && retState.selectedFormula.every((v, i) => v === arr[i]));
+            if (correct) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Área homologada! Área = b x h (+50 Pontos)";
+                updateGlobalScore(50);
+                setTimeout(() => { activePhase = 2; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Fórmula incorreta! Lembre-se de multiplicar Base por Altura.";
+            }
+        }
+
+        function drawRetSimulationSVG() {
+            const svg = document.getElementById('ret-svg-sim');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const step = 200 / 10;
+            const wPx = retState.base * step;
+            const hPx = retState.height * step;
+            const ox = (300 - wPx) / 2;
+            const oy = (250 - hPx) / 2;
+
+            const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            r.setAttribute('x', ox); r.setAttribute('y', oy);
+            r.setAttribute('width', wPx); r.setAttribute('height', hPx);
+            r.setAttribute('fill', 'rgba(6,182,212,0.15)'); r.setAttribute('stroke', '#06b6d4'); r.setAttribute('stroke-width', '3');
+            svg.appendChild(r);
+
+            for (let i = 1; i < retState.height; i++) {
+                const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineH.setAttribute('x1', ox); lineH.setAttribute('y1', oy + i*step);
+                lineH.setAttribute('x2', ox + wPx); lineH.setAttribute('y2', oy + i*step);
+                lineH.setAttribute('stroke', 'rgba(6,182,212,0.3)'); svg.appendChild(lineH);
+            }
+            for (let i = 1; i < retState.base; i++) {
+                const lineV = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                lineV.setAttribute('x1', ox + i*step); lineV.setAttribute('y1', oy);
+                lineV.setAttribute('x2', ox + i*step); lineV.setAttribute('y2', oy + hPx);
+                lineV.setAttribute('stroke', 'rgba(6,182,212,0.3)'); svg.appendChild(lineV);
+            }
+        }
+
+        function checkRetArea() {
+            const ans = parseInt(document.getElementById('ret-p2-answer').value);
+            const fb = document.getElementById('ret-p2-feedback');
+            fb.classList.remove('hidden');
+            const correctAnswer = retState.base * retState.height;
+            if (ans === correctAnswer) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = `Cálculo preciso! A área é exatamente ${correctAnswer} cm²! (+100 Pontos)`;
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 3; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = `Incorreto. A área de um retângulo é Base vezes Altura.`;
+            }
+        }
+
+        function drawRetP3SVG() {
+            const svg = document.getElementById('ret-svg-p3');
+            if(!svg) return;
+            svg.innerHTML = '';
+            
+            const rExt = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rExt.setAttribute('x', '50'); rExt.setAttribute('y', '45'); rExt.setAttribute('width', '200'); rExt.setAttribute('height', '160');
+            rExt.setAttribute('fill', 'rgba(6, 182, 212, 0.4)'); rExt.setAttribute('stroke', '#06b6d4'); rExt.setAttribute('stroke-width', '2');
+            svg.appendChild(rExt);
+
+            const rInt = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rInt.setAttribute('x', '70'); rInt.setAttribute('y', '65'); rInt.setAttribute('width', '160'); rInt.setAttribute('height', '120');
+            rInt.setAttribute('fill', '#0f172a'); rInt.setAttribute('stroke', '#ec4899'); rInt.setAttribute('stroke-width', '2'); rInt.setAttribute('stroke-dasharray', '4');
+            svg.appendChild(rInt);
+            
+            const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            t.setAttribute('x', '150'); t.setAttribute('y', '130'); t.setAttribute('fill', '#ec4899'); t.setAttribute('font-size', '14'); t.setAttribute('text-anchor', 'middle');
+            t.textContent = "Janela (Vazia)"; svg.appendChild(t);
+        }
+
+        function checkRetP3() {
+            const ans = parseInt(document.getElementById('ret-p3-answer').value);
+            const fb = document.getElementById('ret-p3-feedback');
+            fb.classList.remove('hidden');
+            const areaExt = 10 * 8; // 80
+            const areaInt = 8 * 6; // 48
+            if (ans === (areaExt - areaInt)) { // 32
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Lógica genial! A área total (80) menos a janela (48) resulta na moldura de 32 m²! (+100 Pontos)";
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 4; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto. Calcule a Área do grande e subtraia a Área do pequeno.";
+            }
+        }
+
+        function drawRetP4SVG() {
+            const svg = document.getElementById('ret-svg-p4');
+            if(!svg) return;
+            svg.innerHTML = '';
+            // Máximo é 10x2 (escala * 20), quadrado perfeito é 6x6.
+            const scale = 15;
+            const w = retState.p4W * scale;
+            const h = retState.p4H * scale;
+            const ox = (320 - w) / 2;
+            const oy = (250 - h) / 2;
+
+            const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            r.setAttribute('x', ox); r.setAttribute('y', oy); r.setAttribute('width', w); r.setAttribute('height', h);
+            
+            // Destaca se for o quadrado (maior área)
+            if (retState.p4W === 6 && retState.p4H === 6) {
+                r.setAttribute('fill', 'rgba(16, 185, 129, 0.3)'); r.setAttribute('stroke', '#10b981');
+            } else {
+                r.setAttribute('fill', 'rgba(59, 130, 246, 0.1)'); r.setAttribute('stroke', '#3b82f6');
+            }
+            r.setAttribute('stroke-width', '4');
+            svg.appendChild(r);
+        }
+
+        function checkRetP4() {
+            const fb = document.getElementById('ret-p4-feedback');
+            fb.classList.remove('hidden');
+            if (retState.p4W === 6 && retState.p4H === 6) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Impressionante! Para um mesmo perímetro (24m), o QUADRADO (6x6 = 36m²) sempre otimiza e entrega a maior área possível! (+100 Pontos)";
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 5; generateStepper(); loadPhaseContent(); }, 3500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
+                fb.innerText = "Esta área é boa, mas você consegue uma área AINDA MAIOR deslizando o controle! (Dica: busque a forma de quadrado)";
+            }
+        }
+
+        function drawRetP5SVG() {
+            const svg = document.getElementById('ret-svg-p5');
+            if(!svg) return;
+            svg.innerHTML = '';
+            
+            const w = 200; 
+            const h = 100; // Altura é metade da base
+            const ox = (300 - w) / 2;
+            const oy = (250 - h) / 2;
+
+            const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            r.setAttribute('x', ox); r.setAttribute('y', oy); r.setAttribute('width', w); r.setAttribute('height', h);
+            r.setAttribute('fill', 'url(#radar-pattern)'); r.setAttribute('stroke', '#0ea5e9'); r.setAttribute('stroke-width', '3');
+            svg.appendChild(r);
+
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const pat = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+            pat.setAttribute('id', 'radar-pattern'); pat.setAttribute('width', '10'); pat.setAttribute('height', '10'); pat.setAttribute('patternUnits', 'userSpaceOnUse');
+            pat.innerHTML = `<rect width="10" height="10" fill="#0f172a" stroke="#0ea5e9" stroke-width="0.5" stroke-opacity="0.5"/>`;
+            defs.appendChild(pat); svg.appendChild(defs);
+
+            const t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            t1.setAttribute('x', ox + w/2); t1.setAttribute('y', oy + h + 20); t1.setAttribute('fill', '#cbd5e1'); t1.setAttribute('font-size', '14'); t1.setAttribute('text-anchor', 'middle');
+            t1.textContent = "Base = 10cm"; svg.appendChild(t1);
+
+            const t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            t2.setAttribute('x', ox - 35); t2.setAttribute('y', oy + h/2 + 5); t2.setAttribute('fill', '#cbd5e1'); t2.setAttribute('font-size', '14'); t2.setAttribute('text-anchor', 'middle');
+            t2.textContent = "h = ?"; svg.appendChild(t2);
+        }
+
+        function checkRetP5() {
+            const ans = parseInt(document.getElementById('ret-p5-answer').value);
+            const fb = document.getElementById('ret-p5-feedback');
+            fb.classList.remove('hidden');
+            if (ans === 50) { // Base 10, Altura 5. 10 * 5 = 50.
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Perfeito! A altura é 5. A área total é 10 x 5 = 50 cm²! (+150 Pontos)";
+                updateGlobalScore(150);
+                setTimeout(() => { activePhase = 6; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto! Se a base é 10, a metade é 5. Multiplique a base pela altura calculada.";
+            }
+        }
+
+
+        // ==========================================
+        //  MÓDULO 5: ÁREA DO TRIÂNGULO ESPECÍFICAS
+        // ==========================================
+        function renderTrianguloPhase() {
+            const container = document.getElementById('active-phase-content');
+            
+            if (activePhase === 0) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-purple-400">A Metade do Retângulo</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                A área de um triângulo é intimamente ligada ao retângulo. Todo triângulo pode ser visualizado como exatamente a metade de um retângulo que o envolve!
+                                <br><br>
+                                <strong>Clique na Base (linha inferior) e na Altura perpendicular (linha central)</strong> do triângulo para coletar os dados.
+                            </p>
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-between text-xs font-bold">
+                                <span>Arestas Coletadas:</span><span class="text-purple-400 font-mono" id="tri-mapped-count">Nenhuma</span>
+                            </div>
+                            <div id="tri-p0-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="tri-svg-concept" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawTriConceptSVG();
+            } else if (activePhase === 1) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-6 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-purple-400">A Divisão por Dois</h4>
+                            <p class="text-sm text-slate-300">Sabendo que o triângulo é metade do retângulo, sua fórmula exige que peguemos a Base multiplicada pela Altura, e dividamos tudo por 2. Monte a fórmula:</p>
+                            <div class="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 flex justify-center items-center gap-1.5 sm:gap-2 min-h-[80px]">
+                                <div id="tri-formula-slots" class="flex flex-wrap justify-center items-center gap-1 sm:gap-2"></div>
+                            </div>
+                            <div class="bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-3">
+                                <span class="block text-xs font-bold text-slate-400 text-center uppercase tracking-wider mb-2">Elementos Disponíveis:</span>
+                                <div id="tri-formula-chips" class="flex flex-wrap justify-center gap-2"></div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-2 mt-4">
+                                <button onclick="resetTriFormula()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 sm:py-4 px-6 rounded-xl text-sm font-bold transition-all focus:outline-none">Limpar 🔄</button>
+                                <button onclick="validateTriFormula()" class="w-full sm:flex-grow bg-purple-600 hover:bg-purple-500 text-white font-fun py-3 sm:py-4 rounded-xl text-base sm:text-lg shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-purple-500/30">Validar Fórmula ⚡</button>
+                            </div>
+                            <div id="tri-p1-feedback" class="p-3 text-center rounded-xl text-xs hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-6 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <i class="fa-solid fa-play rotate-[-90deg] text-8xl sm:text-9xl text-purple-500/20"></i>
+                        </div>
+                    </div>
+                `;
+                setupTriFormulaMontagem();
+            } else if (activePhase === 2) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-5">
+                            <h4 class="font-fun text-xl sm:text-2xl text-purple-400">Simulador de Vértices</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">Altere a Base e a Altura deste triângulo e calcule manualmente a sua Área total (lembre de dividir por 2!):</p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Base ($b$):</span><span class="text-purple-400 font-mono text-lg" id="tri-b-display">${triState.base} m</span></div>
+                                    <input id="tri-slider-b" type="range" min="4" max="12" step="2" value="${triState.base}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-purple-500">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm font-bold mb-2"><span>Altura ($h$):</span><span class="text-purple-400 font-mono text-lg" id="tri-h-display">${triState.height} m</span></div>
+                                    <input id="tri-slider-h" type="range" min="2" max="10" step="2" value="${triState.height}" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-purple-500">
+                                </div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Área total do triângulo ($\\text{m}^2$):</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="tri-p2-answer" type="number" placeholder="Digite..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkTriArea()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="tri-p2-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[350px]">
+                            <svg id="tri-svg-sim" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawTriSimulationSVG();
+                document.getElementById('tri-slider-b').addEventListener('input', function(e) {
+                    triState.base = parseInt(e.target.value);
+                    document.getElementById('tri-b-display').innerText = triState.base + " m";
+                    drawTriSimulationSVG();
+                });
+                document.getElementById('tri-slider-h').addEventListener('input', function(e) {
+                    triState.height = parseInt(e.target.value);
+                    document.getElementById('tri-h-display').innerText = triState.height + " m";
+                    drawTriSimulationSVG();
+                });
+            } else if (activePhase === 3) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-purple-400">Transformação de Cavalieri</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Você sabia que a forma do triângulo não importa, desde que a Base e a Altura permaneçam as mesmas?
+                                Mova o vértice superior do triângulo para a esquerda e para a direita.
+                            </p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div class="flex justify-between font-bold text-sm"><span>Posição do Vértice:</span></div>
+                                <input id="tri-p3-slider" type="range" min="0" max="100" value="50" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-purple-500">
+                            </div>
+                            <p class="text-sm text-slate-300 mt-4">Ao mover o vértice superior sem mudar a Base e a Altura, o que acontece com a Área deste triângulo?</p>
+                            <div class="flex flex-col gap-2 mt-2">
+                                <button onclick="checkTriP3(false)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl text-sm font-bold shadow transition-colors">A Área muda com o formato</button>
+                                <button onclick="checkTriP3(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl text-sm font-bold shadow-lg transition-colors">A Área continua a mesma</button>
+                            </div>
+                            <div id="tri-p3-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="tri-svg-p3" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                triState.vertexOffset = 50;
+                drawTriP3SVG();
+                document.getElementById('tri-p3-slider').addEventListener('input', function(e) {
+                    triState.vertexOffset = parseInt(e.target.value);
+                    drawTriP3SVG();
+                });
+            } else if (activePhase === 4) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-purple-400">Vela Fotônica Triangular</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Uma vela fotônica em forma de triângulo tem uma Área total exigida de <strong>$60\\text{ m}^2$</strong> para capturar fótons suficientes.
+                                A haste que forma a Base tem <strong>$12\\text{ m}$</strong>. Qual deve ser o tamanho do mastro central (Altura) em metros?
+                            </p>
+                            <div class="bg-indigo-950/40 p-4 sm:p-5 rounded-xl border border-indigo-900/40 text-sm text-slate-300 space-y-2 font-mono">
+                                <div>Área Alvo ($A$) = $60\\text{ m}^2$</div>
+                                <div>Base ($b$) = $12\\text{ m}$</div>
+                                <div>$60 = (12 \\times h) / 2$</div>
+                            </div>
+                            <div class="space-y-2 mt-4">
+                                <label class="block text-sm font-bold ml-1">Altura do mastro ($h$) em metros:</label>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="tri-p4-answer" type="number" placeholder="Digite a altura..." class="flex-grow bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 sm:py-4 text-white focus:outline-none font-mono text-center sm:text-left text-lg shadow-inner">
+                                    <button onclick="checkTriP4()" class="w-full sm:w-auto font-fun bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 sm:py-4 rounded-xl transition-colors shadow-lg">Validar</button>
+                                </div>
+                            </div>
+                            <div id="tri-p4-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="tri-svg-p4" class="w-full h-full max-w-[320px] min-h-[250px]" viewBox="0 0 300 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawTriP4SVG();
+            } else if (activePhase === 5) {
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-5 space-y-4">
+                            <h4 class="font-fun text-xl sm:text-2xl text-purple-400">Ajuste Ocular: Altura Certa</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">
+                                Um escudo térmico triangular frontal precisa de exatos <strong>$20\\text{ m}^2$</strong> de área. 
+                                Ele possui a base fixa em <strong>$8\\text{ m}$</strong>. Use o controle deslizante para ajustar a altura correta do escudo e selar a nave.
+                            </p>
+                            <div class="bg-indigo-950/40 p-5 rounded-2xl border border-indigo-900/40 space-y-4 mt-2">
+                                <div class="flex justify-between font-bold text-sm"><span>Altura Atual ($h$):</span><span class="text-purple-400 font-mono text-lg" id="tri-p5-h-display">2 m</span></div>
+                                <input id="tri-p5-slider" type="range" min="2" max="10" value="2" class="w-full h-3 bg-slate-800 rounded-lg cursor-pointer accent-purple-500">
+                                <div class="border-t border-indigo-900/60 pt-3 mt-2 flex justify-between text-sm font-mono font-bold">
+                                    <span class="text-slate-400">Área Alvo: 20 m²</span>
+                                    <span class="text-yellow-400">Atual: <span id="tri-p5-area-display">8 m²</span></span>
+                                </div>
+                            </div>
+                            <button onclick="checkTriP5()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-fun py-4 text-lg rounded-xl shadow-lg mt-2">Acionar Selamento Térmico 🛡️</button>
+                            <div id="tri-p5-feedback" class="p-3 text-center rounded-xl text-sm hidden font-bold mt-2"></div>
+                        </div>
+                        <div class="lg:col-span-7 bg-slate-950 rounded-3xl border border-slate-800 p-6 flex flex-col items-center justify-center min-h-[320px]">
+                            <svg id="tri-svg-p5" class="w-full h-full max-w-[320px]" viewBox="0 0 320 250" fill="none"></svg>
+                        </div>
+                    </div>
+                `;
+                drawTriP5SVG();
+                document.getElementById('tri-p5-slider').addEventListener('input', function(e) {
+                    triState.p5H = parseInt(e.target.value);
+                    document.getElementById('tri-p5-h-display').innerText = triState.p5H + " m";
+                    document.getElementById('tri-p5-area-display').innerText = ((8 * triState.p5H) / 2) + " m²";
+                    drawTriP5SVG();
+                });
+            } else if (activePhase === 6) {
+                renderExamPhase('triangulo', 6, "Desafio Escolar I: A Bandeira de Sinalização", 
+                    "Sua base precisa construir uma grande bandeira de sinalização triangular luminosa. A base da bandeira no chão terá $15\\text{ m}$, e a ponta mais alta chegará a $8\\text{ m}$ de altura. Quantos metros quadrados ($m^2$) de lona luminosa serão necessários para preencher toda a bandeira?",
+                    "Área Total ($m^2$):",
+                    "<strong>Passo 1:</strong> Multiplique a base pela altura ($15 \\times 8$).<br><strong>Passo 2:</strong> ATENÇÃO: É um triângulo! O erro mais comum é esquecer de dividir o resultado anterior por $2$.",
+                    60);
+            } else if (activePhase === 7) {
+                renderExamPhase('triangulo', 7, "Desafio Escolar II: A Pirâmide Dimensional", 
+                    "Você está analisando a face lateral de uma pirâmide milenar marciana. Você mede a área total dessa única face triangular e descobre que ela tem $150\\text{ m}^2$. O scanner indica que a base da face tem $30\\text{ m}$. Qual é a altura vertical ($h$) exata desse triângulo?",
+                    "Altura do Triângulo (m):",
+                    "<strong>Passo 1:</strong> A fórmula é Área = (Base $\\times$ Altura) / 2. Substituindo: $150 = (30 \\times h) / 2$.<br><strong>Passo 2:</strong> Para isolar o $h$, passe o $2$ multiplicando para o outro lado ($150 \\times 2 = 300$). Agora você tem $30 \\times h = 300$. Basta dividir!",
+                    10);
+            }
+        }
+
+        // --- SUB-MÉTODOS DO TRIÂNGULO ---
+        function drawTriConceptSVG() {
+            const svg = document.getElementById('tri-svg-concept');
+            if(!svg) return;
+            svg.innerHTML = '';
+            
+            const w = 180, h = 140, ox = 60, oy = 50;
+            
+            // Fundo retangular tracejado para mostrar a relação
+            const rExt = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rExt.setAttribute('x', ox); rExt.setAttribute('y', oy); rExt.setAttribute('width', w); rExt.setAttribute('height', h);
+            rExt.setAttribute('fill', 'transparent'); rExt.setAttribute('stroke', '#334155'); rExt.setAttribute('stroke-width', '2'); rExt.setAttribute('stroke-dasharray', '4');
+            svg.appendChild(rExt);
+
+            // Triangulo preenchimento
+            const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            poly.setAttribute('points', `${ox},${oy+h} ${ox+w},${oy+h} ${ox+w/2},${oy}`);
+            poly.setAttribute('fill', 'rgba(168, 85, 247, 0.1)');
+            poly.setAttribute('stroke', '#a855f7'); poly.setAttribute('stroke-width', '2');
+            svg.appendChild(poly);
+
+            const drawLine = (x1, y1, x2, y2, id, color, label, isDashed) => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                const isSelected = triState.clickedParts.includes(id);
+                line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+                line.setAttribute('stroke', isSelected ? '#10b981' : color);
+                line.setAttribute('stroke-width', isSelected ? '7' : '4');
+                if (isDashed) line.setAttribute('stroke-dasharray', '6');
+                line.setAttribute('class', 'cursor-pointer hover:opacity-75 transition-all');
+                line.onclick = () => {
+                    if (!triState.clickedParts.includes(id)) {
+                        triState.clickedParts.push(id);
+                        const fb = document.getElementById('tri-p0-feedback');
+                        fb.classList.remove('hidden');
+                        fb.className = "p-3 text-center rounded-xl text-xs font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                        fb.innerText = `Você encontrou a ${label}!`;
+                        drawTriConceptSVG();
+                        
+                        document.getElementById('tri-mapped-count').innerText = triState.clickedParts.join(', ').toUpperCase();
+                        
+                        if (triState.clickedParts.length >= 2) {
+                            fb.innerText = "Muito bom! Base e Altura são tudo que precisamos. (+50 Score)";
+                            updateGlobalScore(50);
+                            setTimeout(() => { activePhase = 1; generateStepper(); loadPhaseContent(); }, 2500);
+                        }
+                    }
+                };
+                svg.appendChild(line);
+            };
+            
+            drawLine(ox, oy+h, ox+w, oy+h, 'base', '#06b6d4', 'BASE', false); // bottom
+            drawLine(ox+w/2, oy, ox+w/2, oy+h, 'altura', '#ec4899', 'ALTURA', true); // central height
+        }
+
+        function setupTriFormulaMontagem() {
+            const slots = document.getElementById('tri-formula-slots');
+            slots.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const d = document.createElement('div');
+                const val = triState.selectedFormula[i];
+                d.className = `w-8 h-8 sm:w-10 sm:h-10 border-2 rounded-xl flex items-center justify-center font-bold text-sm ${val ? 'border-purple-500 bg-purple-950/60 text-white' : 'border-dashed border-slate-700 bg-slate-900/40 text-slate-600'}`;
+                d.innerText = val ? val : '?';
+                slots.appendChild(d);
+            }
+            const chips = ['(', 'b', 'x', 'h', ')', '/', '2', '=', 'Área'];
+            chips.sort(() => Math.random() - 0.5);
+            const chipsDiv = document.getElementById('tri-formula-chips');
+            chipsDiv.innerHTML = '';
+            chips.forEach(chip => {
+                const b = document.createElement('button');
+                b.className = "bg-slate-800 text-slate-200 px-4 py-2 rounded-lg font-mono text-sm hover:bg-purple-600 focus:outline-none transition-all shadow-md";
+                b.innerText = chip;
+                b.onclick = () => {
+                    if(triState.selectedFormula.length < 9) {
+                        triState.selectedFormula.push(chip);
+                        setupTriFormulaMontagem();
+                    }
+                };
+                chipsDiv.appendChild(b);
+            });
+        }
+
+        function resetTriFormula() { triState.selectedFormula = []; setupTriFormulaMontagem(); document.getElementById('tri-p1-feedback').classList.add('hidden'); }
+
+        function validateTriFormula() {
+            const fb = document.getElementById('tri-p1-feedback');
+            fb.classList.remove('hidden');
+            const correct = formulasAcceptable.tri.some(arr => triState.selectedFormula.length === arr.length && triState.selectedFormula.every((v, i) => v === arr[i]));
+            if (correct) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Magnífico! A área do Triângulo é sempre (Base x Altura) dividida por 2! (+50 Pontos)";
+                updateGlobalScore(50);
+                setTimeout(() => { activePhase = 2; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto! Tente a estrutura completa: ( b x h ) / 2 = Área";
+            }
+        }
+
+        function drawTriSimulationSVG() {
+            const svg = document.getElementById('tri-svg-sim');
+            if(!svg) return;
+            svg.innerHTML = '';
+            const step = 20;
+            const wPx = triState.base * step;
+            const hPx = triState.height * step;
+            const ox = (300 - wPx) / 2;
+            const oy = (250 - hPx) / 2;
+
+            const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            poly.setAttribute('points', `${ox},${oy+hPx} ${ox+wPx},${oy+hPx} ${ox+wPx/2},${oy}`);
+            poly.setAttribute('fill', 'rgba(168, 85, 247, 0.15)'); poly.setAttribute('stroke', '#a855f7'); poly.setAttribute('stroke-width', '3');
+            svg.appendChild(poly);
+
+            const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            lineH.setAttribute('x1', ox+wPx/2); lineH.setAttribute('y1', oy); lineH.setAttribute('x2', ox+wPx/2); lineH.setAttribute('y2', oy+hPx);
+            lineH.setAttribute('stroke', '#ec4899'); lineH.setAttribute('stroke-dasharray', '4'); lineH.setAttribute('stroke-width', '2');
+            svg.appendChild(lineH);
+        }
+
+        function checkTriArea() {
+            const ans = parseInt(document.getElementById('tri-p2-answer').value);
+            const fb = document.getElementById('tri-p2-feedback');
+            fb.classList.remove('hidden');
+            const correctAnswer = (triState.base * triState.height) / 2;
+            if (ans === correctAnswer) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = `Sensacional! A área exata é ${correctAnswer} m²! (+100 Pontos)`;
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 3; generateStepper(); loadPhaseContent(); }, 2500);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = `Incorreto. Você multiplicou a Base pela Altura... mas esqueceu de dividir por 2?`;
+            }
+        }
+
+        function drawTriP3SVG() {
+            const svg = document.getElementById('tri-svg-p3');
+            if(!svg) return;
+            svg.innerHTML = '';
+            
+            const w = 200, h = 120, ox = 50, oy = 80;
+            const topVertexX = ox + (w * (triState.vertexOffset / 100));
+
+            // Grid background to show Area is same
+            for(let i=0; i<=w; i+=20) {
+                const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                l.setAttribute('x1', ox+i); l.setAttribute('y1', oy); l.setAttribute('x2', ox+i); l.setAttribute('y2', oy+h);
+                l.setAttribute('stroke', 'rgba(255,255,255,0.05)'); svg.appendChild(l);
+            }
+            for(let j=0; j<=h; j+=20) {
+                const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                l.setAttribute('x1', ox); l.setAttribute('y1', oy+j); l.setAttribute('x2', ox+w); l.setAttribute('y2', oy+j);
+                l.setAttribute('stroke', 'rgba(255,255,255,0.05)'); svg.appendChild(l);
+            }
+
+            const rExt = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rExt.setAttribute('x', ox); rExt.setAttribute('y', oy); rExt.setAttribute('width', w); rExt.setAttribute('height', h);
+            rExt.setAttribute('fill', 'transparent'); rExt.setAttribute('stroke', '#3b82f6'); rExt.setAttribute('stroke-dasharray', '4');
+            svg.appendChild(rExt);
+
+            const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            poly.setAttribute('points', `${ox},${oy+h} ${ox+w},${oy+h} ${topVertexX},${oy}`);
+            poly.setAttribute('fill', 'rgba(168, 85, 247, 0.5)'); poly.setAttribute('stroke', '#a855f7'); poly.setAttribute('stroke-width', '3');
+            svg.appendChild(poly);
+            
+            const lineH = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            lineH.setAttribute('x1', topVertexX); lineH.setAttribute('y1', oy); lineH.setAttribute('x2', topVertexX); lineH.setAttribute('y2', oy+h);
+            lineH.setAttribute('stroke', '#ec4899'); lineH.setAttribute('stroke-dasharray', '4'); lineH.setAttribute('stroke-width', '2');
+            svg.appendChild(lineH);
+        }
+
+        function checkTriP3(isCorrect) {
+            const fb = document.getElementById('tri-p3-feedback');
+            fb.classList.remove('hidden');
+            if (isCorrect) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400";
+                fb.innerText = "Correto! Esse é o Princípio de Cavalieri. Se a Base e a Altura são as mesmas, a Área não se altera, não importa o quanto o vértice se mova! (+100 Pontos)";
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 4; generateStepper(); loadPhaseContent(); }, 4000);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto! Pense bem: A fórmula Área = (b x h) / 2 se importa com a posição horizontal do vértice?";
+            }
+        }
+
+        function drawTriP4SVG() {
+            const svg = document.getElementById('tri-svg-p4');
+            if(!svg) return;
+            svg.innerHTML = '';
+            
+            const w = 150, h = 180, ox = 75, oy = 30;
+            
+            const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            poly.setAttribute('points', `${ox},${oy+h} ${ox+w},${oy+h} ${ox+w/2},${oy}`);
+            poly.setAttribute('fill', 'rgba(234, 179, 8, 0.15)'); poly.setAttribute('stroke', '#eab308'); poly.setAttribute('stroke-width', '3');
+            svg.appendChild(poly);
+
+            const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            t.setAttribute('x', ox + w/2); t.setAttribute('y', oy + h/2 + 10); t.setAttribute('fill', '#eab308'); t.setAttribute('font-size', '18'); t.setAttribute('font-weight', 'bold'); t.setAttribute('text-anchor', 'middle');
+            t.textContent = "Área: 60m²"; svg.appendChild(t);
+        }
+
+        function checkTriP4() {
+            const ans = parseInt(document.getElementById('tri-p4-answer').value);
+            const fb = document.getElementById('tri-p4-feedback');
+            fb.classList.remove('hidden');
+            if (ans === 10) { // 60 = (12 * h)/2 -> 120 = 12h -> h = 10
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Fantástico! Resolveu a equação inversa perfeitamente. A altura é 10m! (+100 Pontos)";
+                updateGlobalScore(100);
+                setTimeout(() => { activePhase = 5; generateStepper(); loadPhaseContent(); }, 3000);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-rose-950/80 border border-rose-500/50 text-rose-400";
+                fb.innerText = "Incorreto! Dica: Passe o 2 multiplicando (60 x 2 = 120). Então 12 x Altura = 120.";
+            }
+        }
+
+        function drawTriP5SVG() {
+            const svg = document.getElementById('tri-svg-p5');
+            if(!svg) return;
+            svg.innerHTML = '';
+            // Base é sempre 8. Area alvo 20. Logo, altura correta é 5.
+            const scale = 15;
+            const w = 8 * scale;
+            const h = triState.p5H * scale;
+            const ox = (320 - w) / 2;
+            const oy = 220 - h;
+
+            const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            poly.setAttribute('points', `${ox},${oy+h} ${ox+w},${oy+h} ${ox+w/2},${oy}`);
+            
+            if (triState.p5H === 5) {
+                poly.setAttribute('fill', 'rgba(16, 185, 129, 0.4)'); poly.setAttribute('stroke', '#10b981');
+            } else {
+                poly.setAttribute('fill', 'rgba(168, 85, 247, 0.2)'); poly.setAttribute('stroke', '#a855f7');
+            }
+            poly.setAttribute('stroke-width', '4');
+            svg.appendChild(poly);
+        }
+
+        function checkTriP5() {
+            const fb = document.getElementById('tri-p5-feedback');
+            fb.classList.remove('hidden');
+            if (triState.p5H === 5) {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 animate-pulse";
+                fb.innerText = "Escudo Selado! (8 x 5) / 2 resulta exatamente em 20m²! (+150 Pontos)";
+                updateGlobalScore(150);
+                setTimeout(() => { activePhase = 6; generateStepper(); loadPhaseContent(); }, 3000);
+            } else {
+                fb.className = "p-3 text-center rounded-xl text-sm font-bold bg-amber-950/80 border border-amber-500/50 text-amber-400";
+                fb.innerText = "A área atual não bate com os 20m² necessários. Ajuste o controle!";
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            triggerMathRender();
+        });
     </script>
 </body>
 </html>
